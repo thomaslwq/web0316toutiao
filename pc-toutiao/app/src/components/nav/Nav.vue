@@ -1,5 +1,6 @@
 <template>
     <div class='nav-container'>
+        <h3>头条</h3>
         <ul>
             <li v-for="e in data">{{e.text}}</li>
         </ul>
@@ -85,7 +86,7 @@ activated() {
 }
 </script>
 <style lang='less' scoped>
-    @red: #a43f3f;
+    @red: #d84b4b;
     * {
         margin: 0;
         padding: 0;
@@ -93,8 +94,12 @@ activated() {
     }
     .nav-container {
         display: inline-flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        h3 {
+            font-size: 30px;
+        }
         ul {
             width: 100%;
             height: 100%;
