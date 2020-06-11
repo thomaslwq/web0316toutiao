@@ -16,5 +16,7 @@ export default {
 </script>
 
 <style  lang='less' scoped>
-
+  * {
+    --themeColor:#ea4245;
+  }
 </style>
