@@ -1,8 +1,8 @@
 <template>
     <div class='nav-container'>
-        <h3>头条</h3>
+        <h3>今日头条</h3>
         <ul>
-            <li v-for="e in data">{{e.text}}</li>
+            <li v-for="e ,i in data" @click="toggleNav(i)" :class="{active: clickNav == i}">{{e.text}}</li>
         </ul>
     </div>
 </template>
@@ -19,6 +19,7 @@ components() {
 data() {
 //这里存放数据
 return {
+    clickNav: "",
     data: [
         { 
             id: 1, 
@@ -80,8 +81,10 @@ watch() {
 
 },
 //方法集合
-methods() {
-
+methods: {
+    toggleNav: function(i) {
+        this.clickNav = i;
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -123,11 +126,6 @@ activated() {
 </script>
 <style lang='less' scoped>
     @red: #d84b4b;
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
     .nav-container {
         display: inline-flex;
         flex-direction: column;
@@ -136,20 +134,26 @@ activated() {
         h3 {
             font-size: 30px;
             user-select: none;
+            color: #e43c46;
         }
         ul {
             width: 100%;
             height: 100%;
-            list-style-type: none;
             li {
-                margin: 10px 0;
+                margin: 5px 0;
+                height: 40px;
                 font-size: 20px;
+                line-height: 40px;
                 user-select: none;
                 cursor: pointer;
                 border-radius: 10px;
                 transition: all ease-in-out .3s;
             }
             li:hover {
+                background-color: @red;
+                color: white
+            }
+            li.active {
                 background-color: @red;
                 color: white
             }

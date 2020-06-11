@@ -1,20 +1,31 @@
 <template>
+    <div class="main-container">
+    <Header></Header>
     <div class='main'>
         <div class="main-left">
             <Nav></Nav>
         </div>
         <div class="main-center"></div>
-        <div class="main-right"></div>
+        <div class="main-right">
+            <div class="search-container">
+                <Search></Search>
+            </div>
+        </div>
+    </div>
     </div>
 </template>
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import Nav from './nav/Nav.vue'
+import Header from "./header/Header.vue"
+import Search from "./search/Search.vue"
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
-    Nav
+    Nav,
+    Header,
+    Search
 },
 data: function() {
 //这里存放数据
@@ -75,24 +86,36 @@ activated() {
 <style lang='less' scoped>
 .main {
     display: flex;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
 
-    div.main-left {
+    .main-left {
+        padding: 0 10px;
         display: flex;
-        justify-content: flex-start;
+        justify-content: flex-end;
         flex: 20%;
         nav {
             
         }
     }
 
-    div.main-center {
-        flex: 60%;
+    .main-center {
+        flex: 50%;
     }
 
-    div.main-right {
-        flex: 20%;
+    .main-right {
+        display: flex;
+        justify-content: flex-start;
+        flex: 30%;
+
+        .search-container {
+            margin: 10px 0;
+            width: 70%;
+            height: 50px;
+            border: 1px solid grey;
+            border-radius: 5px;
+            overflow: hidden;
+        }
     }
 }
 </style>
