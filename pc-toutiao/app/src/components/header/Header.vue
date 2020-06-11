@@ -87,6 +87,7 @@ activated() {
         height: 30px;
         color: white;
         background-color: black;
+        user-select: none;
 
         div {
             display: flex;

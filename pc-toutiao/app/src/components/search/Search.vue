@@ -80,6 +80,8 @@ activated() {
         input {
             flex: 0 1 70%;
             border: none;
+            outline: none;
+            background-color: #f5f6f7;
         }
 
         button {

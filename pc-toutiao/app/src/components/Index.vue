@@ -10,6 +10,9 @@
             <div class="search-container">
                 <Search></Search>
             </div>
+            <div class="login-container">
+                <Login></Login>
+            </div>
         </div>
     </div>
     </div>
@@ -20,12 +23,15 @@
 import Nav from './nav/Nav.vue'
 import Header from "./header/Header.vue"
 import Search from "./search/Search.vue"
+import Login from "./login/Login.vue"
+
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
     Nav,
     Header,
-    Search
+    Search,
+    Login
 },
 data: function() {
 //这里存放数据
@@ -105,6 +111,8 @@ activated() {
 
     .main-right {
         display: flex;
+        flex-direction: column;
+
         justify-content: flex-start;
         flex: 30%;
 
@@ -115,6 +123,13 @@ activated() {
             border: 1px solid grey;
             border-radius: 5px;
             overflow: hidden;
+        }
+
+        .login-container {
+            padding: 20px;
+            width: 70%;
+            height: 250px;
+            background-color: #f4f5f6;
         }
     }
 }
