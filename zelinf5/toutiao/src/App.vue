@@ -1,12 +1,6 @@
 <template>
   <div id="app">
-    <div class="nav">
-      <div class="nav-item">123</div>
-      <div class="nav-item">123</div>
-      <div class="nav-item">123</div>
-      <div class="nav-item">123</div>
-      <div class="nav-item">123</div>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -22,11 +16,9 @@ export default {
 </script>
 
 <style lang='less' scope>
-  #app {
-    .nav {
-      .nav-item {
-        color:red;
-    }
-  }
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
 </style>
