@@ -19,6 +19,7 @@ export default {
 *{
   margin: 0px;
   padding: 0px;
+  --themeColor:#ea5254;
   box-sizing: border-box;
 }
 </style>

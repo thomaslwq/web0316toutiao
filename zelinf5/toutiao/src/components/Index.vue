@@ -5,6 +5,26 @@
         <!-- a.3 在模板中使用组件 -->
         <Header></Header>
     </div>
+    <!-- 首页内容开始 -->
+    <div class="tt-content">
+        <div class="tt-content-left">
+            <Nav class="tt-content-nav"></Nav>
+        </div>
+        <div class="tt-content-middle"></div>
+        <div class="tt-content-right">
+            <!-- 搜索框开始 -->
+            <div class="searchinput">
+                <SearchInput></SearchInput>
+            </div>
+            <!-- 搜索框结束 -->
+            <!-- 登录组件开始 -->
+            <div class="login">
+                <Login></Login>
+            </div>
+            <!-- 登录组件结束 -->
+        </div>
+    </div>
+    <!-- 首页内容结束 -->
 </div>
 </template>
 
@@ -13,11 +33,17 @@
 //例如：import 《组件名称》 from '《组件路径》';
 // a.1 引入Header组件
 import Header from '../components/header/Header'
+import Nav from '../components/nav/Nav'
+import SearchInput from '../components/searchinput/SearchInput'
+import Login from '../components/login/Login'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
     // a.2 将Header 组件 添加到当前组件中
-    Header
+    Header,
+    Nav,
+    SearchInput,
+    Login
 
 },
 data() {
@@ -50,6 +76,33 @@ destroyed() {}, //生命周期 - 销毁完成
 activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
-<style  scoped>
+<style  scoped lang="less">
+.header {
+
+  header {
+
+  }
+}
+
+.tt-content {
+    width: 100vw;
+    padding: 10px 5vw 10px 10vw;
+    display: flex;
+  .tt-content-left {
+    flex: 1;
+    .tt-content-nav
+     {
+        margin: 0 auto;
+    }
+  }
+
+  .tt-content-middle {
+    flex: 2;
+  }
+
+  .tt-content-right {
+    flex: 2;
+  }
+}
 
 </style>
