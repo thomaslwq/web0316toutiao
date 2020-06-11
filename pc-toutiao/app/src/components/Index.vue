@@ -1,6 +1,10 @@
 <template>
     <div class='main'>
-        <Nav></Nav>
+        <div class="main-left">
+            <Nav></Nav>
+        </div>
+        <div class="main-center"></div>
+        <div class="main-right"></div>
     </div>
 </template>
 <script>
@@ -69,8 +73,26 @@ activated() {
 }
 </script>
 <style lang='less' scoped>
-    .main {
-        width: 100vw;
-        height: 100vh;
+.main {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+
+    div.main-left {
+        display: flex;
+        justify-content: flex-start;
+        flex: 20%;
+        nav {
+            
+        }
     }
+
+    div.main-center {
+        flex: 60%;
+    }
+
+    div.main-right {
+        flex: 20%;
+    }
+}
 </style>

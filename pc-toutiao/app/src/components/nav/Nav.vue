@@ -99,6 +99,7 @@ activated() {
         align-items: center;
         h3 {
             font-size: 30px;
+            user-select: none;
         }
         ul {
             width: 100%;
