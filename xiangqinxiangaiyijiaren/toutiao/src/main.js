@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-// import router from '../router/router'
-// import store from '../vuex/store'
-// import './plugins/element.js'
+import router from '../router/router'
+import store from '../vuex/store'
+import './plugins/element'
 import axios from 'axios'
 Vue.config.productionTip = false
 let loading
@@ -22,6 +22,6 @@ axios.interceptors.response.use(req=>{
 })
 new Vue({
   render: h => h(App),
-  // router,
-  // store
+  router,
+  store
 }).$mount('#app')
