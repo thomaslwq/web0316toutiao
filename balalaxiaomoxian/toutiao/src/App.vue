@@ -19,12 +19,17 @@ export default {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
+
+  --themeColor:#ea4245;
+  --bgColor:#f3f6f6;
 }
-/* #app {
+a{
+  text-decoration: none;
+}
+#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
-} */
+}
 </style>
