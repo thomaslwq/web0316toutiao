@@ -17,8 +17,13 @@
             <el-upload
               drag
               multiple
+              list-type="picture"
               action="http://tt.linweiqin.com/api/tt/aliossUpload"
               :limit="9"
+              :http-request="msgAddImg"
+              :on-success="msgAddImgSuccess"
+              :on-remove="msgAddImgRemove"
+              :on-exceed="msgAddImgExceed"
               :file-list="imgList"
             >
               <i class="el-icon-upload"></i>
@@ -48,15 +53,16 @@
           use-custom-image-handler
           placeholder="救救审核君吧！不要写错别字了啊！"
           v-model="atcText"
+          @image-added="atcAddImg"
         />
         <div class="msg-btm">
-          <el-button class="send-msg" @click="sendMsg">发布</el-button>
+          <el-button class="send-msg" @click="sendAtc">发布</el-button>
         </div>
       </el-tab-pane>
     </el-tabs>
     <el-button icon="el-icon-refresh" class="refresh" @click="reloadNews">&nbsp;点击刷新&nbsp;</el-button>
     <ul>
-      <li v-for="(item,index) in newsList" :key="index">
+      <li v-for="(item,index) in showList" :key="index">
         <div class="news-img" v-if="item.img">
           <a target="_blank" @click="goToDetail(item.nid)">
             <img :src="item.img" lazy="loaded" />
@@ -84,16 +90,27 @@ export default {
     return {
       activeTab: "textMsg",
       newsList: [],
+      showList: [],
       msgText: "",
       atcTitle: "",
       atcText: "",
+      atcShowImg: "",
       imgList: [],
-      imgArr: []
+      imgArr: [],
+      lazyPages: 1
     };
   },
   components: { VueEditor },
   mounted() {
     this.reloadNews();
+    window.addEventListener("scroll", e => {
+      let scrollTotal =
+        document.body.scrollHeight - document.documentElement.clientHeight;
+      if (document.documentElement.scrollTop >= scrollTotal) {
+        this.lazyPages++;
+        this.reloadNews();
+      }
+    });
   },
   methods: {
     sendMsg() {
@@ -107,18 +124,89 @@ export default {
         this.imgArr = imgArr;
         let params = new FormData();
         params.append("content", this.msgText);
-        params.append("imgArr", JSON.stringify(this.imgArr));
+        params.append("imgs", this.imgArr.join(","));
         params.append("oauth_token", this.$store.state.userInfo.oauth_token);
         this.axios.post("/createTT", params).then(res => {
           if (res.data.ret == 0) {
             this.$message(`${res.data.msg}`);
-            this.$store.commit("tt_count", this.$store.state.userInfo.tt_count + 1);
+            this.$store.commit(
+              "msgCount",
+              this.$store.state.userInfo.tt_count + 1
+            );
             this.reloadNews();
+            this.msgText = "";
+            this.imgList = [];
           } else {
             this.$message(`发布头条失败_${res.data.msg}`);
           }
         });
       }
+    },
+    sendAtc() {
+      if (!this.$store.state.ifLogin) {
+        this.$message(`谁啊谁啊，没登录就发？`);
+      } else {
+        let params = new FormData();
+        params.append("content", this.atcText);
+        params.append("title", this.atcTitle);
+        params.append("img", this.atcShowImg);
+        params.append("oauth_token", this.$store.state.userInfo.oauth_token);
+        this.axios.post("/createArticle", params).then(res => {
+          if (res.data.ret == 0) {
+            this.$message(`${res.data.msg}`);
+            this.$store.commit(
+              "articleCount",
+              this.$store.state.userInfo.article_count + 1
+            );
+            this.reloadNews();
+            this.atcTitle = "";
+            this.atcText = "";
+            this.atcShowImg = "";
+          } else {
+            this.$message(`发布头条失败_${res.data.msg}`);
+          }
+        });
+      }
+    },
+    msgAddImg(img) {
+      let params = new FormData();
+      params.append("file", img.file);
+      this.axios
+        .post(img.action, params)
+        .then(res => {
+          if (res.data.ret == 0) {
+            img.onSuccess(res.data);
+          } else {
+            img.onFail(res.data);
+          }
+        })
+        .catch(err => {
+          img.onError();
+        });
+    },
+    msgAddImgSuccess(res, file, fileList) {
+      this.imgList = fileList;
+    },
+    msgAddImgRemove(file, fileList) {
+      this.$message(`${file.name} 文件已删除`);
+    },
+    msgAddImgExceed(file, fileList) {
+      this.$message.warning(
+        `当前限制选择 9 个文件，本次选择了 ${
+          file.length
+        } 个文件，共选择了 ${file.length + fileList.length} 个文件`
+      );
+    },
+    atcAddImg(file, Editor, cursorLocation, resetUploader) {
+      let params = new FormData();
+      params.append("file", file);
+      this.axios.post("/aliossUpload", params).then(res => {
+        Editor.insertEmbed(cursorLocation, "image", res.data.url);
+        if (this.atcShowImg === "") {
+          this.atcShowImg = res.data.url;
+        }
+        resetUploader();
+      });
     },
     goToDetail(id) {
       this.$router.push({
@@ -127,6 +215,7 @@ export default {
       });
     },
     reloadNews() {
+      this.newsList = [];
       let param = new FormData();
       param.append("lastid", this.lastId);
       this.axios.post("/getArticles").then(res => {
@@ -137,6 +226,12 @@ export default {
             }
             this.newsList.unshift(res.data.articles[i]);
           }
+          if (this.newsList.length - 15 > 15 * this.lazyPages) {
+            this.showList = this.newsList.slice(0, 15 * this.lazyPages);
+          } else if (this.newsList.length > 15 * this.lazyPages) {
+            this.showList = this.newsList.slice();
+          }
+          this.$store.commit('newsList', this.newsList);
         }
       });
     }
