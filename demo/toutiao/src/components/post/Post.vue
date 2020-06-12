@@ -14,9 +14,7 @@
     <!-- tab内容开始 -->
     <div class="tab-content">
       <div class="tab-toutiao-content" v-show="activeTab=='toutiao'">
-        <textarea name id cols="30" rows="10"
-        placeholder="有什么新鲜事想告诉大家"
-        ></textarea>
+        <textarea name id cols="30" rows="10" placeholder="有什么新鲜事想告诉大家"></textarea>
         <div class="toutiao-bottom">
           <div class="left">
             <div class="left-title" @click.stop="toggleUploadArea">图片</div>
@@ -36,7 +34,11 @@
           <div class="right">发布</div>
         </div>
       </div>
-      <div class="tab-article-content" v-show="activeTab=='article'">写文章</div>
+      <div class="tab-article-content" v-show="activeTab=='article'">
+        <input type="text" placeholder="请输入内容" />
+        <vue-editor v-model="richContent" class="rich-editor" />
+        <div class="rich-publish">发布</div>
+      </div>
     </div>
     <!-- tab内容内容结束 -->
   </div>
@@ -45,10 +47,12 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { VueEditor } from "vue2-editor";
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: {
+    VueEditor
+  },
   data() {
     //这里存放数据
     return {
@@ -63,15 +67,15 @@ export default {
         }
       ],
       activeTab: "toutiao",
-    //   showUploadImgArea: true, //隐藏
-    //   uploadImgs: [
-    //     "http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_12/8e88757a-ad57-73c5-7860-ad7ebf7b15ce.png",
-    //     "http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_12/8e88757a-ad57-73c5-7860-ad7ebf7b15ce.png",
-    //     "http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_12/8e88757a-ad57-73c5-7860-ad7ebf7b15ce.png"
-    //   ]
+      richContent: "", //富文本编辑器的内容 值
+      //   showUploadImgArea: true, //隐藏
+      //   uploadImgs: [
+      //     "http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_12/8e88757a-ad57-73c5-7860-ad7ebf7b15ce.png",
+      //     "http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_12/8e88757a-ad57-73c5-7860-ad7ebf7b15ce.png",
+      //     "http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_12/8e88757a-ad57-73c5-7860-ad7ebf7b15ce.png"
+      //   ]
       showUploadImgArea: false, //隐藏
-      uploadImgs: [
-      ]
+      uploadImgs: []
     };
   },
   //监听属性 类似于data概念
@@ -82,8 +86,8 @@ export default {
   methods: {
     // 删除上传图片
     deleteImg: function(index) {
-        // 删除图片
-        this.uploadImgs.splice(index,1);
+      // 删除图片
+      this.uploadImgs.splice(index, 1);
     },
     //  文件上传事件
     handleImgsUpload: function(e) {
@@ -143,8 +147,9 @@ export default {
     }
   }
   .tab-content {
+    overflow: hidden;
     .tab-toutiao-content {
-      padding:5px;
+      padding: 5px;
       textarea {
         width: 100%;
         border: 1px solid #ddd;
@@ -154,6 +159,7 @@ export default {
         display: flex;
         justify-content: space-between;
         .left {
+           
           .left-title {
             height: 30px;
             line-height: 30px;
@@ -227,6 +233,25 @@ export default {
     }
 
     .tab-article-content {
+      input {
+        height: 30px;
+        width: 100%;
+        border: none;
+      }
+
+      .rich-editor {
+      }
+      .rich-publish {
+        float: right;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        width: 100px;
+        font-size: 16px;
+        color: white;
+
+        background-color: var(--themeColor);
+      }
     }
   }
 }
