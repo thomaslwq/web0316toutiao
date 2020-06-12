@@ -52,6 +52,7 @@ data() {
     height: 40px;
     line-height: 40px;
     text-align: center;
+    color: var(--themeColor);
   }
 
   .nav-list {

@@ -47,6 +47,7 @@ data() {
         border-radius: 5px;
         background-color: var(--themeColor);
         color: white;
+        outline: none;
         cursor: pointer;
     }
     .login-button:hover{
