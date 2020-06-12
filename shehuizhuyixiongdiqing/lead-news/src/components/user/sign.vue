@@ -143,6 +143,7 @@ body {
           border-radius: 5px;
           font-size: 18px;
           color: #fff;
+          cursor: pointer;
         }
       }
 

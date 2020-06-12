@@ -5,9 +5,9 @@ import Login from '@/components/user/login'
 import Sign from '@/components/user/sign'
 import UserCenter from '@/components/user/userCenter'
 import UserInfo from '@/components/user/userInfo'
-import LeadNews from '@/components/user/leadNews'
+import NewsDetail from '@/components/news/newsDetail'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -37,9 +37,9 @@ export default new Router({
       component: UserInfo
     },
     {
-      path: '/leadNews',
-      name: 'LeadNews',
-      component: LeadNews
+      path: '/newsDetail',
+      name: 'NewsDetail',
+      component: NewsDetail
     }
   ]
 })

@@ -54,16 +54,16 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-    <el-button icon="el-icon-refresh" class="refresh">&nbsp;点击刷新&nbsp;</el-button>
+    <el-button icon="el-icon-refresh" class="refresh" @click="reloadNews">&nbsp;点击刷新&nbsp;</el-button>
     <ul>
       <li v-for="(item,index) in newsList" :key="index">
-        <div class="news-img" v-if="item.img" ga_event="article_img_click">
-          <a target="_blank">
+        <div class="news-img" v-if="item.img">
+          <a target="_blank" @click="goToDetail(item.nid)">
             <img :src="item.img" lazy="loaded" />
           </a>
         </div>
         <div class="news-detail">
-          <a target="_blank" class="news-title">{{item.title}}</a>
+          <a target="_blank" class="news-title" @click="goToDetail(item.nid)">{{item.title}}</a>
           <div>
             <a class="user-img">
               <img :src="item.user.avator" lazy="loaded" />
@@ -93,18 +93,7 @@ export default {
   },
   components: { VueEditor },
   mounted() {
-    let param = new FormData();
-    param.append("lastid", this.lastId);
-    this.axios.post("/getArticles").then(res => {
-      if (res.data.ret == 0) {
-        for (let i = res.data.articles.length - 1; i >= 0; i--) {
-          if (res.data.articles[i].nid > this.lastId) {
-            this.lastId = res.data.articles[i].nid;
-          }
-          this.newsList.unshift(res.data.articles[i]);
-        }
-      }
-    });
+    this.reloadNews();
   },
   methods: {
     sendMsg() {
@@ -119,12 +108,37 @@ export default {
         let params = new FormData();
         params.append("content", this.msgText);
         params.append("imgArr", JSON.stringify(this.imgArr));
-        params.append("oauth_token", this.$store.state.userinfo.oauth_token);
-        // params.append("token", this.$store.state.userInfo.token);
-        this.axios.post("/createArticle", params).then(res => {
-          console.log(res);
+        params.append("oauth_token", this.$store.state.userInfo.oauth_token);
+        this.axios.post("/createTT", params).then(res => {
+          if (res.data.ret == 0) {
+            this.$message(`${res.data.msg}`);
+            this.$store.commit("tt_count", this.$store.state.userInfo.tt_count + 1);
+            this.reloadNews();
+          } else {
+            this.$message(`发布头条失败_${res.data.msg}`);
+          }
         });
       }
+    },
+    goToDetail(id) {
+      this.$router.push({
+        path: "/newsDetail",
+        query: { nid: id }
+      });
+    },
+    reloadNews() {
+      let param = new FormData();
+      param.append("lastid", this.lastId);
+      this.axios.post("/getArticles").then(res => {
+        if (res.data.ret == 0) {
+          for (let i = res.data.articles.length - 1; i >= 0; i--) {
+            if (res.data.articles[i].nid > this.lastId) {
+              this.lastId = res.data.articles[i].nid;
+            }
+            this.newsList.unshift(res.data.articles[i]);
+          }
+        }
+      });
     }
   }
 };
@@ -183,6 +197,7 @@ export default {
     width: 100%;
     background: #fff6f0;
     border: 1px solid #fca;
+    color: #666;
 
     &:hover {
       color: #f66;
