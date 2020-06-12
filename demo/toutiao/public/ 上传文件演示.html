@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .upload{
+      position: relative;
+      width:100px;
+      height:100px;
+    }
+    .upload .title{
+        font-size:50px;
+        line-height: 100px;
+        text-align: center;
+        width: 100px;
+        height:100px;
+        border: 1px dashed #ddd;
+    }
+    .upload #input{
+        opacity: 0;
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+    }
+</style>
+<body>
+
+    <!-- <input type="file" name="" id=""> 单选文件上传 -->
+    <!-- 选择多个文件 -->
+    <!-- <input type="file" name="" id="" multiple> -->
+    <!-- 限制可以选择文件的类型 -->
+    <div class="upload">
+        <div class="title">+</div>
+        <input type="file" name="" id="input" multiple accept=".jpg,.png">
+    </div>
+</body>
+<!-- 引入请求库 -->
+<script src="../node_modules/axios/dist/axios.js"></script>
+<script>
+    let url = "http://tt.linweiqin.com/api/tt/aliossUpload";
+    document.getElementById("input").addEventListener("change",function(e){
+        console.log(e);
+        console.log(e.target.files);
+        Array.from(e.target.files).forEach((f)=>{
+            //1. 构造请求的参数
+            // {
+            //     file:文件的数据 
+            // }
+            let params = new FormData();
+            params.append("file",f)
+            //2. 发请求
+            axios.post(url,params).then(function(res){
+                console.log(res);
+                let url = res.data.url;
+                let img = document.createElement("img");
+                img.src = url;
+                document.body.appendChild(img);
+            })
+            // console.log(f);
+
+        })
+    })
+</script>
+</html>

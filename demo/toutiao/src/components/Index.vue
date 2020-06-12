@@ -11,7 +11,9 @@
         <!-- b.3 在模版中使用组件 -->
         <Nav class="tt-content-nav"></Nav>
       </div>
-      <div class="tt-content-middle"></div>
+      <div class="tt-content-middle">
+        <Post></Post>
+      </div>
       <div class="tt-content-right">
           <!-- 搜索框开始 -->
           <div class="searchinput">
@@ -38,6 +40,7 @@ import Header from "../components/header/Header";
 import Nav from "../components/nav/Nav";
 import SearchInput from "../components/searchinput/SearchInput";
 import Login from "../components/login/Login";
+import Post from "../components/post/Post";
 export default {
   //import引入的组件需要注入到对象中才能使用
 
@@ -48,7 +51,8 @@ export default {
     Header,
     Nav,
     SearchInput,
-    Login
+    Login,
+    Post
   },
   data() {
     //这里存放数据
