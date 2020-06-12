@@ -34,7 +34,7 @@
           <div class="right">发布</div>
         </div>
       </div>
-      <div class="tab-article-content" v-show="activeTab=='article'">
+      <div class="tab-article-content clearfix" v-show="activeTab=='article'">
         <input type="text" placeholder="请输入内容" />
         <vue-editor v-model="richContent" class="rich-editor" />
         <div class="rich-publish">发布</div>
@@ -129,6 +129,17 @@ export default {
 </script>
 <style lang='less' scoped>
 //@import url(); 引入公共css类
+.clearfix:after {
+  /*伪元素是行内元素 正常浏览器清除浮动方法*/
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.clearfix {
+  *zoom: 1; /*ie6清除浮动的方式 *号只有IE6-IE7执行，其他浏览器不执行*/
+}
 .tt-post-box {
   padding: 5px;
   .tt-post-tabs {
@@ -147,7 +158,7 @@ export default {
     }
   }
   .tab-content {
-    overflow: hidden;
+    // overflow: hidden;
     .tab-toutiao-content {
       padding: 5px;
       textarea {
@@ -159,16 +170,18 @@ export default {
         display: flex;
         justify-content: space-between;
         .left {
-           
+          position: relative;
           .left-title {
             height: 30px;
             line-height: 30px;
             font-size: 16px;
           }
           .upload-imgs {
+            background-color: #fff;
             display: flex;
             flex-wrap: wrap;
             width: 300px;
+            position: absolute;
             .upload {
               position: relative;
               width: 100px;
@@ -249,7 +262,6 @@ export default {
         width: 100px;
         font-size: 16px;
         color: white;
-
         background-color: var(--themeColor);
       }
     }
