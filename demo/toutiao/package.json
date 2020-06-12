@@ -13,7 +13,8 @@
     "less": "^3.11.3",
     "less-loader": "^6.1.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.3.2"
+    "vue-router": "^3.3.2",
+    "vue2-editor": "^2.10.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

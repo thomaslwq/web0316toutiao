@@ -10,7 +10,7 @@
     <div class="login-box">
       <form name="loginform" method="post" @submit.prevent="login">
         <h1>账密登录</h1>
-        <input type="text" placeholder="账号/邮箱/手机号" v-model="username" />
+        <input type="text" placeholder="账号/邮箱/手机号" autocomplete="on" v-model="username" />
         <input type="password" placeholder="密码" v-model="password" />
         <button type="submit" @click.prevent="login">确定</button>
       </form>

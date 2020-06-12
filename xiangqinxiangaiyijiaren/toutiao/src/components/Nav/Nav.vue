@@ -1,46 +1,54 @@
 <template>
-    <div class="nav"> 
-        <el-image src='https://s3.pstatp.com/toutiao/static/img/logo.271e845.png'
-        fit='contain'
-        class="img"
-        ></el-image>
-            <el-button 
-            label-width='200' 
-            v-for='(item,index) in navLists' :key='index'
-            :class="{'active':iNow == index,'btn':true}"
-            >{{item}}</el-button>
-    </div>
+  <div class="nav">
+        <img src="https://s3.pstatp.com/toutiao/static/img/logo.271e845.png" alt="">
+        <li 
+        v-for="(item,index) in navList" 
+        :key="index"
+        :class="['btn',{'firstBtn':iNow==index}]">
+            {{item}}
+        </li>
+  </div>
 </template>
 
 <script>
 export default {
     data(){
-        return {
-            navLists:['推荐','西瓜视频','热点','直播','图片','科技','娱乐','游戏','体育','懂车帝','财经','搞笑','更多'],
+        return{
+            navList:['推荐','西瓜视频','热点','直播','图片','科技','娱乐','游戏','体育','懂车帝','财经','搞笑','更多'],
             iNow:0
         }
     }
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .nav{
-    background-color: #fff;
-    .img{
-        margin: 16px 0;
-        width: 70%;
+    width: 200px;
+    img{
+        transform: scale(0.5);
+        margin-left: -7px;
     }
     .btn{
-        width: 80%;
-        border: none;
-        transition: all .5s;
+        width: 120px;
+        height: 40px;
+        transition: all 0.3s;
+        line-height: 40px;
+        text-align: center;
+        font-size: 14px;
+        border-radius: 5px;
+        transition: all 0.3s;
+        margin: 0px auto;
+        color:#606266;
+        cursor: pointer;
     }
-    .active,.btn:hover{
+    .firstBtn{
         background-color: #e43c46;
-        color: white;
-    } 
-    .el-button{
-        margin-left: 0;
+        color: #fff;
+    }
+    .btn:hover{
+        background-color: #e43c46;
+        color: #fff;
     }
 }
+
 </style>
