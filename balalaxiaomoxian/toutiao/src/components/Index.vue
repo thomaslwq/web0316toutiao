@@ -7,11 +7,18 @@
         <div class="tt-content-left">
             <Nav class="left-nav"></Nav>
         </div>
-        <div class="tt-content-middle"></div>
+        <div class="tt-content-middle">
+            <Post class="post"></Post>
+            <NewsList class="newsList"></NewsList>
+        </div>
         <div class="tt-content-right">
             <div class="right">
                 <SearchInput class="right-searchInput"></SearchInput>
                 <Login class="right-login"></Login>
+                <HotNews class="right-hotNews"></HotNews>
+                <More class="right-more"></More>
+                <FriendLink class="right-friendLink"></FriendLink>
+                <CopyRight class="right-copyRight"></CopyRight>
             </div>
         </div>
     </div>
@@ -20,9 +27,18 @@
 
 <script>
 import Header from "../components/header/Header"
+//右侧，导航条
 import Nav from "../components/nav/Nav"
+//中间
+import Post from "../components/post/Post"
+import NewsList from "../components/news/NewsList"
+//右侧
 import SearchInput from "../components/searchInput/SearchInput"
 import Login from "../components/login/Login"
+import HotNews from "../components/hotNews/HotNews"
+import More from "../components/hotNews/More"
+import FriendLink from "../components/hotNews/FriendLink"
+import CopyRight from "../components/hotNews/CopyRight"
 
 export default {
 components: {
@@ -30,6 +46,12 @@ components: {
     Nav,
     SearchInput,
     Login,
+    HotNews,
+    More,
+    Post,
+    FriendLink,
+    CopyRight,
+    NewsList,
 },
 data() {
    return {
@@ -66,6 +88,13 @@ methods: {
 
     .tt-content-middle {
         flex: 2.5;
+        .post {
+
+        }
+
+        .newsList {
+            margin-top: 20px;
+        }
     }
 
     .tt-content-right {
@@ -77,7 +106,10 @@ methods: {
 
             }
             .right-login {
-                margin-top: 20px;
+                margin: 20px 0;
+            }
+            .right-hotNews{
+
             }
         }
     }
