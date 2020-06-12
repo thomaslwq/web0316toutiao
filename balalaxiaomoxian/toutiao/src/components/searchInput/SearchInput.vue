@@ -27,6 +27,8 @@ data() {
         border: 0;
         border-radius: 5px;
         border: 1px solid #ddd;
+        outline:none;
+        padding:20px;
     }
     .search-buttom{
         width: 80px;
@@ -36,6 +38,10 @@ data() {
         background-color: #208eda;
         border-radius: 5px;
         color: white;
+        cursor:pointer;
+    }
+    .search-buttom:hover{
+        background-color:#208eFF;
     }
 }
 </style>
