@@ -6,9 +6,13 @@ Vue.use(Vuex)
 //     userinfo:'',
 //     isLogin:'',
 // };
-let state = JSON.parse(localStorage.getItem('state'));
+let state = JSON.parse(localStorage.getItem('state')) || {};
+state.searchData = []
 /* 变动 */
 const mutations = {
+    setSearchData(state,data){
+        state.searchData = data
+    },
 	Login : (state,isLogin) => {
         localStorage.setItem('isLogin',isLogin);
         state.isLogin = isLogin;
