@@ -13,6 +13,9 @@
             <div class="login-container">
                 <Login></Login>
             </div>
+            <div class="more-container">
+                <More></More>
+            </div>
         </div>
     </div>
     </div>
@@ -20,10 +23,12 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import Nav from './nav/Nav.vue'
+import Nav from "./nav/Nav.vue"
 import Header from "./header/Header.vue"
 import Search from "./search/Search.vue"
 import Login from "./login/Login.vue"
+import More from "./more/More.vue"
+import { VueEditor } from "vue2-editor";
 
 export default {
 //import引入的组件需要注入到对象中才能使用
@@ -31,7 +36,9 @@ components: {
     Nav,
     Header,
     Search,
-    Login
+    Login,
+    More,
+    VueEditor
 },
 data: function() {
 //这里存放数据
@@ -130,6 +137,12 @@ activated() {
             width: 70%;
             height: 250px;
             background-color: #f4f5f6;
+        }
+
+        .more-container {
+            margin: 10px 0;
+            width: 70%;
+            height: 220px;
         }
     }
 }
