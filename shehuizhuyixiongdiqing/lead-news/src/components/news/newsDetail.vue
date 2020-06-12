@@ -1,12 +1,14 @@
 <template>
   <div class="news-detail">
     <div class="n-header">
-      <a href="/">
-        <img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png" />
-      </a>
-      <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText">
-        <el-button slot="append">搜索</el-button>
-      </el-input>
+      <div class="n-headerCt">
+        <a href="/">
+          <img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png" />
+        </a>
+        <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText">
+          <el-button slot="append">搜索</el-button>
+        </el-input>
+      </div>
     </div>
     <div class="n-content">
       <ul class="n-share">
@@ -85,7 +87,6 @@ export default {
     let params = new FormData();
     params.append("nid", this.$route.query.nid);
     this.axios.post("/getArticleById", params).then(res => {
-      console.log(res.data.article);
       this.newsInfo = res.data.article;
     });
   },
@@ -106,42 +107,47 @@ export default {
 
 .news-detail {
   .n-header {
-    height: 60px;
-    padding: 0 100px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     box-shadow: 0 0 5px #ccc;
+    background: #fff;
 
-    a {
-      img {
-        width: 108px;
+    .n-headerCt {
+      width: 1170px;
+      height: 60px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      a {
+        img {
+          width: 108px;
+        }
       }
-    }
 
-    .el-input {
-      width: 340px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      overflow: hidden;
+      .el-input {
+        width: 340px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
 
-      .el-button {
-        height: 42px;
-        background: #f66;
-        color: #fff;
-        border: 0;
-        border-radius: 0;
+        .el-button {
+          height: 42px;
+          background: #f66;
+          color: #fff;
+          border: 0;
+          border-radius: 0;
+        }
       }
     }
   }
 
   .n-content {
-    padding: 20px 100px;
+    width: 1170px;
+    margin: 20px auto;
     display: flex;
-    justify-content: space-between;
 
     .n-share {
-      width: 110px;
+      flex: 0 0 110px;
 
       li {
         display: flex;
@@ -208,7 +214,7 @@ export default {
       }
 
       .n-text {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
       }
 
       .n-imgs {
@@ -240,7 +246,7 @@ export default {
     }
 
     .n-user {
-      width: 340px;
+      flex: 0 0 340px;
       height: 90px;
       background: #f6f6f4;
       border-top: 2px solid #f66;

@@ -4,7 +4,8 @@ Vue.use(Vuex);
 
 let state = JSON.parse(localStorage.getItem('state')) || {
   userInfo: {},
-  ifLogin: false
+  ifLogin: false,
+  newsList: []
 };
 
 const mutations = {
@@ -23,6 +24,10 @@ const mutations = {
   },
   articleCount(state, payload) {
     state.userInfo.article_count = payload;
+    localStorage.setItem('state', JSON.stringify(state));
+  },
+  newsList(state, payload) {
+    state.newsList = payload;
     localStorage.setItem('state', JSON.stringify(state));
   }
 };
