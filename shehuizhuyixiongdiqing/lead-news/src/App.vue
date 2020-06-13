@@ -15,6 +15,10 @@ export default {
 @import url("https://at.alicdn.com/t/font_1879325_pyya2gom3c.css");
 @import url("./assets/detail.css");
 
+html,
+body {
+  height: 100%;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

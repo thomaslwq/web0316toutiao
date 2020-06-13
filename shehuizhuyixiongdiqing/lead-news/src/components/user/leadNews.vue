@@ -109,14 +109,14 @@ export default {
                 this.atcArr.splice(index, 1);
                 this.$store.commit(
                   "msgCount",
-                  this.$store.state.userInfo.tt_count - 1
+                  this.msgArr.length - 1
                 );
                 this.getNews("TT");
               } else if (type === "文章") {
                 this.msgArr.splice(index, 1);
                 this.$store.commit(
                   "articleCount",
-                  this.$store.state.userInfo.article_count - 1
+                  this.msgArr.length - 1
                 );
                 this.getNews("Article");
               }
