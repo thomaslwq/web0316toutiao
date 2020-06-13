@@ -39,7 +39,7 @@
             <!-- 显示图片结束 -->
 
             <!-- 显示表情开始 -->
-            <div v-show="isShowEmoji">表情</div>
+            <div v-show="isShowEmoji" class="emoji">表情</div>
             <!-- 显示表情结束 -->
         </div>
         <div class="content-article" v-show="activeTab=='article'">
@@ -123,6 +123,7 @@ methods: {
     }
     .tab-content{
         .content-toutiao {
+            position:relative;
             .textarea {
                 width: 100%;
                 height: 100%;
@@ -141,7 +142,6 @@ methods: {
                 display: flex;
                 line-height: 40px;
                 font-size: 15px;
-                position: relative;
                 .buttom-pic {
                     padding:0 20px;
                     transition: all 1s;
@@ -171,13 +171,13 @@ methods: {
                 }
             }
             .uploadImg{
-                position: relative;
+                position: absolute;
+                display:flex;
                 background-color: white;
                 box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
                 border-radius: 10px;
                 margin: 10px;
                 padding: 10px;
-                display: flex;
                 flex-wrap: wrap;
                 .fileIcon{
                     width: 100px;
@@ -209,7 +209,6 @@ methods: {
                     border-radius: 10px;
                     margin: 20px;
                     border: 1px dashed #ddd;
-                    position: relative;
                     img{
                         padding: 5px;
                         width: 100px;
@@ -221,7 +220,6 @@ methods: {
                         width: 100px;
                         height: 100px;
                         font-weight: 900;
-                        position: absolute;
                         display: none;
                         text-align: center;
                         line-height: 100px;
@@ -239,6 +237,13 @@ methods: {
                     }
                 }
             }
+            .emoji{
+                position:absolute;
+                width:100%;
+                height:100px;
+                box-shadow:0px 0px 25px 0px skyblue;
+                background-color:pink;
+            }
         }
         .content-article {
             .article-title {
@@ -254,13 +259,12 @@ methods: {
 
             .rich-editor {
                 background-color:var(--bgColor);
-
             }
             .article-bottom {
+                position: relative;
                 width: 100%;
                 height: 40px;
                 border: 1px solid #ddd;
-                position: relative;
                 .bottom-publish {
                     position: absolute;
                     right: 0;
