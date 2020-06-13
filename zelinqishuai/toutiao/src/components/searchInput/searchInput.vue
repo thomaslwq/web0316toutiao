@@ -49,6 +49,8 @@ export default {
     border:1px solid #ddd;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
+    text-indent: 1em;
+    outline: medium;
   }
 
   .search-button {

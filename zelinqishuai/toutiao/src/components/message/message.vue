@@ -20,6 +20,38 @@
         </div>
       </div>
     </div>
+    <div class="messagelist">
+      <div class="list-left">
+        <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
+      </div>
+      <div class="list-right">
+        <div class="middle-top">笑一个吧</div>
+        <div class="middle-botton">
+          <div class="headPortrait">
+            <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
+          </div>
+          <div class="userName">李白</div>
+          <div class="dot">·</div>
+          <div class="time">2020-06-11 19:34:20</div>
+        </div>
+      </div>
+    </div>
+    <div class="messagelist">
+      <div class="list-left">
+        <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
+      </div>
+      <div class="list-right">
+        <div class="middle-top">笑一个吧</div>
+        <div class="middle-botton">
+          <div class="headPortrait">
+            <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
+          </div>
+          <div class="userName">李白</div>
+          <div class="dot">·</div>
+          <div class="time">2020-06-11 19:34:20</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -86,6 +118,7 @@ export default {
     height: 120px;
     display: flex;
     margin-top: 10px;
+    border-bottom: 1px solid #ddd;
     .list-left {
       width: 30%;
       height: 100%;

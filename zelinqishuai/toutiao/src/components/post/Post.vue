@@ -2,16 +2,50 @@
 <template>
 <div class='tt-post'>
     <div class="title">
-       <span class="blue">发微头条</span>
-       <span>写文章</span>
+       <div 
+       v-for='tab in tabs' :key="tab.id"
+       :class="['title-itme',{active:tab.id===activeTab}]"
+       @click="tabClick(tab.id)"
+       >
+        {{tab.text}}
+       </div>
     </div>
-    <textarea placeholder="有什么新鲜事儿告诉大家" name="" id="" cols="30" rows="10"></textarea>
-    <div class="bottom">
-        <div class="post-left">
-            图片
+    <div class="post-content">
+        <div class="post-wb" v-show="activeTab=='toutiao'">
+            <textarea placeholder="有什么新鲜事儿告诉大家" name="" id="" cols="30" rows="10"></textarea>
+            <div class="bottom">
+                <div class="post-left" @click='postImg'>
+                    <div class="img" @click.stop="toggleAddImg">
+                        图片
+                    </div>
+                    <div class="upload-imgs" v-show="toggleAdd"> 
+                        <div class="addImg">
+                            <div class="add">+</div>
+                            <input 
+                            type="file" 
+                            multiple 
+                            accept=".jpg,.png" 
+                            @change="handleImgsUpload"
+                            />
+                        </div>
+                        <div class="img-item" v-for="(img,index) in uploadImgs" :key="img">
+                            <img :src="img" alt="">
+                            <div class="deleteImg" @click.stop="deleteImg(index)">X</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-right">
+                    发布
+                </div>
+            </div>
         </div>
-        <div class="post-right">
-            发布
+        <div class="post-article" v-show="activeTab=='article'">
+            <input class="article-input" type="text" placeholder="请输入文章标题...">
+            <vue-editor v-model="richContent" placeholder="请输入正文..." class="article-editor" />
+            <div class="article-bottom">
+                <div class="articleNumber">字数</div>
+                <div class="submit">发布</div>
+            </div>
         </div>
     </div>
 </div>
@@ -20,23 +54,62 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { VueEditor } from "vue2-editor";
 export default {
 //import引入的组件需要注入到对象中才能使用
-components: {},
+components: {
+    VueEditor
+},
 data() {
 //这里存放数据
 return {
-    title:'写代码真的很快乐'
+    tabs: [
+        {
+          id: "toutiao",
+          text: "发微头条"
+        },
+        {
+          id: "article",
+          text: "写文章"
+        }
+      ],
+      activeTab: "toutiao",
+      toggleAdd:false,
+      uploadImgs:[],
+      richContent:""
 };
 },
 //监听属性 类似于data概念
 computed: {},
 //监控data中的数据变化
-watch: {},
+watch: {
+},
 //方法集合
 methods: {
+    tabClick:function(id){
+        this.activeTab = id;
 
+    },
+    postImg:function(){
+
+    },
+    toggleAddImg:function(){
+        this.toggleAdd = !this.toggleAdd
+    },
+    handleImgsUpload:function(e){
+        Array.from(e.target.files).forEach(e => {
+            let params = new FormData;
+            // console.log(params);
+            params.append('file',e);
+            this.$axios.post("/aliossUpload", params).then(res => {
+                this.uploadImgs.push(res.url);
+            });
+        })
+        // console.log(this.uploadImgs);
+    },
+    deleteImg:function(index){
+        this.uploadImgs.splice(index,1)
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -59,49 +132,148 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
     .tt-post{
         margin: 0 auto 20px;
         width: 512px;
-        height: 225px;
         border: 1px solid #e8e8e8;
         .title{
             font-size: 14px;
             border-bottom: 3px solid #e8e8e8;
             height: 35px;
             line-height: 35px;
-            span{
+            display: flex;
+            .title-itme{
                 padding: 0 20px;
+                cursor: default;
             }
-           .blue{
+           .active{
                color: blue;
            }
         }
-        textarea{
+        .post-content{
             width: 100%;
-            height: 140px;
-            padding: 0;
-            padding-top: 20px;
-            margin: 0;
-            background-color: #f4f5f6;
-            border: none;
-            text-indent: 4em;
+            .post-wb{
+                textarea{
+                    width: 100%;
+                    // padding: 0;
+                    padding-top: 20px;
+                    // margin: 0;
+                    background-color: #f4f5f6;
+                    border: none;
+                    text-indent: 4em;
+                    outline: medium;
+                }
+            }
+            .post-article{
+                .article-input{
+                    height: 50px;
+                    width: 100% ;
+                    border: none;
+                    text-indent: 1em;
+                    font-size: 20px;
+                    outline: medium;
+                }
+                .article-editor{
+                    border: none;
+                }
+                .article-bottom{
+                    // position: absolute;
+                    height: 58px;
+                    line-height: 58px;
+                    position: relative;
+                    display: flex;
+                    justify-content: space-between;
+                    .articleNumber{
+                        padding: 0 10px;
+                        font-size: 14px;
+                        color: #737373;
+                    }
+                    .submit{
+                        background-color: #fe898e;
+                        height: 58px;
+                        width: 100px;
+                        text-align: center;
+                        line-height: 58px;
+                        color: white;
+                        position: absolute;
+                        right: 0;
+                    }
+                }
+            }
         }
+        
+        
         .bottom{
-            height: 40px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            .post-left{
-                width: 93px;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size:12px;
-            }
-            .post-right{
+             .post-right{
                 width: 120px;
-                height: 40px;
+                height: 50px;
+                line-height: 50px;
                 background-color: #fe898e;
                 color: white;
-                line-height: 40px;
                 text-align: center;
+            }
+            .post-left{
+                .img{
+                    width: 93px;
+                    height: 50px;
+                    line-height: 50px;
+                    text-align: center;
+                    font-size:12px;
+                    cursor: pointer;
+                }
+                .upload-imgs{
+                    width: 300px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    background-color: #fff;
+                    .addImg{
+                        width: 100px;
+                        height: 100px;
+                        position: relative;
+                        .add{
+                            font-size: 50px;
+                            line-height: 100px;
+                            text-align: center;
+                            width: 100px;
+                            height: 100px;
+                            border: 1px dashed #ddd;
+                            font-weight: 100;
+                        }
+                        input{
+                            opacity: 0;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    .img-item{
+                        width: 100px;
+                        height: 100px;
+                        padding: 5px;
+                        position: relative;
+                        img {
+                            height: 100%;
+                            width: 100%;
+                        }
+                        .deleteImg{
+                            display: none;
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%,-50%);
+                        }
+                        &:hover{
+                            opacity: .6;
+                            transition: all .5s;
+                            .deleteImg{
+                                display: block;
+                                color: black;
+                                cursor: default;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
