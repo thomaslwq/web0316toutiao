@@ -1,0 +1,23 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1471079",
+      "name": "表情",
+      "font_class": "biaoqing-xue",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "1605769",
+      "name": "图片",
+      "font_class": "picture",
+      "unicode": "e6e9",
+      "unicode_decimal": 59113
+    }
+  ]
+}

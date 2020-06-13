@@ -4,15 +4,15 @@
             <span>登录后可以保存您的浏览喜好、评论、收藏，并与APP同步，更可以发布微头条</span>
         </div>
         <div class="tt-login-button">
-            <button>登录</button>
+            <router-link to="login">登录</router-link>
         </div>
         <div class="tt-login-more">
             <div class="login-qq">
-                <div class="more-icon"></div>
+                <div class="more-icon qq"></div>
                 <span class="more-name">QQ</span>
             </div>
             <div class="login-wx">
-                <div class="more-icon"></div>
+                <div class="more-icon wx"></div>
                 <span class="more-name">微信</span>
             </div>
         </div>
@@ -101,11 +101,13 @@ activated() {
         }
 
         .tt-login-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             flex: 30%;
 
-            button {
+            a {
                 width: 80%;
-                height: 80%;
                 font-size: 25px;
                 background-color: #e43c46;
                 color: white;
@@ -132,6 +134,16 @@ activated() {
                     width: 48px;
                     border: 1px solid black;
                     border-radius: 50%;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+
+                .more-icon.qq {
+                    background-image: url("../../assets/images/qq-icon.png");
+                }
+
+                .more-icon.wx {
+                    background-image: url("../../assets/images/wx-icon.png");
                 }
 
                 .more-name {

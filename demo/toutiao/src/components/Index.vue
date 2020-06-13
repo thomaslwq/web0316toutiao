@@ -13,6 +13,7 @@
       </div>
       <div class="tt-content-middle">
         <Post></Post>
+        <NewsList></NewsList>
       </div>
       <div class="tt-content-right">
           <!-- 搜索框开始 -->
@@ -41,6 +42,7 @@ import Nav from "../components/nav/Nav";
 import SearchInput from "../components/searchinput/SearchInput";
 import Login from "../components/login/Login";
 import Post from "../components/post/Post";
+import NewsList from "../components/news/NewsList";
 export default {
   //import引入的组件需要注入到对象中才能使用
 
@@ -52,7 +54,8 @@ export default {
     Nav,
     SearchInput,
     Login,
-    Post
+    Post,
+    NewsList
   },
   data() {
     //这里存放数据

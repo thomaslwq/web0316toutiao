@@ -31,9 +31,11 @@ import {
     TabPane,
     Tabs,
     Popover,
-    Upload
+    Upload,
+    Autocomplete
 } from 'element-ui'
 Vue.use(Container)
+.use(Autocomplete)
 .use(Popover)
 .use(Upload)
 .use(Dropdown)
