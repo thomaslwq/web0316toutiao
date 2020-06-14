@@ -1,8 +1,13 @@
 <template>
   <div class="options">
-    <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText">
-      <el-button slot="append">搜索</el-button>
-    </el-input>
+    <el-autocomplete
+      placeholder="搜索站内资讯、视频或用户"
+      v-model="searchText"
+      :fetch-suggestions="searchAsync"
+      @keyup.enter="goToSearch"
+    >
+      <el-button slot="append" @click="goToSearch">搜索</el-button>
+    </el-autocomplete>
     <div class="user-box">
       <div class="user-brief" v-if="ifLogin">
         <a class="log-out" @click="logOut">退出登录</a>
@@ -192,7 +197,8 @@ export default {
         { is_blank: true, title: "中青网", fl_href: "http://www.youth.cn" },
         { is_blank: true, title: "海外网", fl_href: "http://www.haiwainet.cn" },
         { is_blank: true, title: "中国网", fl_href: "http://h5.china.com.cn" }
-      ]
+      ],
+      timer: null
     };
   },
   computed: {
@@ -201,6 +207,16 @@ export default {
     },
     userInfo() {
       return this.$store.state.userInfo;
+    },
+    newsList() {
+      let arr = [];
+      this.$store.state.newsList.forEach(ele => {
+        arr.push({
+          value: ele.title,
+          type: ele.type
+        });
+      });
+      return arr;
     }
   },
   methods: {
@@ -211,12 +227,32 @@ export default {
       this.axios.post("/logout").then(res => {
         this.$store.commit("ifLogin", false);
       });
+    },
+    searchAsync(searchText, callback) {
+      let showList = searchText
+        ? this.newsList.filter(ele => {
+            return (
+              ele.value.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+            );
+          })
+        : [{ value: "请输入关键词" }];
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        callback(showList);
+      }, 1000);
+    },
+    goToSearch() {
+      if (this.searchText.trim() !== '') {
+        this.$router.push({
+          path: "/newsSearch",
+          query: { searchText: this.searchText }
+        });
+      }
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 .options /deep/ .el-input__inner {
   background: #fff;
@@ -228,19 +264,21 @@ export default {
   width: 340px;
   margin-left: 40px;
 
-  .el-input {
+  .el-autocomplete {
     width: 100%;
     border: 1px solid #ddd;
     border-radius: 5px;
     overflow: hidden;
     margin-bottom: 20px;
 
-    .el-button {
-      height: 42px;
-      background: #f66;
-      color: #fff;
-      border: 0;
-      border-radius: 0;
+    .el-input {
+      .el-button {
+        height: 42px;
+        background: #f66;
+        color: #fff;
+        border: 0;
+        border-radius: 0;
+      }
     }
   }
 

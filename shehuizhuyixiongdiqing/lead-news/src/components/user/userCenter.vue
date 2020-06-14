@@ -71,7 +71,8 @@ export default {
 
 <style scoped lang="less">
 .user-center {
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   background: #f6f6f4;
 
   .u-header {

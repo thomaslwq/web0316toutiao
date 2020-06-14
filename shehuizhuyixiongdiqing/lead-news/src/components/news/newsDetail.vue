@@ -5,9 +5,14 @@
         <a href="/">
           <img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png" />
         </a>
-        <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText">
-          <el-button slot="append">搜索</el-button>
-        </el-input>
+        <el-autocomplete
+          placeholder="搜索站内资讯、视频或用户"
+          v-model="searchText"
+          :fetch-suggestions="searchAsync"
+          @keyup.enter="goToSearch"
+        >
+          <el-button slot="append" @click="goToSearch">搜索</el-button>
+        </el-autocomplete>
       </div>
     </div>
     <div class="n-content">
@@ -80,8 +85,21 @@ export default {
         imgs: null,
         created_at: ""
       },
-      failImgIdx: null
+      failImgIdx: null,
+      timer: null
     };
+  },
+  computed: {
+    newsList() {
+      let arr = [];
+      this.$store.state.newsList.forEach(ele => {
+        arr.push({
+          value: ele.title,
+          type: ele.type
+        });
+      });
+      return arr;
+    }
   },
   mounted() {
     let params = new FormData();
@@ -93,7 +111,21 @@ export default {
   methods: {
     hideFail(index) {
       this.failImgIdx = index;
-    }
+    },
+    searchAsync(searchText, callback) {
+      let showList = searchText
+        ? this.newsList.filter(ele => {
+            return (
+              ele.value.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+            );
+          })
+        : [{ value: "请输入关键词" }];
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        callback(showList);
+      }, 1000);
+    },
+    goToSearch() {}
   }
 };
 </script>
@@ -124,18 +156,20 @@ export default {
         }
       }
 
-      .el-input {
+      .el-autocomplete {
         width: 340px;
         border: 1px solid #ddd;
         border-radius: 5px;
         overflow: hidden;
 
-        .el-button {
-          height: 42px;
-          background: #f66;
-          color: #fff;
-          border: 0;
-          border-radius: 0;
+        .el-input {
+          .el-button {
+            height: 42px;
+            background: #f66;
+            color: #fff;
+            border: 0;
+            border-radius: 0;
+          }
         }
       }
     }

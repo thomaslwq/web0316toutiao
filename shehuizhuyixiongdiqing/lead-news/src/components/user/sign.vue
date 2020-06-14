@@ -63,11 +63,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-html,
-body {
-  height: 100%;
-}
-
 #app {
   height: 100%;
 

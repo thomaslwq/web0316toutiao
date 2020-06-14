@@ -6,6 +6,7 @@ import Sign from '@/components/user/sign'
 import UserCenter from '@/components/user/userCenter'
 import UserInfo from '@/components/user/userInfo'
 import NewsDetail from '@/components/news/newsDetail'
+import NewsSearch from '@/components/news/newsSearch'
 
 Vue.use(Router);
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/newsDetail',
       name: 'NewsDetail',
       component: NewsDetail
+    },
+    {
+      path: '/newsSearch',
+      name: 'NewsSearch',
+      component: NewsSearch
     }
   ]
 })

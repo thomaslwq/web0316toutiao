@@ -42,10 +42,10 @@
         <el-tab-pane label="密码管理" name="userPwd">
           <el-form :model="formPwd" label-width="80px">
             <el-form-item label="当前密码">
-              <el-input type="password" v-model="formPwd.curPwd"></el-input>
+              <el-input type="password" v-model="formPwd.curPwd" show-password></el-input>
             </el-form-item>
             <el-form-item label="新密码">
-              <el-input type="password" v-model="formPwd.newPwd"></el-input>
+              <el-input type="password" v-model="formPwd.newPwd" show-password></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click.prevent="updatePsw">更改密码</el-button>
