@@ -10,7 +10,12 @@
     </div>
     <div class="tab-content">
         <div class="content-toutiao" v-show="activeTab=='toutiao'">
-            <textarea class="textarea" rows="10" placeholder="有什么新鲜事想告诉大家"></textarea>
+            <textarea class="textarea" rows="10" placeholder="有什么新鲜事想告诉大家" :maxlength="maxCount" v-model="textAreaMsg" @change="textAreaWord"></textarea>
+            <div class="textWord">
+                <span class="nowWord">{{textNum}}</span>
+                <span>/</span>
+                <span class="maxWord">{{maxCount}}</span>
+            </div>
             <div class="toutiao-buttom">
                 <div class="buttom-pic"
                     @click.stop="uploadImg"
@@ -35,6 +40,7 @@
                     <div class="deleteImg" 
                     @click.stop="deleteImg(index)">X</div>
                 </div>
+                <div class="uploadImg-tip">图片只能上传9张,支持格式 .jpg, .png</div>
             </div>
             <!-- 显示图片结束 -->
 
@@ -70,6 +76,9 @@ data() {
         isShowEmoji:false,
         uploadImgs:[],
         richContent: "",
+        maxCount:200,
+        textAreaMsg:"",
+        textNum:0
    };
 },
 methods: {
@@ -81,7 +90,10 @@ methods: {
         this.isShowEmoji = false
     },
     fileImgsUpload:function(e){
-        // console.log(e.target.files);
+        if(this.uploadImgs.length>=10){
+            return
+        }
+        // console.log(e.target.files.length);
         // console.log(Array.from(e.target.files));
         Array.from(e.target.files).forEach(f=>{
             let param = new FormData()
@@ -97,6 +109,12 @@ methods: {
     openEmoji:function(){
         this.isShowUploadImg = false;
         this.isShowEmoji = !this.isShowEmoji;
+    },
+    
+},
+computed:{
+    textAreaWord:function(){
+        return this.textNum = this.textAreaMsg.length
     }
 },
 }
@@ -133,6 +151,13 @@ methods: {
                 font-size: 15px;
                 background-color: var(--bgColor);
                 resize:none;//禁止拖拽窗口哦
+            }
+            .textWord{
+                position: absolute;
+                right: 20px;
+                bottom: 50px;
+                background-color: var(--bgColor);
+                border-radius: 10px;
             }
             .toutiao-buttom {
                 width: 100%;
@@ -204,6 +229,7 @@ methods: {
                     cursor: pointer;
                 }
                 .img-item{
+                    position: relative;
                     width: 100px;
                     height: 100px;
                     border-radius: 10px;
@@ -215,26 +241,27 @@ methods: {
                         height: 100px;
                     }
                     .deleteImg{
-                        position: absolute;
-                        top: 0;
                         width: 100px;
                         height: 100px;
+                        position: absolute;
+                        top: 0;
+                        text-align: center;
+                        color: white;
+                        line-height: 100px;
                         font-weight: 900;
                         display: none;
-                        text-align: center;
-                        line-height: 100px;
                     }
                     &:hover{
                         transition: all 1s;
                         background-color: #ddd;
                         opacity: .5;
                         .deleteImg{
-                            width: 100px;
-                            height: 100px;
-                            color: white;
                             display: block;
                         }
                     }
+                }
+                .uploadImg-tip{
+                    color: red;
                 }
             }
             .emoji{
