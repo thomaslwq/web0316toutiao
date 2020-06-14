@@ -20,7 +20,7 @@
           <input placeholder="账号/邮箱" type="text" v-model.trim="username" />
         </div>
         <div class="paswordInput">
-          <input placeholder="密码" type="text" v-model.trim="password"/>
+          <input placeholder="密码"  autocomplete="off" type="password" v-model.trim="password"/>
         </div>
         <div class="tijiao" @click.stop="login">确定</div>
       </div>
@@ -63,11 +63,16 @@ export default {
            parmas.append('password',this.password)
            this.$axios.post('/loginCheck',parmas)
            .then(res=>{
-               console.log(res);
-               console.log(parmas);
+              //  console.log(res);
+              //  console.log(parmas);
                if(res.ret === 0){
                    this.$store.commit('userInfo',res.wdata);
                    this.$store.commit('isLogin',true)
+                   this.$router.replace('/')
+               }else{
+                 alert('账号或密码不正确')
+                  this.username = '';
+                  this.password = ''
                }
            })
       }
@@ -75,7 +80,11 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+       if (this.$store.state.isLogin){
+        this.$router.replace('/').catch(data => {  })
+      }
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -102,8 +111,8 @@ export default {
   }
 
   .userLogin-img1 {
-    width: 375px;
-    height: 400px;
+    width: 520px;
+    height: 360px;
     margin-left: 50%;
     transform: translateX(-50%);
     img {
@@ -115,9 +124,9 @@ export default {
   .userLogin-box {
     width: 375px;
     // height: 300px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    // position: absolute;
+    margin-left: 50%;
+    margin-top: 0;
     transform: translate(-50%, -50%);
     .login {
       background-color: white;

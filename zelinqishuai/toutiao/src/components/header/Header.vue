@@ -56,7 +56,6 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 </script>
 <style lang='less' scoped>
     .tt-header {
-        width: 100vw;
         background-color: black;
         color: white;
         display: flex;

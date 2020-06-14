@@ -16,13 +16,15 @@
     <div class="userLogin-box">
       <div class="login">
         <h4>账号注册</h4>
-        <div class="usernameInput">
-          <input placeholder="账号/邮箱" type="text" />
+        <div class="usernameInput" >
+           <input placeholder="账号/邮箱" type="text" v-model.trim="username" />
         </div>
         <div class="paswordInput">
-          <input placeholder="密码" type="text" />
+          <input placeholder="密码"  autocomplete="off"type="password" v-model.trim="password"/>
         </div>
-        <div class="tijiao">确定</div>
+        <div class="tijiao"
+        @click.stop="signForm"
+        >确定</div>
       </div>
       <div class="loginDetail">
         <span>登录/注册表示你同意</span>
@@ -43,7 +45,10 @@ export default {
   components: {},
   data() {
     //这里存放数据
-    return {};
+    return {
+      username:'',
+      password:''
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -53,6 +58,41 @@ export default {
   methods: {
       goUserLogin:function(url){
           this.$router.replace(url).catch(data=>{})
+      },
+      signForm:function(){
+        if (this.username == "" || this.password == "") {
+          alert('账号密码不能为空')
+            return
+        }
+          let parmas = new FormData;
+          parmas.append("username", this.username);
+          parmas.append("password", this.password);
+          this.$axios.post("/createUser", parmas)
+          .then(res=>{
+            console.log(res);
+            //如果请求成功
+            if (res.ret == 0) {
+              res.status = 'success';
+              this.$axios.post("/loginCheck", parmas)
+              .then(res=>{
+                // console.log(res);
+                //储存数据
+                this.$store.commit('userInfo',res.wdata)
+                this.$store.commit('isLogin',true)
+                //跳转到主页
+                this.$router.replace('/')
+              })
+              .catch(({ err }) => {
+                console.log(err);
+              });
+            }else{
+              res.status = 'fail';
+              alert('账号已存在')
+            }
+          })
+          .catch(({ err }) => {
+              console.log(err);
+          });
       }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -85,8 +125,8 @@ export default {
   }
 
   .userLogin-img1 {
-    width: 375px;
-    height: 400px;
+    width: 520px;
+    height: 360px;
     margin-left: 50%;
     transform: translateX(-50%);
     img {
@@ -98,9 +138,9 @@ export default {
   .userLogin-box {
     width: 375px;
     // height: 300px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    // position: absolute;
+    margin-left: 50%;
+    margin-top: 0;
     transform: translate(-50%, -50%);
     .login {
       background-color: white;
