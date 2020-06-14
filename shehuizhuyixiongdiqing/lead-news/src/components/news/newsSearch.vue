@@ -102,6 +102,14 @@ export default {
         );
       });
     },
+    goToSearch() {
+      if (this.searchText.trim() !== '') {
+        this.$router.push({
+          path: "/newsSearch",
+          query: { searchText: this.searchText }
+        });
+      }
+    }
   }
 };
 </script>
