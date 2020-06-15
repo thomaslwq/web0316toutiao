@@ -91,6 +91,10 @@ export default {
       }
     }
   }
+
+  article {
+    min-width: 1200px;
+  }
 }
 
 .grid-content {
