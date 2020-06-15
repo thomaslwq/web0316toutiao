@@ -79,7 +79,6 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 <style lang='less' scoped>
     .tt{
         .tt-cotent{
-            width: 100vw;
              padding: 12px 10vw 10px 15vw;
              display:flex;
              justify-content: space-evenly;
@@ -99,7 +98,7 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
                     margin: 20px 0;
                     padding: 20px;
                     padding-top: 10px;
-                    background-color: #ddd;
+                    background-color: #F4F5F6;
                 }
                 .newsList{
                     

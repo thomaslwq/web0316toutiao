@@ -2,53 +2,23 @@
 <template>
   <div class="messageBox">
     <div class="refresh">
-      <div class="clickRefresh">点击刷新</div>
+      <div class="clickRefresh" @click="getArticles">点击刷新</div>
     </div>
-    <div class="messagelist">
-      <div class="list-left">
-        <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
+    
+    <div class="messagelist" v-for="(article,index) in articleLists" :key='article.nid'>
+      <div v-if="article.img == null || article.img == 'undefined'"></div>
+      <div class="list-left" @click.stop="jumpMessageDetaile(article.nid)"  v-else>
+        <img :src="article.img"/>
       </div>
       <div class="list-right">
-        <div class="middle-top">笑一个吧</div>
+        <div class="middle-top" @click.stop="jumpMessageDetaile(article.nid)" >{{article.title}}</div>
         <div class="middle-botton">
           <div class="headPortrait">
-            <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
+            <img :src="article.user.avator" />
           </div>
-          <div class="userName">李白</div>
+          <div class="userName">{{article.user.nickname}}</div>
           <div class="dot">·</div>
-          <div class="time">2020-06-11 19:34:20</div>
-        </div>
-      </div>
-    </div>
-    <div class="messagelist">
-      <div class="list-left">
-        <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
-      </div>
-      <div class="list-right">
-        <div class="middle-top">笑一个吧</div>
-        <div class="middle-botton">
-          <div class="headPortrait">
-            <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
-          </div>
-          <div class="userName">李白</div>
-          <div class="dot">·</div>
-          <div class="time">2020-06-11 19:34:20</div>
-        </div>
-      </div>
-    </div>
-    <div class="messagelist">
-      <div class="list-left">
-        <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
-      </div>
-      <div class="list-right">
-        <div class="middle-top">笑一个吧</div>
-        <div class="middle-botton">
-          <div class="headPortrait">
-            <img src="http://image.yy.com/yywebalbumbs2bucket/144152f8680f421599233c6ffcfcef49_1476265267104.jpeg" alt />
-          </div>
-          <div class="userName">李白</div>
-          <div class="dot">·</div>
-          <div class="time">2020-06-11 19:34:20</div>
+          <div class="time">{{article.created_at}}</div>
         </div>
       </div>
     </div>
@@ -64,19 +34,54 @@ export default {
   components: {},
   data() {
     //这里存放数据
-    return {};
+    return {
+      isLogin:false,
+      userInfo:{}
+    };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    articleLists() {
+      return this.$store.state.articleLists
+    }
+  },
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+    getArticles:function(){
+      let parmas = new FormData;
+      parmas.append('lastid',0);
+      this.$axios.post('/getArticles',parmas)
+      .then(res => {
+        if(res.ret == 0){
+          // console.log(res);
+          this.$store.commit('updateArticleLists',res.articles)
+          // this.articleList = this.$store.state.articleLists
+        }else{
+          alert('加载留言失败')
+          // console.log('1231321');
+        }
+      }).catch(res => [
+        console.log('加载失败了')
+      ])
+    },
+    jumpMessageDetaile:function(nid){
+      // this.$route.query = ""
+      console.log(nid);
+      this.$router.push({
+        path:'/MessageDtaile',
+        query: { nid: nid }
+      })
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-      
+      this.isLogin = this.$store.state.isLogin;
+      this.userInfo = this.$store.state.userInfo;
+      this.getArticles()
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -122,6 +127,7 @@ export default {
     .list-left {
       width: 30%;
       height: 100%;
+      cursor: pointer;
       img {
         width: 100%;
         height: 100%;
@@ -141,6 +147,7 @@ export default {
           font-size: 20px;
           line-height: 80px;
           padding-left: 10px;
+          cursor: pointer;
       }
 
       .middle-botton {
