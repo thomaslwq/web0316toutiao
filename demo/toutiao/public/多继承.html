@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+<!-- </body>
+<script>
+    function Father() {
+    }
+    Father.prototype.property = "百万富翁";
+    Father.prototype.sing = function () {
+        console.log("唱歌技能开启");
+    }
+    Father.prototype.playkongfu = function () {
+        console.log("功夫");
+    }
+    function Mother() {
+    }
+    Mother.prototype.yanzhi = "貌美如花";
+    Mother.prototype.dance = function () {
+        console.log("跳舞技能开启");
+    }
+    function Daughter(name) {
+        // 初始化
+        Father.call(this);
+        Mother.call(this);
+        this.name = name;
+    }
+
+    Daughter.prototype = Object.create(Father.prototype, {
+        shufang: {
+            writable: true,
+            configurable: true,
+            value: "hello",
+            // enumerable:true
+            enumerable:false
+        }
+    });
+    // Daughter.prototype = new Father();
+    Object.assign(Daughter.prototype, Mother.prototype);
+    Daughter.prototype.contructor = Daughter;
+    console.log(Daughter.prototype)
+
+    let lily = new Daughter("lily");
+    for(let key in lily){
+        console.log(key)
+    }
+    console.log(lily);
+</script> -->
+<script>
+    class Person{
+        speak(){
+            console.log("说话");
+        }
+        constructor(name,sex){
+            console.log("调用父类的构造函数");
+            this.name = name;
+            this.sex = sex;
+        }
+
+    }
+    class Man extends Person{
+        constructor(name,sex){
+            super(name,sex)
+        }
+    }
+    let xm = new Man("xiaoming","男");
+    console.log(xm.speak(),xm.sex,xm.name)
+</script>
+</html>
