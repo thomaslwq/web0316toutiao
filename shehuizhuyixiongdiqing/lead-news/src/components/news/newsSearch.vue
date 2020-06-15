@@ -5,7 +5,7 @@
         <a href="/">
           <img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png" />
         </a>
-        <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText" @keyup.enter="goToSearch">
+        <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText" @keyup.enter.native="goToSearch">
           <el-button slot="append" @click="searchRes">搜索</el-button>
         </el-input>
       </div>

@@ -4,7 +4,7 @@
       placeholder="搜索站内资讯、视频或用户"
       v-model="searchText"
       :fetch-suggestions="searchAsync"
-      @keyup.enter="goToSearch"
+      @keyup.enter.native="goToSearch"
     >
       <el-button slot="append" @click="goToSearch">搜索</el-button>
     </el-autocomplete>
