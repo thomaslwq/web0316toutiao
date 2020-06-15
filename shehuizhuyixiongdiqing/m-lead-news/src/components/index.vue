@@ -20,7 +20,7 @@
           src="//s3b.pstatp.com/growth/mobile_list/image/wap_logo@3x_581de69e.png"
           @click="toTop"
         />
-        <i @click="reloadNews" :class="{refresh: ifRefresh}"></i>
+        <i @click="reloadNews(true)" :class="{refresh: ifRefresh}"></i>
       </div>
       <div class="i-search">
         <a @click="goTo('/search')">
@@ -94,13 +94,13 @@ export default {
     }
   },
   mounted() {
-    this.reloadNews();
+    this.reloadNews(true);
     window.addEventListener("scroll", e => {
       let scrollTotal =
         document.body.scrollHeight - document.documentElement.clientHeight;
       if (document.documentElement.scrollTop >= scrollTotal) {
         this.$store.commit("lazyPages", this.lazyPages + 1);
-        this.reloadNews();
+        this.reloadNews(false);
       }
     });
     let startY, endY;
@@ -112,7 +112,7 @@ export default {
     window.addEventListener("touchend", event => {
       endY = event.changedTouches[0].clientY;
       if (endY - startY >= 100) {
-        this.reloadNews();
+        this.reloadNews(true);
       }
     });
   },
@@ -126,7 +126,7 @@ export default {
         query: { nid: id }
       });
     },
-    reloadNews() {
+    reloadNews(refresh) {
       this.ifRefresh = true;
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
@@ -149,7 +149,7 @@ export default {
           } else if (newsList.length > 15 * this.lazyPages) {
             this.showList = newsList.slice();
           }
-          // if (newsList.length - oldLength)
+          if (newsList.length - oldLength && refresh)
           this.$message(`为您推荐${newsList.length - oldLength}篇新头条`);
           this.$store.commit("newsList", newsList);
         }
