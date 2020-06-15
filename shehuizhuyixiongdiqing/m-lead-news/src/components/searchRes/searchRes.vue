@@ -1,28 +1,25 @@
 <template>
   <div class="search-res">
-    <div class="s-header">
-      <div class="s-headerCt">
-        <a href="/">
-          <img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png" />
-        </a>
-        <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText" @keyup.enter="goToSearch">
-          <el-button slot="append" @click="searchRes">搜索</el-button>
+    <div class="sr-input">
+      <form @submit.prevent="goToSearch">
+        <el-input placeholder="搜点啥呢？" v-model="searchText" :fetch-suggestions="searchAsync">
+          <el-button slot="append" @click="goToSearch">搜索</el-button>
         </el-input>
-      </div>
+      </form>
     </div>
-    <h1>"{{this.searchText}}"&emsp;的搜索结果</h1>
-    <div class="s-content">
+    <h1 class="sr-notice">"{{this.searchText}}"&emsp;的搜索结果</h1>
+    <div class="sr-content">
       <div class="msg-res">
         <h3>微头条</h3>
         <ul>
-          <li v-for="(item,index) in msgRes" :key="index">
+          <li v-for="(item,index) in msgRes" :key="index" @click="goToDetail(item.nid)">
             <div class="news-img" v-if="item.img">
-              <a target="_blank" @click="goToDetail(item.nid)">
+              <a target="_blank">
                 <img :src="item.img" lazy="loaded" />
               </a>
             </div>
             <div class="news-detail">
-              <a target="_blank" class="news-title" @click="goToDetail(item.nid)">{{item.title}}</a>
+              <a target="_blank" class="news-title">{{item.title}}</a>
               <div v-html="item.content" class="news-body n-body"></div>
               <div class="news-info">
                 <a class="user-img">
@@ -38,14 +35,14 @@
       <div class="atc-res">
         <h3>文章</h3>
         <ul>
-          <li v-for="(item,index) in atcRes" :key="index">
+          <li v-for="(item,index) in atcRes" :key="index" @click="goToDetail(item.nid)">
             <div class="news-img" v-if="item.img">
-              <a target="_blank" @click="goToDetail(item.nid)">
+              <a target="_blank">
                 <img :src="item.img" lazy="loaded" />
               </a>
             </div>
             <div class="news-detail">
-              <a target="_blank" class="news-title" @click="goToDetail(item.nid)">{{item.title}}</a>
+              <a target="_blank" class="news-title">{{item.title}}</a>
               <div v-html="item.content" class="news-body n-body"></div>
               <div class="news-info">
                 <a class="user-img">
@@ -102,10 +99,23 @@ export default {
         );
       });
     },
+    searchAsync(searchText, callback) {
+      let showList = searchText
+        ? this.newsList.filter(ele => {
+            return (
+              ele.value.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+            );
+          })
+        : [];
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        callback(showList);
+      }, 1000);
+    },
     goToSearch() {
-      if (this.searchText.trim() !== '') {
+      if (this.searchText.trim() !== "") {
         this.$router.push({
-          path: "/newsSearch",
+          path: "/searchRes",
           query: { searchText: this.searchText }
         });
       }
@@ -116,152 +126,118 @@ export default {
 
 <style scoped lang="less">
 .search-res /deep/ .el-input__inner {
+  padding: 0 30px;
+  height: 100px;
+  font-size: 33px;
+  border: none;
+}
+
+.search-res /deep/ .el-input-group__append {
+  height: 100px;
   background: #fff;
-  font-size: 15px;
-  font-weight: 400;
+  border: none;
 }
 
 .search-res {
-  background: #f6f6f4;
-  min-height: 100vh;
-  height: 100%;
+  .sr-input {
+    padding: 30px;
 
-  .s-header {
-    width: 100%;
-    box-shadow: 0 0 5px #ccc;
-    background: #fff;
-    position: fixed;
-    top: 0;
-    z-index: 10;
+    .el-input {
+      width: 100%;
+      height: 100px;
+      border: 2px solid #666;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
 
-    .s-headerCt {
-      width: 1060px;
-      height: 60px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      a {
-        img {
-          width: 108px;
-        }
-      }
-
-      .el-input {
-        width: 500px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        overflow: hidden;
-
-        .el-button {
-          height: 42px;
-          background: #f66;
-          color: #fff;
-          border: 0;
-          border-radius: 0;
-        }
+      .el-button {
+        width: 120px;
+        height: 50px;
+        color: #333;
+        font-size: 27px;
+        border-left: 2px solid #ddd;
       }
     }
   }
-
-  h1 {
-    width: 1060px;
-    margin: 0 auto;
-    padding-top: 100px;
+  .sr-notice {
+    text-align: center;
     font-weight: 600;
+    font-size: 25px;
     color: #999;
+    margin-bottom: 20px;
   }
-
-  .s-content {
-    width: 1060px;
-    margin: 30px auto 0;
-    display: flex;
-    justify-content: space-between;
-
+  .sr-content {
+    padding: 0 30px;
     .msg-res,
     .atc-res {
-      width: 500px;
       background: #fff;
-      border-top: 2px solid #f66;
+      border-top: 4px solid #f66;
       padding: 0 20px;
-
+      margin-bottom: 40px;
       h3 {
-        font-size: 18px;
+        font-size: 27px;
         color: #f66;
-        padding: 15px 0;
+        padding: 30px 0;
       }
-
       ul {
         li {
-          padding: 15px 5px;
-          border-bottom: 1px solid #eee;
+          padding: 20px 10px;
+          border-bottom: 2px solid #eee;
           display: flex;
           align-items: center;
 
+          &:last-of-type {
+            border: none;
+          }
+
           .news-img {
-            width: 150px;
-            height: 100px;
+            width: 240px;
+            height: 160px;
             background: #f6f6f4;
-            margin-right: 15px;
+            margin-right: 20px;
             overflow: hidden;
             flex-shrink: 0;
-
             a {
               display: inline-block;
-              width: 150px;
-              height: 100px;
+              width: 240px;
+              height: 160px;
               display: flex;
               align-items: center;
               justify-content: center;
-
               img {
                 max-width: 100%;
                 height: auto;
-                transition: all 0.3s ease 0.1s;
-
-                &:hover {
-                  transform: scale(1.1);
-                }
               }
             }
           }
-
           .news-detail {
-            max-width: 285px;
-
+            max-width: 370px;
             .news-title {
-              font-size: 20px;
+              font-size: 36px;
               font-weight: 600;
-              margin-bottom: 10px;
+              margin-bottom: 20px;
             }
-
             .news-body {
               color: #999;
               max-width: 100%;
-              max-height: 40px;
+              max-height: 80px;
               overflow: hidden;
+              font-size: 30px;
             }
-
             .news-info {
+              font-size: 25px;
+              color: #aaa;
+              margin-top: 20px;
+              white-space: nowrap;
               display: flex;
               align-items: center;
-              font-size: 15px;
-              color: #aaa;
-              margin-top: 10px;
-              white-space: nowrap;
-
-              img {
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-              }
 
               a {
                 color: #666;
-
-                &:hover {
-                  color: #f66;
+                img {
+                  width: 30px;
+                  height: 30px;
+                  border-radius: 50%;
                 }
               }
             }
