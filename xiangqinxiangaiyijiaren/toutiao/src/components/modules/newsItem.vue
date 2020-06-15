@@ -37,19 +37,13 @@ export default {
             }
         },
     methods:{
-        ...mapMutations(['setSearchData']),
+        ...mapMutations(['setSearchData','setScrollHandle']),
         goDetail(id){
                 this.$router.push({name:'newsdetail',params:{id :id}})
             },
-    },
-    mounted() {
-            this.$axios.get('/getArticles').then(res=>{
-                this.resdata = res.articles
-                this.setSearchData(res.articles)
-            })
-            let flag = true
-            window.addEventListener('scroll',()=>{
-                if(!flag)return;
+        handleScroll(){
+             let flag = true
+             if(!flag)return;
                 let s =  document.documentElement.scrollTop + document.documentElement.clientHeight 
                 if(document.body.offsetHeight-200 <  s){
                     if(this.data.length == this.resdata.length){
@@ -68,8 +62,18 @@ export default {
                         flag = true
                     },1000)
                 }
+        }
+    },
+    mounted() {
+            this.$axios.get('/getArticles').then(res=>{
+                this.resdata = res.articles
+                this.setSearchData(res.articles)
             })
+            document.addEventListener('scroll',this.handleScroll)
+            console.log(1)
+            this.setScrollHandle(this.handleScroll)
         },
+   
 }
 </script>
 

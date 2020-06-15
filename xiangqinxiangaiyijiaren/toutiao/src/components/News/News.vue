@@ -14,8 +14,8 @@
     import { VueEditor } from "vue2-editor";
     import { mapState } from 'vuex'
     import { mapMutations } from 'vuex'
-    import WriteBox from '../modules/writeBox'
-    import NewsItem from '../modules/newsItem'
+    import WriteBox from '../modules/WriteBox'
+    import NewsItem from '../modules/NewsItem'
     export default {
         components:{WriteBox,NewsItem},
         methods:{
