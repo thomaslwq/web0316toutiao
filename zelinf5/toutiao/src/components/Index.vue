@@ -84,11 +84,6 @@ export default {
 }
 </script>
 <style  scoped lang="less">
-.header {
-  header {
-  }
-}
-
 .tt-content {
   width: 100vw;
   padding: 10px 5vw 10px 10vw;

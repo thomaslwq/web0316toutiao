@@ -23,6 +23,7 @@
           cols="30"
           rows="10"
           placeholder="有什么新鲜事想告诉大家"
+          v-model="tt_content"
         ></textarea>
         <div class="title-bottom">
           <div class="left">
@@ -62,7 +63,11 @@
               <!-- 上传图片 的地方结束 -->
             </div>
           </div>
-          <div class="right">发布</div>
+
+          <div
+            class="right"
+            @click.stop="publishTT"
+          >发布</div>
         </div>
       </div>
       <div
@@ -72,13 +77,20 @@
         <input
           type="text"
           placeholder="请输入内容"
+          v-model="article_title"
         />
         <vue-editor
+          id="editor"
+          use-custom-image-handler
+          @image-added="handleImageAdded"
           v-model="richContent"
           class="rich-editor"
           placeholder="请输入正文..."
         />
-        <div class="rich-publish">发布</div>
+        <div
+          class="rich-publish"
+          @click.stop="publishArticle"
+        >发布</div>
       </div>
     </div>
     <!-- tab 内容结束 -->
@@ -97,6 +109,7 @@ export default {
   data() {
     //这里存放数据
     return {
+      tt_content: "",
       tabs: [{
         id: "title",
         text: "发微头条"
@@ -108,6 +121,7 @@ export default {
       showUpload: false, // 隐藏
       updatedImgs: [],
       richContent: "", // 富文本编辑器内容的值
+      article_title: "",
     };
   },
   //监听属性 类似于data概念
@@ -116,6 +130,50 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    publishArticle: function () {
+      if (!this.article_title || !this.richContent) {
+        this.$message({
+          msg: "标题或者内容不能为空"
+        });
+        return false;
+      }
+      this.$axios.post("/createArticle", {
+        content: this.richContent,
+        img: "",
+        title: this.article_title
+      }).then(res => {
+        this.$message({
+          msg: res.msg
+        });
+      });
+    },
+    handleImageAdded: function (file, Editor, cursorLocation, resetUploader) {
+      var formData = new FormData();
+      formData.append("file", file);
+
+      this.$axios.post("/aliossUpload", formData).then(res => {
+        let url = res.url;
+        Editor.insertEmbed(cursorLocation, "image", url);
+        resetUploader();
+      })
+    },
+    publishTT: function () {
+      let content = this.tt_content;
+      if (!content) {
+        this.$message({
+          msg: "微头条内容不能为空"
+        })
+        return false;
+      }
+      this.$axios.post("/createTT", {
+        content: content,
+        imgs: this.updatedImgs.join(",")
+      }).then(res => {
+        this.$message({
+          msg: res.msg
+        })
+      }).catch(err => err)
+    },
     // 删除上传图片
     deleteImg: function (index) {
       this.updatedImgs.splice(index, 1);

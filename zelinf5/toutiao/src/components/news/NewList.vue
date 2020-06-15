@@ -1,83 +1,37 @@
 <!--  -->
 <template>
   <div class="tt-news-list">
-    <div class="tt-news-refresh">点击刷新</div>
-    <div class="list-item">
-      <div class="left">
+    <div
+      class="tt-news-refresh"
+      @click="refresh"
+    >点击刷新</div>
+    <div
+      class="list-item"
+      v-for="article in articles"
+      :key="article.nid"
+    >
+      <div
+        class="left"
+        v-if="article.img"
+      >
         <img
-          src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg"
+          :src="article.img"
           alt
         />
       </div>
       <div class="right">
-        <div class="title">删除文章</div>
+        <div class="title">{{article.title}}</div>
         <div class="profile">
           <img
-            src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image"
+            :src="article.user.avator"
             alt
           />
-          <div class="nickname">小菜比</div>
+          <div class="nickname">{{article.user.nickname}}</div>
         </div>
-        <div class="date">2020-06-12 11:30:51</div>
+        <div class="date">{{article.created_at}}</div>
       </div>
     </div>
-    <div class="list-item">
-      <div class="left">
-        <img
-          src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg"
-          alt
-        />
-      </div>
-      <div class="right">
-        <div class="title">删除文章</div>
-        <div class="profile">
-          <img
-            src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image"
-            alt
-          />
-          <div class="nickname">小菜比</div>
-        </div>
-        <div class="date">2020-06-12 11:30:51</div>
-      </div>
-    </div>
-    <div class="list-item">
-      <div class="left">
-        <img
-          src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg"
-          alt
-        />
-      </div>
-      <div class="right">
-        <div class="title">删除文章</div>
-        <div class="profile">
-          <img
-            src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image"
-            alt
-          />
-          <div class="nickname">小菜比</div>
-        </div>
-        <div class="date">2020-06-12 11:30:51</div>
-      </div>
-    </div>
-    <div class="list-item">
-      <div class="left">
-        <img
-          src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg"
-          alt
-        />
-      </div>
-      <div class="right">
-        <div class="title">删除文章</div>
-        <div class="profile">
-          <img
-            src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image"
-            alt
-          />
-          <div class="nickname">小菜比</div>
-        </div>
-        <div class="date">2020-06-12 11:30:51</div>
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -90,18 +44,45 @@ export default {
   components: {},
   data() {
     //这里存放数据
-    return {};
+    return {
+      lastid: 0, // 最新的id
+      articles: [] //文章列表
+    };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+    refresh: function () {
+      this.$axios.post("/getArticles", {
+        lastid: this.lastid
+      }).then(res => {
+        console.log(res);
+        this.articles = (res.articles || []).concat(this.articles);
+        if (this.articles.length > 0) {
+          // 获取最后一条文章或头条的id
+          this.lastid = this.articles[0].nid;
+        }
+      })
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() { },
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() { },
+  mounted() {
+    this.$axios.post("/getArticles", {
+      lastid: this.lastid
+    }).then(res => {
+      console.log(res);
+      this.articles = res.articles || [];
+      if (this.articles.length > 0) {
+        // 获取最后一条文章或头条的id
+        this.lastid = this.articles[0].nid;
+      }
+    })
+  },
   beforeCreate() { }, //生命周期 - 创建之前
   beforeMount() { }, //生命周期 - 挂载之前
   beforeUpdate() { }, //生命周期 - 更新之前
