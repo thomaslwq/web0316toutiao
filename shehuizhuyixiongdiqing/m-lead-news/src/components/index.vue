@@ -400,7 +400,7 @@ export default {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-9px, -100px);
+    transform: translate(-9px, -50px);
   }
 }
 </style>

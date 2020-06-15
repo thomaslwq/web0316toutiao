@@ -80,6 +80,7 @@
         </div>
       </li>
     </ul>
+    <div v-loading.fullscreen="loading" element-loading-background="#fff6"></div>
   </div>
 </template>
 
@@ -97,8 +98,13 @@ export default {
       atcShowImg: "",
       imgList: [],
       imgArr: [],
-      lazyPages: 1
+      lazyPages: 1,
     };
+  },
+  computed: {
+    loading() {
+      return this.$store.state.loading;
+    }
   },
   components: { VueEditor },
   mounted() {

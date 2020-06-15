@@ -5,7 +5,8 @@ Vue.use(Vuex);
 let state = JSON.parse(localStorage.getItem('state')) || {
   userInfo: {},
   ifLogin: false,
-  newsList: []
+  newsList: [],
+  loading: false
 };
 
 const mutations = {
@@ -29,7 +30,10 @@ const mutations = {
   newsList(state, payload) {
     state.newsList = payload;
     localStorage.setItem('state', JSON.stringify(state));
-  }
+  },
+  loading(state, payload) {
+    state.loading = payload;
+  },
 };
 
 export default new Vuex.Store({

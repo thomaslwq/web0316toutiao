@@ -14,17 +14,31 @@ import Vuex from 'vuex'
 import store from './vuex/store'
 
 Vue.use(ElementUI);
-Vue.use(VueAxios,axios);
+Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false;
 
-axios.defaults.baseURL= 'http://tt.linweiqin.com/api/tt';
+axios.defaults.baseURL = 'http://tt.linweiqin.com/api/tt';
+axios.interceptors.request.use(function (config) {
+  if (config.url === "/getArticles") {
+    store.commit('loading', true);
+  }
+  return config
+})
+axios.interceptors.response.use(function (response) {
+  if (response.data.articles) {
+    store.commit('loading', false);
+  }
+  return response
+})
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })
