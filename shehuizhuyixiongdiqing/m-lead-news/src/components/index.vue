@@ -333,7 +333,7 @@ export default {
   }
 
   .i-news {
-    padding: 162px 30px 0;
+    padding: 162px 30px 100px;
 
     li {
       padding: 30px 0;
