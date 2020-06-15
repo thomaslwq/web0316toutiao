@@ -125,7 +125,14 @@ export default {
         callback(showList);
       }, 1000);
     },
-    goToSearch() {}
+    goToSearch() {
+      if (this.searchText.trim() !== '') {
+        this.$router.push({
+          path: "/newsSearch",
+          query: { searchText: this.searchText }
+        });
+      }
+    }
   }
 };
 </script>

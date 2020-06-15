@@ -13,6 +13,8 @@ import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import store from './vuex/store'
 
+import 'lib-flexible/flexible.js'
+
 Vue.use(ElementUI);
 Vue.use(VueAxios, axios);
 
