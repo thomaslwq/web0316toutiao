@@ -10,7 +10,7 @@
     </div>
     <div class="tab-content">
         <div class="content-toutiao" v-show="activeTab=='toutiao'">
-            <textarea class="textarea" rows="10" placeholder="有什么新鲜事想告诉大家" :maxlength="maxCount" v-model="textAreaMsg" @change="textAreaWord"></textarea>
+            <textarea class="textarea" rows="10" placeholder="有什么新鲜事想告诉大家" :maxlength="maxCount" v-model="textAreaMsg"></textarea> <!--@change="textAreaWord"-->
             <div class="textWord">
                 <span class="nowWord">{{textNum}}</span>
                 <span>/</span>
@@ -27,7 +27,7 @@
                 >
                     <i class="iconfont icon-biaoqing-xue"></i>表情
                 </div>
-                <div class="arcticle-publish">发布</div>
+                <div class="arcticle-publish" @click.stop="publishMin">发布</div>
             </div>
             <!-- 显示图片开始 -->
             <div class="uploadImg" v-show="isShowUploadImg">
@@ -49,10 +49,10 @@
             <!-- 显示表情结束 -->
         </div>
         <div class="content-article" v-show="activeTab=='article'">
-            <input class="article-title" type="text" placeholder="请输入标题"/>
+            <input class="article-title" type="text" placeholder="请输入标题" v-model="title"/>
             <vue-editor v-model="richContent" class="rich-editor" />
             <div class="article-bottom">
-                <div class="bottom-publish">发布</div>
+                <div class="bottom-publish" @click.stop="publishArticle">发布</div>
             </div>
         </div>
     </div>
@@ -78,7 +78,8 @@ data() {
         richContent: "",
         maxCount:200,
         textAreaMsg:"",
-        textNum:0
+        textNum:0,
+        title:""
    };
 },
 methods: {
@@ -110,7 +111,42 @@ methods: {
         this.isShowUploadImg = false;
         this.isShowEmoji = !this.isShowEmoji;
     },
-    
+    publishMin:function(){
+        if(!this.textAreaMsg){
+            this.$message({
+                msg:"内容不能为空"
+            })
+            return false
+        }
+        this.$axios.post("/createTT",{
+            content:this.textAreaMsg,
+            imgs:this.uploadImgs.join(",")
+        }).then(res=>{
+            this.$message({
+                msg:res.msg
+            });
+            this.textAreaMsg = ""
+            this.isShowUploadImg=false
+            this.isShowEmoji=false
+        })
+    },
+    publishArticle:function(){
+        if(!this.title || !this.richContent){
+            this.$message({
+                msg:"请填写标题或内容"
+            })
+            return false
+        }
+        this.$axios.post("/createArticle",{
+            content:this.richContent,
+            img:"",
+            title:this.title
+        }).then(res=>{
+            this.$message({
+                msg:res.msg
+            })
+        })
+    }
 },
 computed:{
     textAreaWord:function(){
@@ -300,6 +336,7 @@ computed:{
                     line-height: 40px;
                     background-color: #eb8a8e;
                     color: white;
+                    cursor: pointer;
                 }
                 .bottom-publish:hover{
                     background-color: var(--themeColor);
