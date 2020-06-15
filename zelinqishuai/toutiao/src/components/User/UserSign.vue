@@ -114,6 +114,7 @@ export default {
   background-color: #ddd;
   padding: 20px;
   height: 100vh;
+  background-image: url('//s3b.pstatp.com/toutiao/resource/ntoutiao_web/static/image/login/login_bg_7584f6a.png');
   .userLogin-titleImg {
     width: 115px;
     height: 30px;

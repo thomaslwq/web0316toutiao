@@ -5,7 +5,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 //设定一个初始值 储存获取到的接口数据
-let state = JSON.parse(localStorage.getItem('state'))
+let state = JSON.parse(localStorage.getItem('state')) || {
+    userInfo:{},
+    isLogin:false,
+    articleLists:{}
+}
 
 //所有模块组件的getter setter集合方法
 const mutations = {
@@ -30,20 +34,28 @@ const mutations = {
 		/* 更新保存全局state变量 */
 		localStorage.setItem('state',JSON.stringify(state))
     },
-    //发布文章数量储存
+    //发布头条留言数量储存
     updateTTCount : (state,count) => {
-		var userInfo = state.userInfo;
+		let userInfo = state.userInfo;
 		userInfo.tt_count = count;
 		localStorage.setItem('userInfo',JSON.stringify(state.userInfo));
 		state.userInfo = userInfo;
-		console.log(count);
+		// console.log(count);
 		/* 更新保存全局state变量 */
 		localStorage.setItem('state',JSON.stringify(state))
     },
+    //发布文章数量储存
+    updateArticleCount:(state,count) => {
+        let userInfo = state.userInfo;
+		userInfo.article_count = count;
+        localStorage.setItem('userInfo',JSON.stringify(state.userInfo));
+        state.userInfo = userInfo
+        localStorage.setItem('state',JSON.stringify(state));
+    },
     //文章内容储存
-    updateArticleLists:(state,articleList) => {
-        // localStorage.setItem('articleLists',JSON.stringify(state.articleLists))
-        state.articleLists = articleList
+    updateArticleLists:(state,articleLists) => {
+        localStorage.setItem('articleLists',JSON.stringify(state.articleLists))
+        state.articleLists = articleLists
         localStorage.setItem('state',JSON.stringify(state))
     }
 }

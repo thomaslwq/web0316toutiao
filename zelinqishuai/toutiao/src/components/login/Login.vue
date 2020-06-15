@@ -53,7 +53,7 @@ export default {
         this.$axios.post('logout').then(res => {
             this.$store.commit('outLogin');
             this.isLogin = this.$store.state.isLogin
-            console.log(res);
+            // console.log(res);
         }).catch(error => {
             console.log(error);
         })
@@ -66,7 +66,7 @@ export default {
     //从$store中获取到登录状态和用户信息
     this.isLogin = this.$store.state.isLogin;
     this.userdata = this.$store.state.userInfo;
-    console.log(this.userdata);
+    // console.log(this.userdata);
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

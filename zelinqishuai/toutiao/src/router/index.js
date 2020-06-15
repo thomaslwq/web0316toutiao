@@ -10,6 +10,8 @@ import Index from "../components/index"
 import UserLogin from '../components/User/UserLogin'
 //注册页面
 import UserSign from '../components/User/UserSign'
+//文章头条详情页面
+import MessageDtaile from '../components/message/MessageDtaile'
 // 3. 路由配置文件
 let routes = [{
     path:"/",
@@ -23,6 +25,10 @@ let routes = [{
     path:'/userSign',
     name:'userSign',
     component:UserSign
+},{
+    path:'/MessageDtaile',
+    name:'MessageDtaile',
+    component:MessageDtaile
 }]
 // 5. 新建一个 VueRouter 实例 将routes 作为参数传进入,同时将路由导出
 export default new VueRouter({

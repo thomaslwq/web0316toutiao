@@ -30,11 +30,13 @@
         </div>
       </div>
       <div class="post-article" v-show="activeTab=='article'">
-        <input class="article-input" type="text" placeholder="请输入文章标题..." />
-        <vue-editor v-model="richContent" placeholder="请输入正文..." class="article-editor" />
+        <input class="article-input" v-model="title" type="text" placeholder="请输入文章标题..." />
+        <vue-editor 
+        id="editor" use-custom-image-handler @image-added="HandleImageAdded"
+        v-model="richContent" placeholder="请输入正文..." class="article-editor" />
         <div class="article-bottom">
           <div class="articleNumber">字数</div>
-          <div class="submit" @click.stop="submit">发布</div>
+          <div class="submit" @click.stop="submitArticle">发布</div>
         </div>
       </div>
     </div>
@@ -66,6 +68,8 @@ export default {
       activeTab: "toutiao",//切换title
       toggleAdd: false,//显示图片开关
       uploadImgs: [],//添加图片的URL
+      articlesImgs:[],
+      title:'',
       richContent: "",//v-model文章输入框
       messages: ""//v-modeltexteara输入框
     };
@@ -98,32 +102,31 @@ export default {
           this.uploadImgs.push(res.url);
         });
       });
+      console.log(this.uploadImgs);
     },
+   
     //删除图片
     deleteImg: function(index) {
       this.uploadImgs.splice(index, 1);
     },
-    //提交文章
+    //提交tt留言板
     submit: function() {
       if (!this.$store.state.isLogin) {
-        alert(`请先登录`);
+        alert(`请先登录`)
         return;
       }
-      let parmas = new FormData();
-      //texteara文本内容
-      parmas.append("content", this.messages);
-      //图片地址
-      parmas.append("imgs", this.uploadImgs);
-      //用户token
-      parmas.append("oauth_token", this.$store.state.userInfo.oauth_token);
-      this.$axios.post("/createTT", parmas).then(res => {
+      this.$axios.post("/createTT", {
+          "content":this.messages,
+          "imgs":this.uploadImgs.join(',')
+      }).then(res => {
           //成功后个人信息文章数量加1
         if (res.ret === 0) {
+          res.status = 'success';
           this.$store.commit(
             "updateTTCount",
             this.$store.state.userInfo.tt_count + 1
           );
-          
+          this.messages = '';
           this.refreshMessages()
           alert(res.msg)
         }else{
@@ -136,18 +139,63 @@ export default {
     },
     //刷新最新文章目录
     refreshMessages: function() {
-      this.$axios.post("/getArticles", {'lastid':0})
+      let parmas = new FormData;
+      parmas.append('lastid',0);
+      this.$axios.post('/getArticles',parmas)
         .then(res => {
           if (res.ret == 0) {
-            console.log(res);
-            // this.articleList = res.articles;
-            this.$store.state.articleLists = res.articles
+            // console.log(res);
             this.$store.commit('updateArticleLists',res.articles)
           } else {
             alert("加载留言失败");
           }
         })
         .catch(res => [console.log("加载失败了")]);
+    },
+
+     //Vue2Edit上传图片
+    HandleImageAdded:function(file, Editor, cursorLocation, resetUploader){
+        console.log('上传图片');
+        let param = new FormData();
+        param.append('file',file);
+        this.$axios.post('/aliossUpload',param).then(res => {
+          let url = res.url;
+          Editor.insertEmbed(cursorLocation, "image", url);
+          this.articlesImgs = url;
+          resetUploader()
+        }).catch(error=>error)
+    },
+    //发布文章
+    submitArticle:function(){
+      if (!this.$store.state.isLogin) {
+        alert(`请先登录`);
+        return
+      }else if(this.richContent === "" || this.title === ""){
+        alert('不能发布空内容')
+        return
+      }
+      this.$axios.post('/createArticle',{
+          'content':this.richContent,
+          'img':this.articlesImgs,
+          'title':this.title
+        })
+        .then(res => {
+          if(res.ret === 0){
+            res.status = 'success';
+            this.title = '';
+            this.richContent = ''
+            this.$store.commit("updateArticleCount",this.$store.state.userInfo.article_count + 1);
+            this.refreshMessages()
+            alert('发布成功')
+          }else{
+            res.status = 'fail'
+            alert('发布文章失败')
+            return
+          }
+        }).catch(({err}) => {
+          alert('服务器繁忙')
+          return false;
+        })
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
