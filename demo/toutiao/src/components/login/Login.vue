@@ -2,7 +2,7 @@
 <template>
 <div class='tt-index-login'>
     <p class="text">登录后可以保存您的浏览喜好、评论、收藏，并与APP同步，更可以发布微头条</p>
-    <div class="login-button">登陆</div>
+    <div class="login-button" @click.stop="goToUserLogin">登陆</div>
 </div>
 </template>
 
@@ -25,7 +25,13 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    goToUserLogin:function(){
+    // this.$router.push("userLogin");// 直接通过name属性进行跳转
+    // 直接通过路径跳转
+    this.$router.push({
+        path:"/userLogin"
+    })
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
