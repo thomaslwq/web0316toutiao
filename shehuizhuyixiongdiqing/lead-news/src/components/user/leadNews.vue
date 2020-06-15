@@ -17,7 +17,7 @@
               <a target="_blank" class="news-content n-body" @click="goToDetail(item.nid)">
                 <div v-html="item.content"></div>
               </a>
-              <span class="news-time">&nbsp;{{item.created_at}}</span>
+              <span class="news-time">&nbsp;{{item.created_at.slice(0, 10)}}</span>
             </div>
             <div class="delete" @click="delNews('文章', item.nid, index)">
               <i class="iconfont icon-shanchu"></i>
@@ -42,7 +42,7 @@
               <a target="_blank" class="news-content" @click="goToDetail(item.nid)">
                 <div v-html="item.content"></div>
               </a>
-              <span class="news-time">&nbsp;{{item.created_at}}</span>
+              <span class="news-time">&nbsp;{{item.created_at.slice(0, 10)}}</span>
             </div>
             <div class="delete" @click="delNews('微头条', item.nid, index)">
               <i class="iconfont icon-shanchu"></i>
@@ -191,6 +191,7 @@ export default {
               align-items: center;
               font-size: 15px;
               color: #555;
+              white-space: nowrap;
 
               .user-img {
                 width: 25px;
