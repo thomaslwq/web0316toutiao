@@ -127,7 +127,6 @@ export default {
       });
     },
     reloadNews() {
-      console.log(1);
       this.ifRefresh = true;
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
