@@ -103,15 +103,16 @@ export default {
         this.reloadNews();
       }
     });
+    let startY, endY;
     window.addEventListener("touchstart", e => {
       if (document.documentElement.scrollTop === 0) {
-        let startY = e.touches[0].clientY;
-        window.addEventListener("touchend", event => {
-          let endY = event.changedTouches[0].clientY;
-          if (endY - startY >= 100) {
-            this.reloadNews();
-          }
-        });
+        startY = e.touches[0].clientY;
+      }
+    });
+    window.addEventListener("touchend", event => {
+      endY = event.changedTouches[0].clientY;
+      if (endY - startY >= 100) {
+        this.reloadNews();
       }
     });
   },
@@ -126,6 +127,7 @@ export default {
       });
     },
     reloadNews() {
+      console.log(1);
       this.ifRefresh = true;
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
@@ -148,8 +150,8 @@ export default {
           } else if (newsList.length > 15 * this.lazyPages) {
             this.showList = newsList.slice();
           }
-          if (newsList.length - oldLength)
-            this.$message(`为您推荐${newsList.length - oldLength}篇新头条`);
+          // if (newsList.length - oldLength)
+          this.$message(`为您推荐${newsList.length - oldLength}篇新头条`);
           this.$store.commit("newsList", newsList);
         }
       });
