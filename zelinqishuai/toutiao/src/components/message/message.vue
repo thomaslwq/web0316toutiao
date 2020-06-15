@@ -81,7 +81,7 @@ export default {
   mounted() {
       this.isLogin = this.$store.state.isLogin;
       this.userInfo = this.$store.state.userInfo;
-      // this.getArticles()
+      this.getArticles()
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

@@ -127,6 +127,8 @@ export default {
             this.$store.state.userInfo.tt_count + 1
           );
           this.messages = '';
+          this.uploadImgs = [];
+          this.toggleAdd = false
           this.refreshMessages()
           alert(res.msg)
         }else{

@@ -34,18 +34,20 @@
                 {{articleList.title}}
             </div>
             <div class="content-user">
-                <span>{{articleList.user.nickname}}</span>
+                <img :src="avator" alt="">
+                 <span>{{nickname}}</span>
                 <span>{{articleList.created_at}}</span>
             </div>
-            <div class="content-txt" v-html=" articleList.content">
+            <div class="content-txt">
+                {{articleList.content}}
             </div>
-            <div class="content-img">
-                <img src="" alt="">
+            <div class="content-img" v-for='img in imgs'>
+                <img :src="img">
             </div>
         </div>
         <div class="content-right">
-            <img :src="articleList.user.avator" alt="">
-            <span>{{articleList.user.nickname}}</span>
+            <img :src="avator" alt="">
+            <span>{{nickname}}</span>
         </div>
     </div>
 </div>
@@ -63,6 +65,9 @@ data() {
 //这里存放数据
 return {
     articleList:{},
+    nickname:"",
+    avator:'',
+    imgs:[],
     nid:''
 };
 },
@@ -83,10 +88,16 @@ mounted() {
     this.nid = this.$route.query.nid
     let articleLists = this.$store.state.articleLists
     let index = articleLists.findIndex(e => {
-        return e.nid = this.nid
+        return e.nid == this.nid
     })
     this.articleList = articleLists[index]
-    console.log(this.articleList);
+    this.nickname = this.articleList.user.nickname;
+    this.avator = this.articleList.user.avator;
+    let imgs = this.articleList.imgs || "";
+    let imgggs = imgs.split().join(',').split(",")
+    this.imgs = imgggs;   
+    // console.log(this.articleList);
+    // console.log( imgggs);
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前
@@ -99,7 +110,7 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 </script>
 <style lang='less' scoped>
 .messageDtaile {
-    padding: 0 20vw;
+    padding: 0 15vw;
   .messageDtaile-hearder {
       display: flex;
       justify-content: space-between;
@@ -116,8 +127,9 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   .messageDtaile-content {
       display: flex;
       justify-content: space-between;
-
+        padding-top: 20px;
     .content-left {
+       padding: 0 20px;
       ul {
           list-style: none;
         li {
@@ -134,6 +146,10 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
     }
 
     .content-middle {
+        flex: 6;
+        padding: 0 20px;
+         border-left: 1px solid #ddd;
+          border-right: 1px solid #ddd;
       .content-title {
           font-size: 40px;
           font-weight: 800;
@@ -141,18 +157,27 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
       }
       .content-user{
           text-align: start;
+          img{
+              width: 30px;
+              height: 30px;
+              border-radius: 50%;
+              vertical-align: middle;
+          }
           span{
+              padding: 0 10px;
               font-size: 14px;
               color: grey;
           }
       }
       .content-txt {
-
+          padding: 20px 0;
       }
 
       .content-img {
+          padding: 20px 0;
+          text-align: center;
         img {
-
+            width: 300px;
         }
       }
     }
@@ -160,7 +185,11 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
     .content-right {
         display: flex;
         width: 300px;
+        height: 200px;
+        background-color: #ddd;
         padding: 10px 20px;
+        border-top: 2px solid red;
+        margin: 0 0 0 10px;
       img {
           width: 70px;
           height: 70px;

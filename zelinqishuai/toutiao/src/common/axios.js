@@ -12,8 +12,8 @@ axios.interceptors.request.use(function(config){
         config.data = data
     }
     
-    console.log(data);
-    console.log(oauth_token);
+    // console.log(data);
+    // console.log(oauth_token);
     // console.log(config);
     return config;
 },function(error){
