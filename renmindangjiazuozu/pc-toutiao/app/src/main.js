@@ -9,7 +9,11 @@ import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import store from './vuex/store'
 
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
 Vue.use(VueAxios ,axios);
+Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
 axios.defaults.baseURL= "http://tt.linweiqin.com/api/tt";

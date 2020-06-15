@@ -4,17 +4,28 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 // 这里定义初始值
 let state = {
-
+    loginStatus: false,
+    userInfo: {}
 };
 
 /* 变动 */
 const mutations = {
-
+    modifyLoginInfo: function(state ,{params}) {
+        localStorage["userInfo"] = JSON.stringify(params);
+        this.state.userInfo = params;
+        this.state.loginStatus = true;
+    },
+    exitLogin: function(state) {
+        localStorage["userInfo"] = "";
+        this.state.userInfo = "";
+        this.state.loginStatus = false;
+    }
 };
 
 // 事件触发后的逻辑操作
 // 参数为事件函数
 const actions = {
+
 };
 
 // 返回改变后的数值

@@ -1,22 +1,45 @@
 <template>
-    <div class='tt-login'>
-        <div class="tt-login-tips">
-            <span>登录后可以保存您的浏览喜好、评论、收藏，并与APP同步，更可以发布微头条</span>
-        </div>
-        <div class="tt-login-button">
-            <router-link to="login">登录</router-link>
-        </div>
-        <div class="tt-login-more">
-            <div class="login-qq">
-                <div class="more-icon qq"></div>
-                <span class="more-name">QQ</span>
+        <div class='tt-login' >
+            <div class="tt-no-login" v-show="!$store.state.loginStatus">
+                <div class="tt-login-tips">
+                    <span>登录后可以保存您的浏览喜好、评论、收藏，并与APP同步，更可以发布微头条</span>
+                </div>
+                <div class="tt-login-button">
+                    <router-link to="login">登录</router-link>
+                </div>
+                <div class="tt-login-more">
+                    <div class="login-qq">
+                        <div class="more-icon qq"></div>
+                        <span class="more-name">QQ</span>
+                    </div>
+                    <div class="login-wx">
+                        <div class="more-icon wx"></div>
+                        <span class="more-name">微信</span>
+                    </div>
+                </div>
             </div>
-            <div class="login-wx">
-                <div class="more-icon wx"></div>
-                <span class="more-name">微信</span>
+            <div class='tt-is-login' v-show="$store.state.loginStatus">
+                <div class="exit-login">
+                    <span @click="exitLogin">退出登录</span>
+                </div>
+                <div class="user-info">
+                    <div class="user-avator">
+                        <img :src="$store.state.userInfo.avator" alt="">
+                    </div>
+                    <div class="user-name">{{$store.state.userInfo.nickname}}</div>
+                    <div class="user-upload-content">
+                        <div class="user-toutiao">
+                            <span class="count">{{$store.state.userInfo.tt_count}}</span>
+                            <span class="type">头条数</span>
+                        </div>
+                        <div class="user-article">
+                            <span class="count">{{$store.state.userInfo.article_count}}</span>
+                            <span class="type">文章数</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -25,7 +48,7 @@
 
 export default {
 //import引入的组件需要注入到对象中才能使用
-components() {
+components: {
 
 },
 data() {
@@ -35,16 +58,30 @@ return {
 };
 },
 //监听属性 类似于data概念
-computed() {
-
+computed: {
+    
 },
 //监控data中的数据变化
-watch() {
+watch: {
 
 },
 //方法集合
-methods() {
-
+methods: {
+    exitLogin: function() {
+        this.axios({
+            method: 'POST',
+            url: "/logout",
+        }).then(res => {
+            this.$message({
+                type: "success",
+                message: "退出成功",
+            })
+            this.$store.commit({
+                type: "exitLogin"
+            })
+        });
+        
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -52,7 +89,10 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    if(localStorage["userInfo"]) {
+        this.$store.state.userInfo = JSON.parse(localStorage["userInfo"]);
+        this.$store.state.loginStatus = true;
+    }
 },
 //生命周期 - 创建之前
 beforeCreate() {
@@ -104,6 +144,7 @@ activated() {
             display: flex;
             justify-content: center;
             align-items: center;
+            margin: 5px 0;
             flex: 30%;
 
             a {
@@ -120,6 +161,7 @@ activated() {
         .tt-login-more {
             display: flex;
             justify-content: center;
+            margin: 15px 0;
             flex: 35%;
 
             div {
@@ -132,7 +174,7 @@ activated() {
                     flex: 0 1 48px;
                     display: inline-block;
                     width: 48px;
-                    border: 1px solid black;
+                    border: 2px solid #aeabab;
                     border-radius: 50%;
                     background-repeat: no-repeat;
                     background-position: center;
@@ -149,6 +191,91 @@ activated() {
                 .more-name {
                     flex: 1;
                     font-size: 14px;
+                }
+            }
+        }
+
+        .tt-is-login {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+
+            .exit-login {
+                flex: 5%;
+                padding: 5px;
+                font-size: 14px;
+                text-align: right;
+                color: #a4a4a4;
+                transition: all ease-in-out .3s;
+
+                &:hover {
+                    color: black;
+                }
+                
+                span {
+                    cursor: pointer;
+                }
+            }
+
+            .user-info {
+                flex: 95%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+                & > div {
+                    margin: 5px 0;
+                }
+
+                .user-avator {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 50%;
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                .user-upload-content {
+                    display: flex;
+                    align-items: center;
+                    flex: 1;
+                    width: 100%;
+
+                    .count {
+                        font-size: 25px;
+                        font-weight: bold;
+                    }
+                    
+                    .user-toutiao {
+                        position: relative;
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            top: 50%;
+                            right: 0;
+                            display: inline-block;
+                            height: 70%;
+                            border: 1px solid black;
+                            transform: translateY(-50%);
+                        }
+                    }
+
+                    .user-article {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                    }
                 }
             }
         }

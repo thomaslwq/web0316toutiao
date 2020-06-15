@@ -3,15 +3,16 @@
         <div class="header">今日头条</div>
         <div class="vertical-text"></div>
         <div class="login-model">
+            <el-alert class="tips" v-show="tipsStatus" :title="tipsMsg" :type="tipsType" show-icon></el-alert>
             <div class="login-main">
                 <div class="main-title">账密登录</div>
                 <div class="main-email">
-                    <input type="text" placeholder="账号 / 邮箱">
+                    <input type="text" v-model="username" placeholder="账号 / 邮箱">
                 </div>
                 <div class="main-password">
-                    <input type="text" placeholder="密码">
+                    <input type="password" v-model="password" @keyup.enter="submitLogin" placeholder="密码">
                 </div>
-                <div class="main-confirm">
+                <div class="main-confirm" @click="submitLogin">
                 </div>
             </div>
             <div class="login-other">
@@ -37,26 +38,75 @@
 
 export default {
 //import引入的组件需要注入到对象中才能使用
-components() {
+components: {
 
 },
 data() {
 //这里存放数据
 return {
-    
+    username: "",
+    password: "",
+    tipsType: "",
+    tipsMsg: "",
+    tipsStatus: false,
 };
 },
 //监听属性 类似于data概念
-computed() {
+computed: {
 
 },
 //监控data中的数据变化
-watch() {
+watch: {
 
 },
 //方法集合
-methods() {
+methods: {
+    check: function(data) {
+        let type = "";
+        if(this.username && this.password){
+            switch(data.msg) {
+                case "登录成功":
+                    this.$store.commit({
+                        type: "modifyLoginInfo",
+                        params: data.wdata
+                    })
+                    this.$router.push("/")
+                    break;
+    
+                case "账号密码错误":
+                    type = "error";
+                    break;
+    
+                default:
+                    type = "error";
+                    msg = "unknow error";
+            }
+        }
+        else {
+            type = "warning"
+            data.msg = "帐密不能为空";
+        }
 
+        this.tipsType = type;
+        this.tipsMsg = data.msg;
+        this.tipsStatus = true;
+
+        setTimeout(() => {
+            this.tipsStatus = false;
+        } ,2500)
+    },
+    submitLogin: function() {
+        this.axios({
+            method: "POST",
+            url: "/loginCheck",
+            data: {
+                username: this.username,
+                password: this.password
+            }
+        }).then(({data}) => {
+            this.check(data);
+        })
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -97,8 +147,24 @@ activated() {
 }
 </script>
 <style lang='less' scoped>
+    /deep/ .el-alert__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    /deep/ .el-alert__icon {
+        font-size: 20px;
+        width: 20px;
+    }
+
+    /deep/ .el-alert__closebtn {
+        font-size: 20px;
+    }
+
     .container {
         position: relative;
+        display: flex;
+        justify-content: center;
         width: 100%;
         height: 100vh;
         background-image: url("../assets/images/login_bg.png");
@@ -112,8 +178,9 @@ activated() {
             color: #e43c46;
         }
         .vertical-text {
+            position: absolute;
             width: 100%;
-            height: 200px;
+            height: 100%;
             background-image: url("../assets/images/login_bg_font.png");
             background-repeat: no-repeat;
             background-size: 35%;
@@ -121,11 +188,17 @@ activated() {
         }
 
         .login-model {
+            position: absolute;
+            top: 250px;
             display: flex;
             flex-direction: column;
-            margin: 0 auto;
             width: 400px;
             height: 300px;
+
+            .tips {
+                position: absolute;
+                top: -12%;
+            }
 
             .login-main {
                 flex: 90%;

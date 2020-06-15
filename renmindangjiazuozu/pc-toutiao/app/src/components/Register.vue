@@ -3,13 +3,14 @@
         <div class="header">今日头条</div>
         <div class="vertical-text"></div>
         <div class="register-model">
+            <el-alert class="tips" v-show="tipsStatus" :title="tipsMsg" :type="tipsType" show-icon></el-alert>
             <div class="register-main">
                 <div class="main-title">账密注册</div>
                 <div class="main-email">
                     <input type="text" v-model="username" placeholder="账号 / 邮箱">
                 </div>
                 <div class="main-password">
-                    <input type="text" v-model="password" placeholder="密码">
+                    <input type="password" v-model="password" @keyup.enter="submitRegister" placeholder="密码">
                 </div>
                 <div class="main-confirm" @click="submitRegister"></div>
             </div>
@@ -36,7 +37,7 @@
 
 export default {
 //import引入的组件需要注入到对象中才能使用
-components() {
+components: {
 
 },
 data() {
@@ -44,20 +45,67 @@ data() {
 return {
     username: "",
     password: "",
+    tipsType: "",
+    tipsMsg: "",
+    tipsStatus: false,
 };
 },
 //监听属性 类似于data概念
-computed() {
+computed: {
 
 },
 //监控data中的数据变化
-watch() {
+watch: {
 
 },
 //方法集合
 methods: {
+    check: function(msg) {
+        let type = "";
+        switch(msg) {
+            case "注册成功":
+                type = "success";
+                break;
+
+            case "该账号已经存在":
+                type = "error";
+                break;
+
+            case "帐密不能为空":
+                type = "warning"
+                break;
+
+            default:
+                type = "error";
+                msg = "unknow error";
+        }
+
+        this.tipsType = type;
+        this.tipsMsg = msg;
+        this.tipsStatus = true;
+
+        if(type == "success") {
+            setTimeout(() => {
+                this.$router.push("/login")
+            } ,2500)
+            return
+        }
+
+        setTimeout(() => {
+            this.tipsStatus = false;
+        } ,2500)
+    },
     submitRegister: function() {
-        console.log(this.$root.$store)
+        this.axios({
+            method: "POST",
+            url: "/createUser",
+            data: {
+                username: this.username,
+                password: this.password
+            }
+        }).then(({data}) => {
+            this.check(data.msg);
+        })
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
@@ -99,8 +147,24 @@ activated() {
 }
 </script>
 <style lang='less' scoped>
+    /deep/ .el-alert__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    /deep/ .el-alert__icon {
+        font-size: 20px;
+        width: 20px;
+    }
+
+    /deep/ .el-alert__closebtn {
+        font-size: 20px;
+    }
+
     .container {
         position: relative;
+        display: flex;
+        justify-content: center;
         width: 100%;
         height: 100vh;
         background-image: url("../assets/images/login_bg.png");
@@ -123,11 +187,17 @@ activated() {
         }
 
         .register-model {
+            position: absolute;
+            top: 250px;
             display: flex;
             flex-direction: column;
-            margin: 0 auto;
             width: 400px;
             height: 300px;
+
+            .tips {
+                position: absolute;
+                top: -12%;
+            }
 
             .register-main {
                 flex: 90%;
