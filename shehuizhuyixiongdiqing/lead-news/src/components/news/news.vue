@@ -99,6 +99,7 @@ export default {
       imgList: [],
       imgArr: [],
       lazyPages: 1,
+      lastId: 0
     };
   },
   computed: {
@@ -227,6 +228,7 @@ export default {
       this.axios.post("/getArticles").then(res => {
         if (res.data.ret == 0) {
           for (let i = res.data.articles.length - 1; i >= 0; i--) {
+            console.log(res.data.articles[i].nid);
             if (res.data.articles[i].nid > this.lastId) {
               this.lastId = res.data.articles[i].nid;
             }
