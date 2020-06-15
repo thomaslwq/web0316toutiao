@@ -21,7 +21,7 @@
 
 export default {
 //import引入的组件需要注入到对象中才能使用
-components() {
+components: {
 
 },
 data() {
@@ -31,15 +31,15 @@ return {
 };
 },
 //监听属性 类似于data概念
-computed() {
+computed: {
 
 },
 //监控data中的数据变化
-watch() {
+watch: {
 
 },
 //方法集合
-methods() {
+methods: {
 
 },
 //生命周期 - 创建完成（可以访问当前this实例）

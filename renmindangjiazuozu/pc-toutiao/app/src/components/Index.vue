@@ -5,7 +5,12 @@
         <div class="main-left">
             <Nav></Nav>
         </div>
-        <div class="main-center"></div>
+        <div class="main-center">
+            <el-alert class="login-success" v-show="loginSuccessTips" title="登陆成功" type="success" show-icon></el-alert>
+            <div class="comment-input-container">
+                <Comment></Comment>
+            </div>
+        </div>
         <div class="main-right">
             <div class="search-container">
                 <Search></Search>
@@ -15,6 +20,9 @@
             </div>
             <div class="more-container">
                 <More></More>
+            </div>
+            <div class="friends-link">
+                <Friendslink></Friendslink>
             </div>
         </div>
     </div>
@@ -26,8 +34,10 @@
 import Nav from "./nav/Nav.vue"
 import Header from "./header/Header.vue"
 import Search from "./search/Search.vue"
+import Comment from "./comment/Comment.vue"
 import Login from "./login/Login.vue"
 import More from "./more/More.vue"
+import Friendslink from "./friendslink/Friendslink.vue"
 import { VueEditor } from "vue2-editor";
 
 export default {
@@ -36,14 +46,16 @@ components: {
     Nav,
     Header,
     Search,
+    Comment,
     Login,
     More,
+    Friendslink,
     VueEditor
 },
 data: function() {
 //这里存放数据
     return {
-
+        loginSuccessTips: false,
     };
 },
 //监听属性 类似于data概念
@@ -52,11 +64,16 @@ computed: {
 },
 //监控data中的数据变化
 watch: {
-
+    
 },
 //方法集合
 methods: {
-
+    loginSuccess: function() {
+        this.loginSuccessTips = true;
+        setTimeout(() => {
+            this.loginSuccessTips = false;
+        } ,3000)
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -64,7 +81,9 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    if(this.$store.state.loginStatus){
+        this.loginSuccess();
+    }
 },
 //生命周期 - 创建之前
 beforeCreate() {
@@ -97,6 +116,20 @@ activated() {
 }
 </script>
 <style lang='less' scoped>
+/deep/ .el-alert__title {
+    font-size: 20px;
+    line-height: 28px;
+}
+
+/deep/ .el-alert__icon {
+    font-size: 20px;
+    width: 20px;
+}
+
+/deep/ .el-alert__closebtn {
+    font-size: 20px;
+}
+
 .main {
     display: flex;
     width: 100%;
@@ -107,20 +140,30 @@ activated() {
         display: flex;
         justify-content: flex-end;
         flex: 20%;
-        nav {
-            
-        }
     }
 
     .main-center {
+        position: relative;
         flex: 50%;
+        margin: 10px 0;
+        padding: 0 50px;
+
+        .login-success {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            transform: translateX(-50%);
+        }
+
+        .comment-input-container {
+            width: 100%;
+            height: auto;
+            border: 1px solid #e8e8e8;
+        }
     }
 
     .main-right {
-        display: flex;
-        flex-direction: column;
-
-        justify-content: flex-start;
         flex: 30%;
 
         .search-container {
@@ -133,6 +176,7 @@ activated() {
         }
 
         .login-container {
+            margin: 10px 0;
             padding: 20px;
             width: 70%;
             height: 250px;
@@ -140,6 +184,12 @@ activated() {
         }
 
         .more-container {
+            margin: 10px 0;
+            width: 70%;
+            height: 220px;
+        }
+
+        .friends-link {
             margin: 10px 0;
             width: 70%;
             height: 220px;
