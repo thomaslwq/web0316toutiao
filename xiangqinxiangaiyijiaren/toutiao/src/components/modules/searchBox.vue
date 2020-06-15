@@ -24,9 +24,8 @@ export default {
             searchDefault:'',
         }
     },
-    computed:{
-        ...mapState(['searchData'])
-    },
+    props:['searchData'],
+   
     methods:{
         querySearch(queryString, cb) {
         let restaurants = this.searchData.filter(e=>e.title.indexOf(queryString)!= -1);
@@ -35,13 +34,14 @@ export default {
             cb(restaurants);
         },
         search({id}){
-            if(!this.searchDefault){
+            if(!this.searchBox){
                 return this.$message('请输入内容')
             }
-            this.searchDefault=''
+            this.searchBox=''
             if(!id){
                 return this.$message('没有该资讯')
             }
+            
             this.$router.push({name:'newsdetail',params:{id :id}})
         },
     },
@@ -62,7 +62,11 @@ export default {
         margin: 15px auto;
         display: flex;
         
-       
+       /deep/.el-input-group__append{
+           background-color: #4075fd;
+           color: white;
+           border: 1px solid #4075fd;
+       }
         .inline-input{
             width: 100%;
                 .slot{

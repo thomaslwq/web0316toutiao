@@ -92,7 +92,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(['isLogin','userinfo']),
+        ...mapState(['userinfo']),
     },
     methods: {
             ...mapMutations(['updateTTCount','updateArticleCount']),
@@ -100,7 +100,7 @@ export default {
                 this.$message('文件最多3个')
             },
             releasett(){
-                if(!this.isLogin){
+                if(!this.userinfo){
                     return this.$message({
                         message:'请先登录',
                         type:'error'
@@ -131,7 +131,7 @@ export default {
                 })
             },
             releasewz(){
-                if(!this.isLogin){
+                if(!this.userinfo){
                     return this.$message({
                         message:'请先登录',
                         type:'error'

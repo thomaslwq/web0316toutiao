@@ -5,6 +5,7 @@ import login from '../src/components/User/UserLogin'
 import newsDetail from '../src/components/News/NewsListDetail'
 import userCenter from '../src/components/User/UserCenter'
 import userData from '../src/components/User/UserData'
+import sign from '../src/components/User/Usersign'
 
 Vue.use(Router)
 let routes = [
@@ -18,6 +19,11 @@ let routes = [
         path:'/login',
         component:login,
         name:'login'
+    },
+    {
+        path:'/sign',
+        component:sign,
+        name:'sign'
     },
     {
         path:'/newsDetail',
