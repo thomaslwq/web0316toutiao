@@ -110,7 +110,7 @@
    ```json
    @url http://tt.linweiqin.com/api/tt/getArticles
    @method post
-   @params lastid
+   @params lastid （默认第一次请求的时候，lastid 为0）
    @return msg,ret,wdata
    ```
 

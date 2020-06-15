@@ -2,6 +2,7 @@
 import Vue from "vue"
 // 2. 引入 vuex
 import Vuex from "vuex"
+import {UPDATE_USER_INFO } from "./mutationsType"
 //3. 在Vue 中 使用 Vuex
 Vue.use(Vuex);
 let storageKey = "userInfo";
@@ -11,7 +12,7 @@ const state = {
 }
 const mutations = {
     // 更新用户信息
-    updateUserInfo:function(state,userInfo){
+    [UPDATE_USER_INFO]:function(state,userInfo){
         localStorage.setItem(storageKey,JSON.stringify(userInfo));
         state.userInfo = userInfo;
     }

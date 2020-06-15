@@ -14,7 +14,7 @@
     <!-- tab内容开始 -->
     <div class="tab-content">
       <div class="tab-toutiao-content" v-show="activeTab=='toutiao'">
-        <textarea name id cols="30" rows="10" placeholder="有什么新鲜事想告诉大家"></textarea>
+        <textarea name id cols="30" v-model="tt_content" rows="10" placeholder="有什么新鲜事想告诉大家"></textarea>
         <div class="toutiao-bottom">
           <div class="left">
             <div class="left-title" @click.stop="toggleUploadArea">图片</div>
@@ -31,13 +31,20 @@
               <!-- 上传的图片的地方结束 -->
             </div>
           </div>
-          <div class="right">发布</div>
+          <div class="right" @click.stop="publishTT">发布</div>
         </div>
       </div>
       <div class="tab-article-content clearfix" v-show="activeTab=='article'">
-        <input type="text" placeholder="请输入内容" />
-        <vue-editor v-model="richContent" class="rich-editor" />
-        <div class="rich-publish">发布</div>
+        <input type="text" placeholder="请输入内容" v-model="article_title" />
+        <!-- 官方例子上传图片有问题的，需要改成下面的形式 -->
+        <vue-editor
+          id="editor"
+          use-custom-image-handler
+          @image-added="handleImageAdded"
+          v-model="richContent"
+          class="rich-editor"
+        />
+        <div class="rich-publish" @click.stop="publishArticle">发布</div>
       </div>
     </div>
     <!-- tab内容内容结束 -->
@@ -56,6 +63,8 @@ export default {
   data() {
     //这里存放数据
     return {
+      article_title: "", //文章的标题
+      tt_content: "", // 微头条 textarea 内容
       tabs: [
         {
           id: "toutiao",
@@ -84,6 +93,73 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    //发布文章
+    publishArticle: function() {
+      if (!this.article_title || !this.richContent) {
+        this.$message({
+          msg: "标题或者内容不能为空"
+        });
+        return false;
+      }
+      this.$axios
+        .post("/createArticle", {
+          content: this.richContent,
+          img: "",
+          title: this.article_title
+        })
+        .then(res => {
+          this.$message({
+            msg: res.msg
+          });
+        });
+    },
+    handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+      // An example of using FormData
+      // NOTE: Your key could be different such as:
+      // formData.append('file', file)
+      console.log("vue2-editor上传图片");
+      var formData = new FormData();
+      formData.append("file", file);
+      this.$axios.post("/aliossUpload", formData).then(res => {
+        let url = res.url;
+        Editor.insertEmbed(cursorLocation, "image", url);
+        resetUploader();
+      });
+      // axios({
+      //   url: "https://fakeapi.yoursite.com/images",
+      //   method: "POST",
+      //   data: formData
+      // })
+      //   .then(result => {
+      //     let url = result.data.url; // Get url from response
+      //     Editor.insertEmbed(cursorLocation, "image", url);
+      //     resetUploader();
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
+    },
+    // 发头条的方法
+    publishTT: function() {
+      let content = this.tt_content;
+      if (!content) {
+        this.$message({
+          msg: "微头条内容不能为空"
+        });
+        return false;
+      }
+      this.$axios
+        .post("/createTT", {
+          content: content,
+          imgs: this.uploadImgs.join(",")
+        })
+        .then(res => {
+          this.$message({
+            msg: res.msg
+          });
+        })
+        .catch(err => err);
+    },
     // 删除上传图片
     deleteImg: function(index) {
       // 删除图片
