@@ -77,6 +77,8 @@ export default {
       timer: null,
       activeIndex: "0",
       refresh: true,
+      startY: 0,
+      endY: 0
     };
   },
   computed: {
@@ -90,7 +92,7 @@ export default {
       return this.$store.state.channelList;
     },
     oldLength() {
-      return localStorage.getItem('old-length') || 0;
+      return localStorage.getItem("old-length") || 0;
     },
     newsList() {
       return this.$store.state.newsList;
@@ -98,27 +100,17 @@ export default {
   },
   mounted() {
     this.reloadNews();
-    window.addEventListener("scroll", e => {
-      let scrollTotal =
-        document.body.scrollHeight - document.documentElement.clientHeight;
-      if (document.documentElement.scrollTop >= scrollTotal) {
-        this.$store.commit("lazyPages", this.lazyPages + 1);
-        this.refresh = false;
-        this.reloadNews();
-      }
-    });
-    let startY, endY;
+    window.addEventListener("scroll", this.scroll);
     window.addEventListener("touchstart", e => {
       if (document.documentElement.scrollTop === 0) {
-        startY = e.touches[0].clientY;
+        this.startY = e.touches[0].clientY;
       }
     });
-    window.addEventListener("touchend", event => {
-      endY = event.changedTouches[0].clientY;
-      if (endY - startY >= 100) {
-        this.reloadNews();
-      }
-    });
+    window.addEventListener("touchend", this.downDrag);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.scroll);
+    window.removeEventListener("touchend", this.downDrag);
   },
   methods: {
     goTo(url) {
@@ -157,7 +149,7 @@ export default {
               `为您推荐${res.data.counts - this.oldLength}篇新头条`
             );
           }
-          localStorage.setItem('old-length', res.data.counts);
+          localStorage.setItem("old-length", res.data.counts);
           this.refresh = true;
         }
       });
@@ -170,6 +162,21 @@ export default {
       this.ifPop = true;
       this.ifNotice = true;
       localStorage.setItem("if-notice", this.ifNotice);
+    },
+    scroll(e) {
+      let scrollTotal =
+        document.body.scrollHeight - document.documentElement.clientHeight;
+      if (document.documentElement.scrollTop >= scrollTotal) {
+        this.$store.commit("lazyPages", this.lazyPages + 1);
+        this.refresh = false;
+        this.reloadNews();
+      }
+    },
+    downDrag(e) {
+      this.endY = e.changedTouches[0].clientY;
+      if (this.endY - this.startY >= 100) {
+        this.reloadNews();
+      }
     }
   }
 };
