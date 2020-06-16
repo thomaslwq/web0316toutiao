@@ -76,7 +76,6 @@ export default {
       ifRefresh: false,
       timer: null,
       activeIndex: "0",
-      newsList: [],
       refresh: true,
     };
   },
@@ -92,6 +91,9 @@ export default {
     },
     oldLength() {
       return localStorage.getItem('old-length') || 0;
+    },
+    newsList() {
+      return this.$store.state.newsList;
     }
   },
   mounted() {
@@ -134,6 +136,7 @@ export default {
       this.timer = setTimeout(() => {
         this.ifRefresh = false;
       }, 1000);
+      let newsList = this.newsList;
       let page = this.refresh ? 0 : this.lazyPages;
       let params = new FormData();
       params.append("page", page);
@@ -142,10 +145,10 @@ export default {
         if (res.data.ret == 0) {
           if (this.refresh) {
             console.log(res.data);
-            this.newsList = [];
+            newsList = [];
           }
           this.newsList.push(...res.data.articles);
-          this.$store.commit("newsList", this.newsList);
+          this.$store.commit("newsList", newsList);
           if (res.data.counts - this.oldLength && this.refresh) {
             this.$message(
               `为您推荐${res.data.counts - this.oldLength}篇新头条`
