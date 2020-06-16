@@ -80,6 +80,7 @@ export default {
       params.append("oauth_token", this.$store.state.userInfo.oauth_token);
       this.axios.post("/getArticlesByType", params).then(res => {
         if (res.data.ret == 0) {
+          console.log(res);
           if (type === "TT") this.msgArr = res.data.articles;
           else if (type === "Article") this.atcArr = res.data.articles;
         } else {
@@ -106,17 +107,17 @@ export default {
           this.axios.post("/deleteArticle", params).then(res => {
             if (res.data.ret == 0) {
               if (type === "微头条") {
-                this.atcArr.splice(index, 1);
+                this.msgArr.splice(index, 1);
                 this.$store.commit(
                   "msgCount",
-                  this.msgArr.length - 1
+                  this.msgArr.length
                 );
                 this.getNews("TT");
               } else if (type === "文章") {
-                this.msgArr.splice(index, 1);
+                this.atcArr.splice(index, 1);
                 this.$store.commit(
                   "articleCount",
-                  this.msgArr.length - 1
+                  this.atcArr.length
                 );
                 this.getNews("Article");
               }
