@@ -14,34 +14,6 @@
 
 ## 3.1. VUE2安装
 
-## 3.2. VUE2目录结构
-
-| 目录名     | 作用             |
-| ---------- | ---------------- |
-| build     | 生产打包文件夹     |
-| config | VUE系统配置文件夹        |
-| node_modules | node组件依赖        |
-| src | 代码逻辑文件夹        |
-| test | 测试单元        |
-| static | 纯静态资源，不会被wabpack构建        |
-| /src/router | 路由文件        |
-| /src/vuex/store.js | 状态管理器 & localStorage本地保存器|
-
-## 3.3. 搭建项目的页面
-
-| 页面名称     | 名称         |
-| ------------ | ------------ |
-| 首页         | /src/components/Index.vue |
-| 导航         | /src/components/Nav/Nav.vue |
-| 个人中心         | /src/components/User/UserCenter.vue |
-| 文章列表         | /src/components/News/News.vue |
-| 文章详情         | /src/components/News/NewsListDetail.vue |
-| 登录         | /src/components/User/UserLogin.vue |
-| 注册         | /src/components/User/UserSign.vue |
-| 个人资料     | /src/components/User/UserData.vue |
-| 个人文章列表     | /src/components/User/UserCenterArticle.vue |
-| 个人头条列表    | /src/components/User/UserCenterTT.vue |
-
 ### 3.3.1 首页技术介绍
 
 
@@ -65,93 +37,82 @@
    @method post
    @params username,password
    @return msg,ret,wdata
-   
+   ```
 ```
-
-登陆成功
-
-![image-20200614172038703](README.assets/image-20200614172038703.png)
-
-登陆失败
-
-![image-20200614172053521](README.assets/image-20200614172053521.png)
-
-
-
-3. 文章创建接口
-
-```json
+3.  文章创建接口
 @url http://tt.linweiqin.com/api/tt/createArticle
 @method post
 @params content,img,title,oauth_token
 @return msg,ret,wdata
 ```
 
-1. 头条创建接口
+4. 头条创建接口
 
-   ```json
-   @url http://tt.linweiqin.com/api/tt/createTT
-   @method post
-   @params content,imgs（字符串，逗号隔开）,oauth_token
-   @return msg,ret,wdata
-   ```
+```json
+@url http://tt.linweiqin.com/api/tt/createTT
+@method post
+@params content,imgs（字符串，逗号隔开）,oauth_token
+@return msg,ret,wdata
+```
 
-2. 用户退出接口
+5. 用户退出接口
 
-   ```json
-   @url http://tt.linweiqin.com/api/tt/logout
-   @method post
-   @params 
-   @return msg,ret,wdata
-   ```
+```json
+@url http://tt.linweiqin.com/api/tt/logout
+@method post
+@params 
+@return msg,ret,wdata
+```
 
-3. 文章列表接口
+6. 文章列表接口
 
-   ```json
-   @url http://tt.linweiqin.com/api/tt/getArticles
-   @method post
-   @params lastid
-   @return msg,ret,wdata
-   ```
+   page默认0，number 默认20条
 
-4. 用户文章列表
+```json
+@url http://tt.linweiqin.com/api/tt/getArticles
+@method post/get
+@params lastid,type(可选TT/Article),page,number
+@return msg,ret,wdata,articles(列表内容),counts(当前页数总文章数),current_page(当前页码)
+@articles: nid(文章ID),type(文章类型TT/Article),img(首图路径),imgs(头条组图),content(内容),title(标题),uid(用户ID),created_at(创建时间),user(对象:nickname(昵称),avator(头像路径))
+```
 
-   ```json
-   @url http://tt.linweiqin.com/api/tt/getArticlesByType
-   @method post
-   @params type,oauth_token
-   @return msg,ret,wdata
-   ```
+7. 用户文章列表
 
-5. 文章删除接口
+```json
+@url http://tt.linweiqin.com/api/tt/getArticlesByType
+@method post
+@params type,oauth_token
+@return msg,ret,wdata
+```
 
-   ```json
-   @url http://tt.linweiqin.com/api/tt/deleteArticle
-   @method post
-   @params nid,oauth_token
-   @return msg,ret,wdata
-   ```
+8. 文章删除接口
 
+```json
+@url http://tt.linweiqin.com/api/tt/deleteArticle
+@method post
+@params nid,oauth_token
+@return msg,ret,wdata
+```
 
-8. 用户个人信息修改
+9. 用户个人信息修改
 
-   ```json
-   @url http://tt.linweiqin.com/api/tt/updateUserInfo
-   @method post
-   @params nickname,avator
-   @return msg,ret,wdata
-   ```
+```json
+@url http://tt.linweiqin.com/api/tt/updateUserInfo
+@method post
+@params nickname,avator
+@return msg,ret,wdata
+```
 
-9. 用户密码修改
+10. 用户密码修改
 
-   ```json
-   @url http://tt.linweiqin.com/api/tt/updatePassword
-   @method post
-   @params currentPassword,updatePassword
-   @return msg,ret,wdata
-   ```
+```json
+@url http://tt.linweiqin.com/api/tt/updatePassword
+@method post
+@params currentPassword,updatePassword
+@return msg,ret,wdata
+```
 
-10. 文章、头条详情接口
+11. 文章、头条详情接口
 
    ```json
    @url http://tt.linweiqin.com/api/tt/getArticleById
@@ -160,7 +121,12 @@
    @return msg,ret,wdata
    ```
 
+12. 上传图片接口
 
+  @url http://tt.linweiqin.com/api/tt/aliossUpload
+   @method post
+   @params file(form 格式)
+   @return msg,url(图片的链接),wdata,status
 
 # 5. Vue-cli 3.0 关闭eslint
 

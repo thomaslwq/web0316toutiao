@@ -7,7 +7,7 @@
     </div>
     <div v-else class="tt-index-login">
       <div class="logout" @click="logout">退出登陆</div>
-      <div class="imagerWrapper">
+      <div class="imagerWrapper" @click.stop="goToUserCenter">
         <img :src="userInfo.avator" alt />
       </div>
       <div class="nickname">{{userInfo.nickname}}</div>
@@ -47,6 +47,11 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    goToUserCenter:function(){
+      this.$router.push({
+        path:"/userCenter"
+      })
+    },
     logout:function(){
       this.$axios.post("/logout").then(res=>{
         this.$message({
