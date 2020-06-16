@@ -4,7 +4,7 @@
     <div class="tt-user-header">
       <img :src="userInfo.avator" alt />
       <span>{{userInfo.nickname}}</span>
-      <button>编辑</button>
+      <button @click.stop="goTotoUserData">编辑</button>
     </div>
     <!-- 用户文章内容开始 -->
     <div class="tt-user-content">
@@ -90,6 +90,11 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    goTotoUserData: function() {
+        this.$router.push({
+            path:"/userData"
+        })
+    },
     changeTab(id) {
       this.activeTab = id;
     },

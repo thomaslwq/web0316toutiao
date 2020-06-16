@@ -10,6 +10,7 @@ import UserLogin from "../components/login/UserLogin.vue"
 import UserRegister from "../components/login/UserRegister.vue"
 import NewsDetail from "../components/news/NewsDetail"
 import UserCenter from "../components/user/UserCenter"
+import UserData from "../components/user/UserData"
 // 3. 路由配置文件
 let routes = [{
     path:"/",
@@ -31,6 +32,10 @@ let routes = [{
     path:"/userCenter",
     name:"userCenter",
     component:UserCenter
+},{
+    path:"/userData",
+    name:"userData",
+    component:UserData
 }]
 // 5. 新建一个 VueRouter 实例 将routes 作为参数传进入,同时将路由导出
 export default new VueRouter({

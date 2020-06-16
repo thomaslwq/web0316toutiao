@@ -99,7 +99,7 @@
 ```json
 @url http://tt.linweiqin.com/api/tt/updateUserInfo
 @method post
-@params nickname,avator
+@params nickname,avator,oauth_token
 @return msg,ret,wdata
 ```
 
@@ -108,7 +108,7 @@
 ```json
 @url http://tt.linweiqin.com/api/tt/updatePassword
 @method post
-@params currentPassword,updatePassword
+@params currentPassword,updatePassword,oauth_token
 @return msg,ret,wdata
 ```
 
