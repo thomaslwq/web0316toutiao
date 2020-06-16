@@ -5,7 +5,7 @@
       <div class="clickRefresh" @click="getArticles">点击刷新</div>
     </div>
     
-    <div class="messagelist" v-for="(article,index) in articleLists" :key='article.nid'>
+    <div class="messagelist" v-for="(article,index) in articleLists" :key='index'>
       <div v-if="article.img == null || article.img == 'undefined'"></div>
       <div class="list-left" @click.stop="jumpMessageDetaile(article.nid)"  v-else>
         <img :src="article.img"/>

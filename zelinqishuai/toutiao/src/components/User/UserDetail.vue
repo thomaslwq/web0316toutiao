@@ -11,7 +11,7 @@
     <div class="UserDtail-userInfo">
             <img src="http://s3.pstatp.com/site/tt_mfsroot/pc_img/bg_profile.png" alt="">
             <div class="user">
-                <img :src="userInfo.avator" alt="">
+                <img :src="userInfo.avator" @click.stop="jumpIndex" alt="">
                 <span>{{userInfo.nickname}}</span>
                 <span style="color:blue;cursor:pointer;" @click="modifyUserInfoTab">修改信息</span>
             </div>
@@ -96,11 +96,13 @@ methods: {
         }
     },
     jumpMessageDetaile:function(nid){
-        console.log(nid);
         this.$router.push({
             path:'/MessageDtaile',
             query:{nid:nid}
         })
+    },
+    jumpIndex(){
+         this.$router.push('/')
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
@@ -109,13 +111,15 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
+     document.body.style.backgroundColor = '#f4f5f6'
     this.userInfo = this.$store.state.userInfo;
     this.$axios.post('/getArticlesByType',{
         'type':'tt',
         'oauth_token':this.userInfo.oauth_token
     }).then(res => {
-        console.log(res);
+        // console.log(res);
         if(res.ret === 0){
+            // console.log( res.articles);
             this.articles = res.articles
         }
     })
@@ -125,14 +129,16 @@ beforeMount() {}, //生命周期 - 挂载之前
 beforeUpdate() {}, //生命周期 - 更新之前
 updated() {}, //生命周期 - 更新之后
 beforeDestroy() {}, //生命周期 - 销毁之前
-destroyed() {}, //生命周期 - 销毁完成
+destroyed() {
+     document.body.style.backgroundColor = '#fff'
+}, //生命周期 - 销毁完成
 activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
 <style lang='less' scoped>
     .UserDtail {
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        // height: 100%;
         background-color:#f4f5f6;
     .UserDtail-header {
         height: 60px;
@@ -187,11 +193,11 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
         .articles-title {
             display: flex;
             height: 60px;
-            width: 800px;
-            justify-content: center;
+            width: 70%;
+            justify-content: start;
             align-items: center;
-            border-bottom: 1px solid #ddd;
-            background-color: white;
+            // border-bottom: 1px solid #ddd;
+            // background-color: white;
             span {
                 padding: 0 20px;
                 font-size: 20px;
@@ -207,8 +213,9 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
             display: flex;
             // justify-content: space-between;
             .content{
+                margin-right: 20px;
                  background-color: white;
-                    width: 800px;
+                   width: 70%;
                 .articleslist{
                     width: 100%;
                     height: 160px;

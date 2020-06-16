@@ -48,7 +48,7 @@ components: {
 data() {
 //这里存放数据
 return {
-
+    page:1
 };
 },
 //监听属性 类似于data概念
@@ -57,9 +57,29 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-    // postArticles:function(){
-       
-    // }
+    //懒加载函数
+    postArticles:function(){
+        let top = parseInt(document.documentElement.scrollTop);
+        let height = document.documentElement.scrollHeight;
+        let clienHeight = document.documentElement.clientHeight
+        // console.log(top);
+        // console.log(height-clienHeight);
+        if(top == height-clienHeight){
+            console.log('触发了');
+            this.$axios.post('/getArticles',{
+                type:'TT',
+                page:this.page,
+                number:20
+                }).then(res => {
+                // console.log(res);
+                // console.log(...res.articles);
+                if(res.ret === 0){
+                    this.$store.state.articleLists.push(...res.articles)
+                    this.page++
+                }
+            }).catch(err => err)
+        }
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -67,34 +87,18 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    window.addEventListener('scroll',e=>{
-        
-        let top = document.documentElement.scrollTop;
-        let height = document.documentElement.scrollHeight;
-        let clienHeight = document.documentElement.clientHeight
-        if(top >= height-clienHeight){
-            console.log('触发了');
-            // let lastItem = this.$store.state.articleLists.pop();
-            // console.log(lastItem.nid);
-            this.$axios.post('/getArticles',{
-                type:'TT',
-                page:2,
-                number:20
-                }).then(res => {
-                console.log(res);
-                console.log(...res.articles);
-                this.$store.state.articleLists.push(...res.articles)
-                // console.log(lastItem.nid);
-            }).catch(err => err)
-        }
-    })
+   //开启监听页面scroll事件
+    window.addEventListener('scroll',this.postArticles)
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前
 beforeUpdate() {}, //生命周期 - 更新之前
 updated() {}, //生命周期 - 更新之后
 beforeDestroy() {}, //生命周期 - 销毁之前
-destroyed() {}, //生命周期 - 销毁完成
+destroyed() {
+    //离开此清除页面scroll事件
+     window.removeEventListener('scroll',this.postArticles)
+}, //生命周期 - 销毁完成
 activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>

@@ -62,7 +62,7 @@ export default {
     },
     //跳转到修改信息页面
     jumpModify:function(){
-      this.$router.replace('/UserDetail')
+      this.$router.push('/UserDetail')
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
