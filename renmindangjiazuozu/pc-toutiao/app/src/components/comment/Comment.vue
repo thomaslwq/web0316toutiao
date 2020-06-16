@@ -21,16 +21,16 @@
                             </el-dialog>
                             <span>只能上传jpg/png文件，且不超过500kb</span>
                         </div>
-                        <div class="send-comment">发布</div>
+                        <div class="send-comment" @click="upload_wtt">发布</div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="写文章">
                     <div class="xwz-comment-center">
                         <el-input type="text" :rows="10" placeholder="请输入内容" maxlength="30" show-word-limit v-model="elm_text"></el-input>
-                        <vue-editor use-custom-image-handler @imageAdded="handleImageAdded" v-model="editor_text" placeholder="请输入正文......"/>
+                        <vue-editor use-custom-image-handler @image-added="handleImageAdded" v-model="editor_text" placeholder="请输入正文......"/>
                     </div>
                     <div class="xwz-comment-bottom">
-                        <div class="xwz-send-comment">发布</div>
+                        <div class="xwz-send-comment" @click="upload_xwz">发布</div>
                     </div>
                 </el-tab-pane>
             </el-tabs>
@@ -80,22 +80,85 @@ methods: {
         console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
-        // this.dialogImageUrl = file.url;
-        // this.dialogVisible = true;
+        console.log(file)
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
-        var formData = new FormData();
-        formData.append("image", file);
+        let formData = new FormData();
+        formData.append("file", file);
 
-        axios({
+        this.axios({
             url: "/aliossUpload",
             method: "POST",
             data: formData
-        }).then(result => {
-                    let url = result.data.url;
-                    Editor.insertEmbed(cursorLocation, "image", url);
-                    resetUploader();
-                })
+        }).then(res => {
+            // 将图片插入到当前光标位置
+            Editor.insertEmbed(cursorLocation, "image", res.data.url);
+            // 刷新富文本编辑器
+            resetUploader();
+        })
+    },
+    upload_wtt: function(type) {
+        if(this.$store.state.loginStatus) {
+            this.axios({
+                method: 'POST',
+                url: "/createTT",
+                data: {
+                    content: this.elm_textarea,
+                    imgs: null,
+                    oauth_token: this.$store.state.userInfo.oauth_token
+                }
+            }).then(res => {
+                if(res.data.msg == "发布成功") {
+                    this.$message({
+                        type: "success",
+                        message: res.data.msg
+                    })
+                    this.$store.commit({
+                        type: "modifyToutiaoCount",
+                        kind: "add"
+                    })
+                }
+            })
+        }
+        else {
+            this.$message({
+                type: "warning",
+                message: "请先登录"
+            })
+        }
+    },
+    upload_xwz: function() {
+        if(this.$store.state.loginStatus) {
+            this.axios({
+                method: 'POST',
+                url: "/createArticle",
+                data: {
+                    title: this.elm_text,
+                    content: this.editor_text,
+                    img: null,
+                    oauth_token: this.$store.state.userInfo.oauth_token
+                }
+            }).then(res => {
+                if(res.data.msg == "发布成功") {
+                    this.$message({
+                        type: "success",
+                        message: res.data.msg
+                    })
+                    this.$store.commit({
+                        type: "modifyArticleCount",
+                        kind: "add"
+                    })
+                }
+            })
+        }
+        else {
+            this.$message({
+                type: "warning",
+                message: "请先登录"
+            })
+        }
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
