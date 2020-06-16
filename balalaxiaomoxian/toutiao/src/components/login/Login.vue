@@ -7,7 +7,7 @@
     <div class="login-content" v-else>
         <span class="exit" @click="logout">退出登录</span>
         <div class="content-info">
-            <img :src="userInfo.avator">
+            <img :src="userInfo.avator" @click.stop="toUserCenter">
             <div>{{userInfo.nickname}}</div>
         </div>
         <div class="article">
@@ -54,6 +54,11 @@ methods:{
                 msg:res.msg
             });
             this.$store.commit("updateUserInfo",{})
+        })
+    },
+    toUserCenter:function(){
+        this.$router.push({
+            path:"/userCenter"
         })
     }
 }
@@ -116,6 +121,7 @@ methods:{
       width: 60px;
       height: 60px;
       border-radius: 50%;
+      cursor: pointer;
   }
 
   div {
