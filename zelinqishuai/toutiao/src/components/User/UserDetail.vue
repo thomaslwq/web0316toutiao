@@ -39,16 +39,19 @@
                         <div class="dot">·</div>
                         <div class="time">{{article.created_at}}</div>
                     </div>
+                    <div class="delete" @click="deleteArticle(index,article.nid)">
+                        <span>删除</span>
                     </div>
+                </div>
                 </div>
             </div>
             <div class="articles-count">
                 <div class="left">
-                    <p>{{userInfo.article_count}}</p>
+                    <p>{{article_count}}</p>
                     <p>文章数</p>
                 </div>
                 <div class="right">
-                    <p>{{userInfo.tt_count}}</p>
+                    <p>{{tt_count}}</p>
                     <p>头条数</p>
                 </div>
             </div>
@@ -82,7 +85,14 @@ return {
 };
 },
 //监听属性 类似于data概念
-computed: {},
+computed: {
+    tt_count(){
+        return this.$store.state.userInfo.tt_count
+    },
+    article_count(){
+        return this.$store.state.userInfo.article_count
+    }
+},
 //监控data中的数据变化
 watch: {},
 //方法集合
@@ -95,6 +105,27 @@ methods: {
             this.$router.push('/Usermodify')
         }
     },
+    deleteArticle(index,nid){
+        console.log(index,nid);
+          this.$axios.post('/deleteArticle',{'nid':nid})
+          .then((res) => {
+            if (res.ret == 0){
+                let i = this.$store.state.userInfo.tt_count
+                console.log(i);
+                this.$store.state.userInfo.tt_count  = i - 1
+                console.log(this.$store.state.userInfo.tt_count);
+                this.articles.splice(index,1);
+            }else{
+              this.$Message({msg:res.msg})
+              return false;
+            }
+          })
+          .catch((res) => {
+            console.log('加载失败');
+            return false;
+          })
+        
+      },
     jumpMessageDetaile:function(nid){
         this.$router.push({
             path:'/MessageDtaile',
@@ -222,6 +253,7 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
                     display: flex;
                     padding: 10px 0;
                     border-bottom: 1px solid #ddd;
+                    position: relative;
                     .list-left {
                         width: 30%;
                         height: 100%;
@@ -279,7 +311,15 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
                             }
                         }
                         }
-  
+                    .delete{
+                        cursor: pointer;
+                        position: absolute;
+                        right: 10px;
+                        display: none;
+                    }
+                    &:hover .delete{
+                        display: block;
+                    }
                 }
                 
             }
