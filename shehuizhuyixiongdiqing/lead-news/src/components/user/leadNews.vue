@@ -80,7 +80,6 @@ export default {
       params.append("oauth_token", this.$store.state.userInfo.oauth_token);
       this.axios.post("/getArticlesByType", params).then(res => {
         if (res.data.ret == 0) {
-          console.log(res);
           if (type === "TT") this.msgArr = res.data.articles;
           else if (type === "Article") this.atcArr = res.data.articles;
         } else {

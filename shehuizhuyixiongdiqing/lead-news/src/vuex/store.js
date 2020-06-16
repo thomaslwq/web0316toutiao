@@ -6,7 +6,8 @@ let state = JSON.parse(localStorage.getItem('state')) || {
   userInfo: {},
   ifLogin: false,
   newsList: [],
-  loading: false
+  loading: false,
+  newsCount: 0
 };
 
 const mutations = {
@@ -27,8 +28,9 @@ const mutations = {
     state.userInfo.article_count = payload;
     localStorage.setItem('state', JSON.stringify(state));
   },
-  newsList(state, payload) {
-    state.newsList = payload;
+  newsList(state, {newsList, newsCount}) {
+    state.newsList = newsList;
+    state.newsCount = newsCount;
     localStorage.setItem('state', JSON.stringify(state));
   },
   loading(state, payload) {

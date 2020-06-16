@@ -236,7 +236,10 @@ export default {
             newsList = [];
           }
           newsList.push(...res.data.articles);
-          this.$store.commit("newsList", newsList);
+          this.$store.commit("newsList", {
+            newsList,
+            newsCount: res.data.counts
+          });
           this.refresh = true;
         }
       });

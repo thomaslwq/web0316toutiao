@@ -144,11 +144,14 @@ export default {
       this.axios.post("/getArticles", params).then(res => {
         if (res.data.ret == 0) {
           if (this.refresh) {
-            console.log(res.data);
             newsList = [];
           }
-          this.newsList.push(...res.data.articles);
-          this.$store.commit("newsList", newsList);
+          console.log(res.data.counts);
+          newsList.push(...res.data.articles);
+          this.$store.commit("newsList", {
+            newsList,
+            newsCount: res.data.counts
+          });
           if (res.data.counts - this.oldLength && this.refresh) {
             this.$message(
               `为您推荐${res.data.counts - this.oldLength}篇新头条`
