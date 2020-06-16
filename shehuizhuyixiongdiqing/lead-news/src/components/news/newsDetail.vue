@@ -86,22 +86,18 @@ export default {
         created_at: ""
       },
       failImgIdx: null,
-      timer: null
+      timer: null,
+      srhList: [],
+      newsList: []
     };
   },
   computed: {
-    newsList() {
-      let arr = [];
-      this.$store.state.newsList.forEach(ele => {
-        arr.push({
-          value: ele.title,
-          type: ele.type
-        });
-      });
-      return arr;
+    newsCount() {
+      return this.$store.state.newsCount;
     }
   },
   mounted() {
+    this.getAllNews();
     let params = new FormData();
     params.append("nid", this.$route.query.nid);
     this.axios.post("/getArticleById", params).then(res => {
@@ -114,7 +110,7 @@ export default {
     },
     searchAsync(searchText, callback) {
       let showList = searchText
-        ? this.newsList.filter(ele => {
+        ? this.srhList.filter(ele => {
             return (
               ele.value.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
             );
@@ -126,12 +122,28 @@ export default {
       }, 1000);
     },
     goToSearch() {
-      if (this.searchText.trim() !== '') {
+      if (this.searchText.trim() !== "") {
         this.$router.push({
           path: "/newsSearch",
           query: { searchText: this.searchText }
         });
       }
+    },
+    getAllNews() {
+      let params = new FormData();
+      params.append("page", 0);
+      params.append("number", this.newsCount);
+      this.axios.post("/getArticles", params).then(res => {
+        if (res.data.ret == 0) {
+          this.newsList = res.data.articles;
+          this.newsList.forEach(ele => {
+            this.srhList.push({
+              value: ele.title,
+              type: ele.type
+            });
+          });
+        }
+      });
     }
   }
 };

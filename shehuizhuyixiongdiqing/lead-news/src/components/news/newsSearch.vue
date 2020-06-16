@@ -6,7 +6,7 @@
           <img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png" />
         </a>
         <el-input placeholder="搜索站内资讯、视频或用户" v-model="searchText" @keyup.enter.native="goToSearch">
-          <el-button slot="append" @click="searchRes">搜索</el-button>
+          <el-button slot="append" @click="getAllNews">搜索</el-button>
         </el-input>
       </div>
     </div>
@@ -69,17 +69,18 @@ export default {
       searchText: "",
       timer: null,
       msgRes: [],
-      atcRes: []
+      atcRes: [],
+      newsList: []
     };
   },
   computed: {
-    newsList() {
-      return this.$store.state.newsList;
+    newsCount() {
+      return this.$store.state.newsCount;
     }
   },
   mounted() {
     this.searchText = this.$route.query.searchText;
-    this.searchRes();
+    this.getAllNews();
   },
   methods: {
     goToDetail(id) {
@@ -89,6 +90,7 @@ export default {
       });
     },
     searchRes() {
+      console.log(this.newsList);
       this.msgRes = this.newsList.filter(ele => {
         return (
           ele.title.toLowerCase().indexOf(this.searchText.toLowerCase()) !==
@@ -103,12 +105,23 @@ export default {
       });
     },
     goToSearch() {
-      if (this.searchText.trim() !== '') {
+      if (this.searchText.trim() !== "") {
         this.$router.push({
           path: "/newsSearch",
           query: { searchText: this.searchText }
         });
       }
+    },
+    getAllNews() {
+      let params = new FormData();
+      params.append("page", 0);
+      params.append("number", this.newsCount);
+      this.axios.post("/getArticles", params).then(res => {
+        if (res.data.ret == 0) {
+          this.newsList = res.data.articles;
+          this.searchRes();
+        }
+      });
     }
   }
 };

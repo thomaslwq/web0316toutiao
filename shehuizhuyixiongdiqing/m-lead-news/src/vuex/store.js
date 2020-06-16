@@ -4,6 +4,7 @@ Vue.use(Vuex);
 
 let state = {
   newsList: JSON.parse(localStorage.getItem('news-list')) || [],
+  newsCount: +localStorage.getItem('news-count') || 0,
   lazyPages: 0,
   loading: false,
   channelList: JSON.parse(localStorage.getItem('channel-list')) || {
@@ -13,9 +14,11 @@ let state = {
 };
 
 const mutations = {
-  newsList(state, payload) {
-    state.newsList = payload;
-    localStorage.setItem('news-list', JSON.stringify(payload));
+  newsList(state, {newsList, newsCount}) {
+    state.newsList = newsList;
+    state.newsCount = newsCount;
+    localStorage.setItem('news-list', JSON.stringify(newsList));
+    localStorage.setItem('news-count', newsCount);
   },
   lazyPages(state, payload) {
     state.lazyPages = payload;
