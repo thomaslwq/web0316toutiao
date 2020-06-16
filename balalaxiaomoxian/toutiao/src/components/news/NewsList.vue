@@ -1,66 +1,23 @@
 <template>
 <div class='newsList'>
     <div class="newsList-refresh">
-        <div class="refresh-text">点击刷新</div>
+        <div class="refresh-text" @click.stop="refresh">点击刷新</div>
     </div>
     <div class="newsList-list">
 
-
-      <div class="list-item">
-        <div class="item-left">
-          <img src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg" />
+      <div class="list-item" v-for="article in articles" :key="article.nid">
+        <div class="item-left" v-if="article.img">
+          <img :src="article.img" />
         </div>
         <div class="item-right">
-          <div class="right-title">这里是文章标题</div>
+          <div class="right-title">{{article.title}}</div>
           <div class="right-profile">
-            <img src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image" />
-            <div class="profile-nickname">小菜比</div>
+            <img :src="article.user.avator" />
+            <div class="profile-nickname">{{article.user.nickname}}</div>
           </div>
-          <div class="right-date">2020-06-12 11:30:51</div>
+          <div class="right-date">{{article.created_at}}</div>
         </div>
       </div>
-      <div class="list-item">
-        <div class="item-left">
-          <img src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg" />
-        </div>
-        <div class="item-right">
-          <div class="right-title">这里是文章标题</div>
-          <div class="right-profile">
-            <img src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image" />
-            <div class="profile-nickname">小菜比</div>
-          </div>
-          <div class="right-date">2020-06-12 11:30:51</div>
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="item-left">
-          <img src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg" />
-        </div>
-        <div class="item-right">
-          <div class="right-title">这里是文章标题</div>
-          <div class="right-profile">
-            <img src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image" />
-            <div class="profile-nickname">小菜比</div>
-          </div>
-          <div class="right-date">2020-06-12 11:30:51</div>
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="item-left">
-          <img src="http://wlanya.oss-cn-shenzhen.aliyuncs.com/2020_06_11/1c872634-9527-7d84-5da2-a72e5911078b.jpg" />
-        </div>
-        <div class="item-right">
-          <div class="right-title">这里是文章标题</div>
-          <div class="right-profile">
-            <img src="http://sf1-ttcdn-tos.pstatp.com/img/pgc-image/f6cc8e95467f44e3bcdcf9d4ca0a58f6~120x256.image" />
-            <div class="profile-nickname">小菜比</div>
-          </div>
-          <div class="right-date">2020-06-12 11:30:51</div>
-        </div>
-      </div>
-      
-      
-
 
     </div>
 </div>
@@ -72,9 +29,33 @@ export default {
 components: {},
 data() {
    return {
-
+     lastid:0,
+     articles:[],
    };
 },
+methods:{
+  refresh:function(){
+    this.$axios.post("/getArticles",{
+      lastid:this.lastid
+    }).then(res =>{
+      this.articles = (res.articles||[]).concat(this.articles)
+      if(this.articles.length>0){
+        this.lastid = this.articles[0].nid
+      }
+    })
+  }
+},
+mounted(){
+  this.$axios.post("/getArticles",{
+    lastid:this.lastid
+  }).then(res=>{
+    this.articles = res.articles || []
+    if (this.articles.length > 0) {
+      // 获取最后一条文章或头条的 id
+      this.lastid = this.articles[0].nid;
+    }
+  })
+}
 }
 </script>
 <style lang='less' scoped>
