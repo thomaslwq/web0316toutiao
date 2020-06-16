@@ -4,6 +4,8 @@ import axios from './common/axios'
 Vue.prototype.$axios = axios;
 // a.1 引入路由配置信息
 import router from "./router"
+import { Message } from "./common/utils"
+Vue.prototype.$Message = Message;
 Vue.config.productionTip = false
 
 import Vuex from 'vuex'

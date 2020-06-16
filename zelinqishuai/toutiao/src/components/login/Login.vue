@@ -6,9 +6,9 @@
       <div class="login-button" @click="goUserLogin('/userLogin')">登陆</div>
     </div>
     <div class="isLogin" v-if="isLogin">
-      <p @click="outLogin">退出登录</p>
+      <p @click.stop="outLogin">退出登录</p>
       <div class="userInfo">
-        <img :src="userdata.avator" alt />
+        <img @click="jumpModify" :src="userdata.avator" alt />
         <p>{{userdata.nickname}}</p>
       </div>
       <div class="messageCount">
@@ -50,13 +50,19 @@ export default {
       this.$router.replace(url).catch(data => {});
     },
     outLogin:function(){
+      console.log('111');
         this.$axios.post('logout').then(res => {
             this.$store.commit('outLogin');
             this.isLogin = this.$store.state.isLogin
             // console.log(res);
         }).catch(error => {
             console.log(error);
+            return error
         })
+    },
+    //跳转到修改信息页面
+    jumpModify:function(){
+      this.$router.replace('/UserDetail')
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

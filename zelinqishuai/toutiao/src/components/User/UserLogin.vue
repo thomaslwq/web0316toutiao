@@ -20,9 +20,9 @@
           <input placeholder="账号/邮箱" type="text" v-model.trim="username" />
         </div>
         <div class="paswordInput">
-          <input placeholder="密码"  autocomplete="off" type="password" v-model.trim="password"/>
+          <input @keyup.enter="login" placeholder="密码"  autocomplete="off" type="password" v-model.trim="password"/>
         </div>
-        <div class="tijiao" @click.stop="login">确定</div>
+        <div class="tijiao"  @click.stop="login">确定</div>
       </div>
       <div class="loginDetail">
         <span>登录/注册表示你同意</span>
@@ -57,6 +57,7 @@ export default {
       goUserSign:function(url){
           this.$router.replace(url).catch(data=>{})
       },
+     
       login:function(){
            let parmas = new FormData();
            parmas.append('username',this.username);
@@ -66,11 +67,12 @@ export default {
               //  console.log(res);
               //  console.log(parmas);
                if(res.ret === 0){
+                  this.$Message({msg:'登录成功'})
                    this.$store.commit('userInfo',res.wdata);
                    this.$store.commit('isLogin',true)
                    this.$router.replace('/')
                }else{
-                 alert('账号或密码不正确')
+                 this.$Message({msg:'账号或密码不正确'})
                   this.username = '';
                   this.password = ''
                }

@@ -61,7 +61,7 @@ export default {
       },
       signForm:function(){
         if (this.username == "" || this.password == "") {
-          alert('账号密码不能为空')
+          this.$Message({msg:'账号密码不能为空'})
             return
         }
           let parmas = new FormData;
@@ -87,7 +87,7 @@ export default {
               });
             }else{
               res.status = 'fail';
-              alert('账号已存在')
+              this.$Message({msg:'账号已存在'})
             }
           })
           .catch(({ err }) => {

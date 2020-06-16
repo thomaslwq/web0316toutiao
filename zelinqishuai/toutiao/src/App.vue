@@ -15,8 +15,22 @@ export default {
 }
 </script>
 
-<style>
+<style lang='less'>
   * {
     --themeColor:#ea4245;
   }
+.tt-message {
+  line-height: 50px;
+  font-size: 16px;
+  color: #6ac144;
+  text-align: center;
+  left: 50%;
+  position: fixed;
+  top: 0;
+  width: 400px;
+  height: 50px;
+  margin-left: -200px;
+ background: #fcf6ec;
+  z-index: 1001;
+}
 </style>

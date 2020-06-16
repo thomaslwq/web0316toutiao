@@ -38,15 +38,14 @@
                  <span>{{nickname}}</span>
                 <span>{{articleList.created_at}}</span>
             </div>
-            <div class="content-txt">
-                {{articleList.content}}
+            <div class="content-txt" v-html='articleList.content'>
             </div>
             <div class="content-img" v-for='img in imgs'>
                 <img :src="img">
             </div>
         </div>
         <div class="content-right">
-            <img :src="avator" alt="">
+            <img :src="avator" alt="" @click="modifyUser">
             <span>{{nickname}}</span>
         </div>
     </div>
@@ -77,7 +76,16 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    modifyUser:function(){
+        // console.log(this.nickname);
+        // this.$axios.post('/updateUserInfo',{
+        //     nickname:this.nickname,
+        //     avator:this.avator
+        // }).then(res => {
+        //     console.log(res);
+        // })
+        this.$router.push('/UserDetail')
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {

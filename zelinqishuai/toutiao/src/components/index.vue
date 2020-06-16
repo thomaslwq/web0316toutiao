@@ -57,7 +57,9 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    // postArticles:function(){
+       
+    // }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -65,7 +67,27 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    window.addEventListener('scroll',e=>{
+        
+        let top = document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight;
+        let clienHeight = document.documentElement.clientHeight
+        if(top >= height-clienHeight){
+            console.log('触发了');
+            // let lastItem = this.$store.state.articleLists.pop();
+            // console.log(lastItem.nid);
+            this.$axios.post('/getArticles',{
+                type:'TT',
+                page:2,
+                number:20
+                }).then(res => {
+                console.log(res);
+                console.log(...res.articles);
+                this.$store.state.articleLists.push(...res.articles)
+                // console.log(lastItem.nid);
+            }).catch(err => err)
+        }
+    })
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

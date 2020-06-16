@@ -59,7 +59,7 @@ export default {
           this.$store.commit('updateArticleLists',res.articles)
           // this.articleList = this.$store.state.articleLists
         }else{
-          alert('加载留言失败')
+          this.$Message({msg:'加载留言失败了'})
           // console.log('1231321');
         }
       }).catch(res => [
