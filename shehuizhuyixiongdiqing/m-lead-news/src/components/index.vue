@@ -18,9 +18,9 @@
       <div class="i-app">
         <img
           src="//s3b.pstatp.com/growth/mobile_list/image/wap_logo@3x_581de69e.png"
-          @click="toTop"
+          @click="toTop(false)"
         />
-        <i @click="reloadNews(true)" :class="{refresh: ifRefresh}"></i>
+        <i @click="toTop(true)" :class="{refresh: ifRefresh}"></i>
       </div>
       <div class="i-search">
         <a @click="goTo('/search')">
@@ -41,7 +41,7 @@
       <i @click="goTo('/channel')">+</i>
     </nav>
     <ul class="i-news">
-      <li v-for="(item,index) in showList" :key="index" @click="goToDetail(item.nid)">
+      <li v-for="(item,index) in newsList" :key="index" @click="goToDetail(item.nid)">
         <div class="news-img" v-if="item.img">
           <a target="_blank">
             <img :src="item.img" lazy="loaded" />
@@ -76,7 +76,8 @@ export default {
       ifRefresh: false,
       timer: null,
       activeIndex: "0",
-      showList: []
+      newsList: [],
+      refresh: true,
     };
   },
   computed: {
@@ -89,18 +90,19 @@ export default {
     channelList() {
       return this.$store.state.channelList;
     },
-    newsList() {
-      return this.$store.state.newsList;
+    oldLength() {
+      return localStorage.getItem('old-length') || 0;
     }
   },
   mounted() {
-    this.reloadNews(true);
+    this.reloadNews();
     window.addEventListener("scroll", e => {
       let scrollTotal =
         document.body.scrollHeight - document.documentElement.clientHeight;
       if (document.documentElement.scrollTop >= scrollTotal) {
         this.$store.commit("lazyPages", this.lazyPages + 1);
-        this.reloadNews(false);
+        this.refresh = false;
+        this.reloadNews();
       }
     });
     let startY, endY;
@@ -112,7 +114,7 @@ export default {
     window.addEventListener("touchend", event => {
       endY = event.changedTouches[0].clientY;
       if (endY - startY >= 100) {
-        this.reloadNews(true);
+        this.reloadNews();
       }
     });
   },
@@ -126,37 +128,37 @@ export default {
         query: { nid: id }
       });
     },
-    reloadNews(refresh) {
+    reloadNews() {
       this.ifRefresh = true;
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         this.ifRefresh = false;
       }, 1000);
-      let oldLength = this.newsList.length;
-      let newsList = [];
-      let param = new FormData();
-      param.append("lastid", this.lastId);
-      this.axios.post("/getArticles").then(res => {
+      let page = this.refresh ? 0 : this.lazyPages;
+      let params = new FormData();
+      params.append("page", page);
+      params.append("number", 15);
+      this.axios.post("/getArticles", params).then(res => {
         if (res.data.ret == 0) {
-          for (let i = res.data.articles.length - 1; i >= 0; i--) {
-            if (res.data.articles[i].nid > this.lastId) {
-              this.lastId = res.data.articles[i].nid;
-            }
-            newsList.unshift(res.data.articles[i]);
+          if (this.refresh) {
+            console.log(res.data);
+            this.newsList = [];
           }
-          if (newsList.length - 15 > 15 * this.lazyPages) {
-            this.showList = newsList.slice(0, 15 * this.lazyPages);
-          } else if (newsList.length > 15 * this.lazyPages) {
-            this.showList = newsList.slice();
+          this.newsList.push(...res.data.articles);
+          this.$store.commit("newsList", this.newsList);
+          if (res.data.counts - this.oldLength && this.refresh) {
+            this.$message(
+              `为您推荐${res.data.counts - this.oldLength}篇新头条`
+            );
           }
-          if (newsList.length - oldLength && refresh)
-          this.$message(`为您推荐${newsList.length - oldLength}篇新头条`);
-          this.$store.commit("newsList", newsList);
+          localStorage.setItem('old-length', res.data.counts);
+          this.refresh = true;
         }
       });
     },
-    toTop() {
+    toTop(refresh) {
       window.scrollTo(0, 0);
+      if (refresh) this.reloadNews();
     },
     notice() {
       this.ifPop = true;
