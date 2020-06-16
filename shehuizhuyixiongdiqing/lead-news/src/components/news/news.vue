@@ -62,7 +62,7 @@
     </el-tabs>
     <el-button icon="el-icon-refresh" class="refresh" @click="reloadNews">&nbsp;点击刷新&nbsp;</el-button>
     <ul>
-      <li v-for="(item,index) in showList" :key="index">
+      <li v-for="(item,index) in newsList" :key="index">
         <div class="news-img" v-if="item.img">
           <a target="_blank" @click="goToDetail(item.nid)">
             <img :src="item.img" lazy="loaded" />
@@ -91,15 +91,15 @@ export default {
     return {
       activeTab: "textMsg",
       newsList: [],
-      showList: [],
       msgText: "",
       atcTitle: "",
       atcText: "",
       atcShowImg: "",
       imgList: [],
       imgArr: [],
-      lazyPages: 1,
-      lastId: 0
+      lazyPages: 0,
+      lastId: 0,
+      refresh: true
     };
   },
   computed: {
@@ -115,6 +115,7 @@ export default {
         document.body.scrollHeight - document.documentElement.clientHeight;
       if (document.documentElement.scrollTop >= scrollTotal) {
         this.lazyPages++;
+        this.refresh = false;
         this.reloadNews();
       }
     });
@@ -222,24 +223,18 @@ export default {
       });
     },
     reloadNews() {
-      this.newsList = [];
-      let param = new FormData();
-      param.append("lastid", this.lastId);
-      this.axios.post("/getArticles").then(res => {
+      let page = this.refresh ? 0 : this.lazyPages;
+      let params = new FormData();
+      params.append("page", page);
+      params.append("number", 15);
+      this.axios.post("/getArticles", params).then(res => {
         if (res.data.ret == 0) {
-          for (let i = res.data.articles.length - 1; i >= 0; i--) {
-            console.log(res.data.articles[i].nid);
-            if (res.data.articles[i].nid > this.lastId) {
-              this.lastId = res.data.articles[i].nid;
-            }
-            this.newsList.unshift(res.data.articles[i]);
+          if (this.refresh) {
+            this.newsList = [];
           }
-          if (this.newsList.length - 15 > 15 * this.lazyPages) {
-            this.showList = this.newsList.slice(0, 15 * this.lazyPages);
-          } else if (this.newsList.length > 15 * this.lazyPages) {
-            this.showList = this.newsList.slice();
-          }
-          this.$store.commit('newsList', this.newsList);
+          this.newsList.push(...res.data.articles);
+          this.$store.commit("newsList", this.newsList);
+          this.refresh = true;
         }
       });
     }

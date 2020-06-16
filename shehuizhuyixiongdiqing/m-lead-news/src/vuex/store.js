@@ -4,7 +4,7 @@ Vue.use(Vuex);
 
 let state = {
   newsList: JSON.parse(localStorage.getItem('news-list')) || [],
-  lazyPages: 1,
+  lazyPages: 0,
   loading: false,
   channelList: JSON.parse(localStorage.getItem('channel-list')) || {
     added: ["推荐", "热点", "社会", "娱乐", "科技", "汽车", "体育", "财经", "军事", "国际", "时尚", "游戏"],
