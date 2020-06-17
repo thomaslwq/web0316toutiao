@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>modile端头条</title>
+    <!--  1. 设置视口 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no,
+        maximum-scale=1.0,minimum-scale=1.0
+        ">
+    <style>
+        *{
+            padding:0px;
+            margin:0px;
+            box-sizing: border-box;
+        }
+        html {
+            font-size: 62.5%;
+            --themeColor: #d23f42;
+
+            /* font-size:10%; */
+            /* 
+                基本的单位 rem 1rem = 10px 
+                100vw 整个屏幕的宽度
+                10vw 10%的屏幕的宽度
+                100vh 整个屏幕的高度
+                10vh 10%的屏幕的高度
+                */
+        }
+    </style>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <!--移动端主体结构开始 -->
+    <section class="tt-m-index">
+        <section class="tt-m-header">
+            <section class="header-message">邮件</section>
+            <section class="header-title">头条</section>
+            <section class="header-search">搜索</section>
+        </section>
+        <section class="tt-m-add">
+            +
+        </section>
+        <!-- 分类开始 -->
+        <section class="tt-m-nav">
+            <section class="nav-box">
+                <a class="nav-left-item">推荐</a>
+                <a class="nav-left-item">科技</a>
+                <a class="nav-left-item">汽车</a>
+                <a class="nav-left-item">体育</a>
+                <a class="nav-left-item">时尚</a>
+                <a class="nav-left-item">养生</a>
+                <a class="nav-left-item">故事</a>
+            </section>
+        </section>
+        <!-- 分类结束 -->
+        <!-- 列表开始 -->
+        <section class="tt-m-list">
+            <section class="list-item">
+               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
+               <section class="date">2020-06-20 05:02:02</section> 
+            </section>
+            <section class="list-item">
+               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
+               <section class="date">2020-06-20 05:02:02</section> 
+            </section>
+            <section class="list-item">
+               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
+               <section class="date">2020-06-20 05:02:02</section> 
+            </section>
+            <section class="list-item">
+               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
+               <section class="date">2020-06-20 05:02:02</section> 
+            </section>
+            <section class="list-item">
+               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
+               <section class="date">2020-06-20 05:02:02</section> 
+            </section>
+        </section>
+        <!-- 列表结束 -->
+    </section>
+    <!--移动端主体结构结束 -->
+</body>
+<script>
+    console.log(document.documentElement);
+    console.log(document.documentElement);
+</script>
+
+</html>

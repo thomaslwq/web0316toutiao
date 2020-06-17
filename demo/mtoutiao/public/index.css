@@ -1,0 +1,60 @@
+.tt-m-index .tt-m-header {
+  background-color: var(--themeColor);
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  color: white;
+  font-weight: 200;
+}
+.tt-m-index .tt-m-header .header-message {
+  font-size: 1.5rem;
+}
+.tt-m-index .tt-m-header .header-title {
+  font-weight: 600;
+  font-size: 2rem;
+}
+.tt-m-index .tt-m-header .header-search {
+  font-size: 1.5rem;
+}
+.tt-m-index .tt-m-add {
+  height: 3rem;
+  line-height: 3rem;
+  float: right;
+  font-size: 1.9rem;
+  width: 3rem;
+  text-align: center;
+  color: var(--themeColor);
+}
+.tt-m-index .tt-m-nav {
+  height: 3rem;
+}
+.tt-m-index .tt-m-nav .nav-box {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  border-bottom: 1px solid #ddd;
+}
+.tt-m-index .tt-m-nav .nav-box .nav-left-item {
+  display: inline-block;
+  width: 6rem;
+  font-size: 1.5rem;
+  text-align: center;
+  height: 3rem;
+  line-height: 3rem;
+}
+.tt-m-index .tt-m-nav .nav-box::-webkit-scrollbar {
+  display: none;
+}
+.tt-m-index .tt-m-list .list-item {
+  padding: 1rem;
+  border-bottom: 0.1rem solid #ddd;
+}
+.tt-m-index .tt-m-list .list-item .title {
+  font-size: 1.5rem;
+}
+.tt-m-index .tt-m-list .list-item .date {
+  font-size: 0.5rem;
+  color: #9a9a9a;
+}
