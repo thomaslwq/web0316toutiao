@@ -20,6 +20,7 @@
         <img
           :src="userInfo.avator"
           alt=""
+          @click="gotoUserCenter"
         >
       </div>
       <div class="nickname">
@@ -63,6 +64,11 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    gotoUserCenter: function () {
+      this.$router.push({
+        path: "/userCenter"
+      })
+    },
     logout: function () {
       this.$axios.post("/logout").then(res => {
         this.$message({

@@ -9,6 +9,7 @@
       class="list-item"
       v-for="article in articles"
       :key="article.nid"
+      @click.stop="gotoNewsDetail(article.nid)"
     >
       <div
         class="left"
@@ -55,6 +56,16 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    gotoNewsDetail: function (nid) {
+      console.log(nid);
+      this.$router.push({
+        path: "/newsDetail",
+        query: {
+          nid: nid
+        }
+      })
+
+    },
     refresh: function () {
       this.$axios.post("/getArticles", {
         lastid: this.lastid
