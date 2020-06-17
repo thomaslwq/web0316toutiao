@@ -90,7 +90,6 @@ export default {
   data() {
     return {
       activeTab: "textMsg",
-      newsList: [],
       msgText: "",
       atcTitle: "",
       atcText: "",
@@ -105,6 +104,9 @@ export default {
   computed: {
     loading() {
       return this.$store.state.loading;
+    },
+    newsList() {
+      return this.$store.state.newsList;
     }
   },
   components: { VueEditor },
@@ -223,6 +225,7 @@ export default {
       });
     },
     reloadNews() {
+      let newsList = this.newsList;
       let page = this.refresh ? 0 : this.lazyPages;
       let params = new FormData();
       params.append("page", page);
@@ -230,10 +233,13 @@ export default {
       this.axios.post("/getArticles", params).then(res => {
         if (res.data.ret == 0) {
           if (this.refresh) {
-            this.newsList = [];
+            newsList = [];
           }
-          this.newsList.push(...res.data.articles);
-          this.$store.commit("newsList", this.newsList);
+          newsList.push(...res.data.articles);
+          this.$store.commit("newsList", {
+            newsList,
+            newsCount: res.data.counts
+          });
           this.refresh = true;
         }
       });

@@ -63,25 +63,21 @@ export default {
       searchText: "",
       timer: null,
       delOption: false,
-      history: JSON.parse(localStorage.getItem("search-history")) || []
+      history: JSON.parse(localStorage.getItem("search-history")) || [],
+      newsList: [],
+      srhList: []
     };
   },
   computed: {
     rdNews() {
-      return this.$store.state.newsList
-        .sort(() => parseInt(Math.random() + 1))
-        .slice(0, 9);
+      return this.newsList.sort(() => parseInt(Math.random() + 1)).slice(0, 9);
     },
-    newsList() {
-      let arr = [];
-      this.$store.state.newsList.forEach(ele => {
-        arr.push({
-          value: ele.title,
-          type: ele.type
-        });
-      });
-      return arr;
+    newsCount() {
+      return this.$store.state.newsCount;
     }
+  },
+  mounted() {
+    this.getAllNews();
   },
   methods: {
     goToDetail(id) {
@@ -92,7 +88,7 @@ export default {
     },
     searchAsync(searchText, callback) {
       let showList = searchText
-        ? this.newsList.filter(ele => {
+        ? this.srhList.filter(ele => {
             return (
               ele.value.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
             );
@@ -127,6 +123,22 @@ export default {
       if (index >= 0) this.history.splice(index, 1);
       else this.history = [];
       localStorage.setItem("search-history", JSON.stringify(this.history));
+    },
+    getAllNews() {
+      let params = new FormData();
+      params.append("page", 0);
+      params.append("number", this.newsCount);
+      this.axios.post("/getArticles", params).then(res => {
+        if (res.data.ret == 0) {
+          this.newsList = res.data.articles;
+          this.newsList.forEach(ele => {
+            this.srhList.push({
+              value: ele.title,
+              type: ele.type
+            });
+          });
+        }
+      });
     }
   }
 };

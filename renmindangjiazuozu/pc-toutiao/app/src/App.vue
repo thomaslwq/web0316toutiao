@@ -8,13 +8,17 @@
 import Index from "./components/Index.vue"
 import Login from "./components/Login.vue"
 import Register from "./components/Register.vue"
+import UserCenter from "./components/UserCenter.vue"
+import UserData from "./components/UserData.vue"
 
 export default {
   name: 'App',
   components: {
     Index,
     Login,
-    Register
+    Register,
+    UserCenter,
+    UserData
   }
 }
 </script>

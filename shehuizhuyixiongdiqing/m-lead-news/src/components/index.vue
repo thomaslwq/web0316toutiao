@@ -76,8 +76,9 @@ export default {
       ifRefresh: false,
       timer: null,
       activeIndex: "0",
-      newsList: [],
       refresh: true,
+      startY: 0,
+      endY: 0
     };
   },
   computed: {
@@ -91,32 +92,25 @@ export default {
       return this.$store.state.channelList;
     },
     oldLength() {
-      return localStorage.getItem('old-length') || 0;
+      return localStorage.getItem("old-length") || 0;
+    },
+    newsList() {
+      return this.$store.state.newsList;
     }
   },
   mounted() {
     this.reloadNews();
-    window.addEventListener("scroll", e => {
-      let scrollTotal =
-        document.body.scrollHeight - document.documentElement.clientHeight;
-      if (document.documentElement.scrollTop >= scrollTotal) {
-        this.$store.commit("lazyPages", this.lazyPages + 1);
-        this.refresh = false;
-        this.reloadNews();
-      }
-    });
-    let startY, endY;
+    window.addEventListener("scroll", this.scroll);
     window.addEventListener("touchstart", e => {
       if (document.documentElement.scrollTop === 0) {
-        startY = e.touches[0].clientY;
+        this.startY = e.touches[0].clientY;
       }
     });
-    window.addEventListener("touchend", event => {
-      endY = event.changedTouches[0].clientY;
-      if (endY - startY >= 100) {
-        this.reloadNews();
-      }
-    });
+    window.addEventListener("touchend", this.downDrag);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.scroll);
+    window.removeEventListener("touchend", this.downDrag);
   },
   methods: {
     goTo(url) {
@@ -134,6 +128,7 @@ export default {
       this.timer = setTimeout(() => {
         this.ifRefresh = false;
       }, 1000);
+      let newsList = this.newsList;
       let page = this.refresh ? 0 : this.lazyPages;
       let params = new FormData();
       params.append("page", page);
@@ -141,17 +136,20 @@ export default {
       this.axios.post("/getArticles", params).then(res => {
         if (res.data.ret == 0) {
           if (this.refresh) {
-            console.log(res.data);
-            this.newsList = [];
+            newsList = [];
           }
-          this.newsList.push(...res.data.articles);
-          this.$store.commit("newsList", this.newsList);
+          console.log(res.data.counts);
+          newsList.push(...res.data.articles);
+          this.$store.commit("newsList", {
+            newsList,
+            newsCount: res.data.counts
+          });
           if (res.data.counts - this.oldLength && this.refresh) {
             this.$message(
               `为您推荐${res.data.counts - this.oldLength}篇新头条`
             );
           }
-          localStorage.setItem('old-length', res.data.counts);
+          localStorage.setItem("old-length", res.data.counts);
           this.refresh = true;
         }
       });
@@ -164,6 +162,21 @@ export default {
       this.ifPop = true;
       this.ifNotice = true;
       localStorage.setItem("if-notice", this.ifNotice);
+    },
+    scroll(e) {
+      let scrollTotal =
+        document.body.scrollHeight - document.documentElement.clientHeight;
+      if (document.documentElement.scrollTop >= scrollTotal) {
+        this.$store.commit("lazyPages", this.lazyPages + 1);
+        this.refresh = false;
+        this.reloadNews();
+      }
+    },
+    downDrag(e) {
+      this.endY = e.changedTouches[0].clientY;
+      if (this.endY - this.startY >= 100) {
+        this.reloadNews();
+      }
     }
   }
 };

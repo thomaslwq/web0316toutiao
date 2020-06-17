@@ -66,17 +66,18 @@ export default {
       searchText: "",
       timer: null,
       msgRes: [],
-      atcRes: []
+      atcRes: [],
+      newsList: []
     };
   },
   computed: {
-    newsList() {
-      return this.$store.state.newsList;
+    newsCount() {
+      return this.$store.state.newsCount;
     }
   },
   mounted() {
     this.searchText = this.$route.query.searchText;
-    this.searchRes();
+    this.getAllNews();
   },
   methods: {
     goToDetail(id) {
@@ -119,6 +120,17 @@ export default {
           query: { searchText: this.searchText }
         });
       }
+    },
+    getAllNews() {
+      let params = new FormData();
+      params.append("page", 0);
+      params.append("number", this.newsCount);
+      this.axios.post("/getArticles", params).then(res => {
+        if (res.data.ret == 0) {
+          this.newsList = res.data.articles;
+          this.searchRes();
+        }
+      });
     }
   }
 };
