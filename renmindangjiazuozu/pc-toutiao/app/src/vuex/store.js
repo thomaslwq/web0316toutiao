@@ -19,6 +19,22 @@ const mutations = {
         localStorage["userInfo"] = "";
         this.state.userInfo = "";
         this.state.loginStatus = false;
+    },
+    modifyToutiaoCount: function(state ,{kind}) {
+        if(kind == "add"){
+            this.state.userInfo.tt_count += 1;
+        }
+        else {
+            this.state.userInfo.tt_count -= 1;
+        }
+    },
+    modifyArticleCount: function(state ,{kind}) {
+        if(kind == "add"){
+            this.state.userInfo.article_count += 1;
+        }
+        else {
+            this.state.userInfo.article_count -= 1;
+        }
     }
 };
 

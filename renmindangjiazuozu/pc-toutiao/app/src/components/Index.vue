@@ -10,6 +10,9 @@
             <div class="comment-input-container">
                 <Comment></Comment>
             </div>
+            <div class="article-list-container">
+                <ArticleList></ArticleList>
+            </div>
         </div>
         <div class="main-right">
             <div class="search-container">
@@ -35,6 +38,7 @@ import Nav from "./nav/Nav.vue"
 import Header from "./header/Header.vue"
 import Search from "./search/Search.vue"
 import Comment from "./comment/Comment.vue"
+import ArticleList from "./articleList/ArticleList.vue"
 import Login from "./login/Login.vue"
 import More from "./more/More.vue"
 import Friendslink from "./friendslink/Friendslink.vue"
@@ -47,6 +51,7 @@ components: {
     Header,
     Search,
     Comment,
+    ArticleList,
     Login,
     More,
     Friendslink,
@@ -160,6 +165,12 @@ activated() {
             width: 100%;
             height: auto;
             border: 1px solid #e8e8e8;
+        }
+
+        .article-list-container {
+            margin: 15px 0;
+            width: 100%;
+            height: 600px;
         }
     }
 

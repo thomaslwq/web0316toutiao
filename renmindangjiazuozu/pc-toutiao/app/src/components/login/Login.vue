@@ -23,7 +23,7 @@
                     <span @click="exitLogin">退出登录</span>
                 </div>
                 <div class="user-info">
-                    <div class="user-avator">
+                    <div class="user-avator" @click="$router.push('userCenter')">
                         <img :src="$store.state.userInfo.avator" alt="">
                     </div>
                     <div class="user-name">{{$store.state.userInfo.nickname}}</div>
@@ -80,8 +80,7 @@ methods: {
                 type: "exitLogin"
             })
         });
-        
-    }
+    },
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -235,6 +234,7 @@ activated() {
                     height: 64px;
                     border-radius: 50%;
                     overflow: hidden;
+                    cursor: pointer;
 
                     img {
                         width: 100%;
