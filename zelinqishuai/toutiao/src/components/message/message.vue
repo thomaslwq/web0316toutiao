@@ -5,7 +5,7 @@
       <div class="clickRefresh" @click="getArticles">点击刷新</div>
     </div>
     
-    <div class="messagelist" v-for="(article,index) in articleLists" :key='article.nid'>
+    <div class="messagelist" v-for="(article,index) in articleLists" :key='index'>
       <div v-if="article.img == null || article.img == 'undefined'"></div>
       <div class="list-left" @click.stop="jumpMessageDetaile(article.nid)"  v-else>
         <img :src="article.img"/>
@@ -59,7 +59,7 @@ export default {
           this.$store.commit('updateArticleLists',res.articles)
           // this.articleList = this.$store.state.articleLists
         }else{
-          alert('加载留言失败')
+          this.$Message({msg:'加载留言失败了'})
           // console.log('1231321');
         }
       }).catch(res => [

@@ -94,6 +94,7 @@ export default {
     },
     //拿到图片URL
     handleImgsUpload: function(e) {
+      console.log(e.target.files);
       Array.from(e.target.files).forEach(item => {
         let params = new FormData();
         // console.log(params);
@@ -112,7 +113,7 @@ export default {
     //提交tt留言板
     submit: function() {
       if (!this.$store.state.isLogin) {
-        alert(`请先登录`)
+        this.$Message({msg:'请先登录'})
         return;
       }
       this.$axios.post("/createTT", {
@@ -130,13 +131,13 @@ export default {
           this.uploadImgs = [];
           this.toggleAdd = false
           this.refreshMessages()
-          alert(res.msg)
+          this.$Message({msg:res.msg})
         }else{
             res.status = 'fail'
-            alert(res.msg)
+            this.$Message({msg:res.msg})
         }
       }).catch(({err}) => {
-          alert('服务器繁忙');
+          this.$Message({msg:'服务器繁忙'});
         });
     },
     //刷新最新文章目录
@@ -149,7 +150,7 @@ export default {
             // console.log(res);
             this.$store.commit('updateArticleLists',res.articles)
           } else {
-            alert("加载留言失败");
+            this.$Message({msg:'加载留言失败了'});
           }
         })
         .catch(res => [console.log("加载失败了")]);
@@ -170,10 +171,10 @@ export default {
     //发布文章
     submitArticle:function(){
       if (!this.$store.state.isLogin) {
-        alert(`请先登录`);
+        this.$Message({msg:'请先登录'});
         return
       }else if(this.richContent === "" || this.title === ""){
-        alert('不能发布空内容')
+        this.$Message({msg:'不能发布空内容'})
         return
       }
       this.$axios.post('/createArticle',{
@@ -188,14 +189,14 @@ export default {
             this.richContent = ''
             this.$store.commit("updateArticleCount",this.$store.state.userInfo.article_count + 1);
             this.refreshMessages()
-            alert('发布成功')
+            this.$Message({msg:'发布成功'})
           }else{
             res.status = 'fail'
-            alert('发布文章失败')
+            this.$Message({msg:'发布文章失败了'})
             return
           }
         }).catch(({err}) => {
-          alert('服务器繁忙')
+          this.$Message({msg:'服务器繁忙'})
           return false;
         })
     }
