@@ -1,0 +1,89 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{
+    //设置为移动端的字体大小，默认16px  1rem=10px 10/16=0.625
+    font-size: 62.5%;
+    --themeColor:#d23f42;
+    --bgColor:rgba(221, 221, 221);
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.tt-m-index {
+    .tt-m-header{
+        position: fixed;
+        width: 100vw;
+        z-index: 999;
+        .header {
+            height: 4.5rem;
+            background-color: var(--themeColor);
+            font-size: 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            color: white;
+        .header-email {
+    
+        }
+    
+        .header-title {
+            font-weight: 600;
+        }
+    
+        .header-search {
+    
+        }
+        }
+        .tt-m-tab{
+            display: flex;
+            background-color:var(--bgColor);
+            .tab-nav{
+                width: 90%;
+                font-size: 1.8rem;
+                overflow-x: scroll;
+                overflow-y: hidden;
+                white-space: nowrap;
+                a{
+                    padding: 0.8rem;
+                    display: inline-block;
+                    text-align: center;
+                    color: #555;
+                }
+            }
+            .tab-nav::-webkit-scrollbar{
+                display: none;
+            }
+            .tab-more{
+                width: 10%;
+                text-align: center;
+                line-height: 3.4rem;
+                font-size: 2rem;
+            }
+        }
+    }
+    .tt-m-content {
+        position: absolute;
+        top: 9rem;
+        .content-list {
+          .list-item {
+              padding: 1rem;
+              border-bottom: 1px solid #ddd;
+            .item-title {
+                margin: 0.5rem;
+                font-size: 2rem;
+            }
+            
+            .item-time {
+                margin: 0.5rem;
+                font-size: 1.5rem;
+                color: #777;
+            }
+          }
+        }
+      }
+  }
