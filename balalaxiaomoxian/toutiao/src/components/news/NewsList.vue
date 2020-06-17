@@ -5,7 +5,7 @@
     </div>
     <div class="newsList-list">
 
-      <div class="list-item" v-for="article in articles" :key="article.nid">
+      <div class="list-item" v-for="article in articles" :key="article.nid" @click="toNewsDetail(article.nid)">
         <div class="item-left" v-if="article.img">
           <img :src="article.img" />
         </div>
@@ -43,6 +43,15 @@ methods:{
         this.lastid = this.articles[0].nid
       }
     })
+  },
+  toNewsDetail:function(nid){
+    this.$router.push(
+      {
+        path:"/newsDetail",
+        query:{
+          nid:nid
+          }
+      })
   }
 },
 mounted(){
@@ -80,6 +89,7 @@ mounted(){
       display: flex;
       padding: 20px 0;
       border-bottom: 1px solid #ddd;
+      cursor: pointer;
       .item-left {
         img {
           width: 156px;

@@ -6,6 +6,9 @@ import VueRouter from "vue-router"
 import Index from "../components/Index"
 import UserLogin from "../components/login/UserLogin.vue"
 import UserRegister from "../components/login/UserRegister.vue"
+import NewsDetail from "../components/news/NewsDetail.vue"
+import UserCenter from "../components/user/UserCenter.vue"
+import UserData from "../components/user/UserData.vue"
 
 //使用
 Vue.use(VueRouter)
@@ -23,6 +26,18 @@ let routes = [{
         path: "/userRegister",
         name: "userRegister",
         component: UserRegister
+    }, {
+        path: "/newsDetail",
+        name: "newsDetail",
+        component: NewsDetail
+    }, {
+        path: "/userCenter",
+        name: "userCenter",
+        component: UserCenter
+    }, {
+        path: "/userData",
+        name: "userData",
+        component: UserData
     }]
     //导出路由
 export default new VueRouter({

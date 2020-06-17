@@ -10,7 +10,7 @@
     </div>
     <div class="tab-content">
         <div class="content-toutiao" v-show="activeTab=='toutiao'">
-            <textarea class="textarea" rows="10" placeholder="有什么新鲜事想告诉大家" :maxlength="maxCount" v-model="textAreaMsg"></textarea> <!--@change="textAreaWord"-->
+            <textarea class="textarea" rows="10" placeholder="有什么新鲜事想告诉大家" :maxlength="maxCount" v-model="textAreaMsg"></textarea>
             <div class="textWord">
                 <span class="nowWord">{{textNum}}</span>
                 <span>/</span>
@@ -50,7 +50,12 @@
         </div>
         <div class="content-article" v-show="activeTab=='article'">
             <input class="article-title" type="text" placeholder="请输入标题" v-model="title"/>
-            <vue-editor v-model="richContent" class="rich-editor" />
+            <vue-editor 
+            use-custom-image-handler
+            v-model="richContent" 
+            class="rich-editor" 
+            @image-added="handleImageAdded"
+            />
             <div class="article-bottom">
                 <div class="bottom-publish" @click.stop="publishArticle">发布</div>
             </div>
@@ -67,9 +72,9 @@ components: {
 },
 data() {
    return {
-       tabsItem:[
-           {id:"toutiao",text:"发微头条"},
-           {id:"article",text:"写文章"},
+        tabsItem:[
+            {id:"toutiao",text:"发微头条"},
+            {id:"article",text:"写文章"},
         ],
         activeTab:"toutiao",
         isShowUploadImg:false,
@@ -78,7 +83,6 @@ data() {
         richContent: "",
         maxCount:200,
         textAreaMsg:"",
-        textNum:0,
         title:""
    };
 },
@@ -146,11 +150,25 @@ methods: {
                 msg:res.msg
             })
         })
-    }
+    },
+    textAreaWord(){
+        this.textNum = this.textAreaMsg.length
+    },
+    //修复Vue2 editor的控件
+    handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+      console.log("vue2-editor上传图片");
+      var formData = new FormData();
+      formData.append("file", file);
+      this.$axios.post("/aliossUpload", formData).then(res => {
+        let url = res.url;
+        Editor.insertEmbed(cursorLocation, "image", url);
+        resetUploader();
+      });
+    },
 },
 computed:{
-    textAreaWord:function(){
-        return this.textNum = this.textAreaMsg.length
+    textNum(){
+        return this.textAreaMsg.length
     }
 },
 }
