@@ -36,7 +36,7 @@
           <span>{{articleList.created_at}}</span>
         </div>
         <div class="content-txt" v-html="articleList.content"></div>
-        <div class="content-img" v-for="img in imgs">
+        <div v-if="articleList.imgs" class="content-img" v-for="img in articleList.imgs">
           <img :src="img" />
         </div>
       </div>
@@ -80,43 +80,20 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
+ 
     this.$axios
-      .post("/getArticles", {
-        type: "TT",
-        page: 0,
-        number: 500
+      .post("/getArticleById", {
+          'nid':this.$route.query.nid
       })
       .then(res => {
         if (res.ret === 0) {
-          let articleLists = res.articles;
-          let index = articleLists.findIndex(e => {
-            return e.nid == this.$route.query.nid;
-          });
-          this.articleList = articleLists[index];
-          this.nickname = this.articleList.user.nickname;
-          this.avator = this.articleList.user.avator;
-          let imgs = this.articleList.imgs || "";
-          let imgggs = imgs
-            .split()
-            .join(",")
-            .split(",");
-          this.imgs = imgggs;
-        }
+            console.log(res);
+            this.articleList = res.article;
+            this.nickname = res.article.n_user.nickname;
+            this.avator = res.article.n_user.avator;
+            }
       })
       .catch(err => err);
-    // this.nid = this.$route.query.nid
-    // let articleLists = this.$store.state.articleLists
-    // let index = articleLists.findIndex(e => {
-    //     return e.nid == this.nid
-    // })
-    // this.articleList = articleLists[index]
-    // this.nickname = this.articleList.user.nickname;
-    // this.avator = this.articleList.user.avator;
-    // let imgs = this.articleList.imgs || "";
-    // let imgggs = imgs.split().join(',').split(",")
-    // this.imgs = imgggs;
-    // // console.log(this.articleList);
-    // // console.log( imgggs);
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

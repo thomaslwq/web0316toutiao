@@ -145,7 +145,7 @@ mounted() {
      document.body.style.backgroundColor = '#f4f5f6'
     this.userInfo = this.$store.state.userInfo;
     this.$axios.post('/getArticlesByType',{
-        'type':'tt',
+        'type':'TT',
         'oauth_token':this.userInfo.oauth_token
     }).then(res => {
         // console.log(res);
