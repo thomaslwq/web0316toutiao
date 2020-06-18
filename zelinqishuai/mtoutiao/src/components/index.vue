@@ -1,9 +1,12 @@
 <!--  -->
 <template>
 <div class='mToutiao'>
-    <Search></Search>
-    <Navs></Navs>
-    <NewsList></NewsList>
+    <div class="mToutiao-title">
+        <Search></Search>
+        <Navs></Navs>
+    </div>
+    <NewsList class="mToutiao-news"></NewsList>
+    <Download class="mToutiao-download"></Download>
 </div>
 </template>
 
@@ -16,12 +19,15 @@ import Search from '../components/search/Search'
 import Navs from '../components/nav/Nav'
 //新闻
 import NewsList from '../components/newsList/NewsList'
+//下载头条
+import Download from '../components/download/Download'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
     Search,
     Navs,
-    NewsList
+    NewsList,
+    Download
 },
 data() {
 //这里存放数据
@@ -42,7 +48,7 @@ methods: {
         console.log(scrollTop);
         console.log(scrollHeight);
         console.log(cHeight);
-        if(scrollTop === scrollHeight - cHeight ){
+        if(scrollTop === scrollHeight - cHeight){
              console.log('触发了');
              console.log(this.page);
             this.$axios.post('/getArticles',{
@@ -54,11 +60,13 @@ methods: {
                 if(res.ret === 0){
                     this.page++
                     let arr = res.articles
+                    //遍历数据 逗号切割修改数据中的字符串变成数组
                     arr.map(item => {
                         if(item.imgs){
                         item.imgs  = item.imgs.split(',')
                         }
                     });
+                    console.log(this.page);
                     this.$store.state.news.push(...arr) 
                     // console.log(arr);
                     this.$Message({msg:res.msg})
@@ -96,5 +104,20 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 <style lang='less' scoped>
     .mToutiao{
         height: 100vh;
+        .mToutiao-title{
+            width: 100vw;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+        }
+        .mToutiao-news{
+            margin-top: 8rem;
+        }
+        .mToutiao-download{
+             width: 100vw;
+            position: fixed;
+            overflow: hidden;
+            bottom: 0;
+        }
     }
 </style>

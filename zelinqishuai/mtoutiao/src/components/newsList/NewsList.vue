@@ -87,6 +87,7 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 </script>
 <style lang='less' scoped>
     .newsList {
+        overflow: hidden;
   .newsList-item {
       margin: 0 2rem;
       padding: 1rem 0;
@@ -105,7 +106,7 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
          span{
                 padding: 1rem;
               img{
-                width: 10rem;
+                width: 8rem;
                 height: 5rem;             
             }
          }
