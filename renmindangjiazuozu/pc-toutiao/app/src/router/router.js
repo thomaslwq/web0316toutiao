@@ -8,6 +8,7 @@ import Login from "../components/Login"
 import Register from "../components/Register"
 import UserCenter from "../components/UserCenter"
 import UserData from "../components/UserData.vue"
+import Detail from "../components/Detail.vue"
 
 let routes = [
     {
@@ -34,6 +35,11 @@ let routes = [
         path: "/userData",
         name: "userData",
         component: UserData
+    },
+    {
+        path: "/detail/:id",
+        name: "detail",
+        component: Detail
     },
 ]
 

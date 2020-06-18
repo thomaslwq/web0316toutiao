@@ -6,7 +6,7 @@
             <Nav></Nav>
         </div>
         <div class="main-center">
-            <el-alert class="login-success" v-show="loginSuccessTips" title="登陆成功" type="success" show-icon></el-alert>
+            <el-alert class="login-success" v-show="loginSuccessTips" title="欢迎回来" type="success" show-icon></el-alert>
             <div class="comment-input-container">
                 <Comment></Comment>
             </div>
