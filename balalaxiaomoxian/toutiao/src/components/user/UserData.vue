@@ -20,7 +20,7 @@
                 <div class="userImg">
                     <div>头像</div>
                     <div class="imgWrapper">
-                        <img :src="updateImgUrl.avator" >
+                        <img :src="updateImgUrl" >
                         <input type="file" @change="uploadImg">
                     </div>
                 </div>
@@ -56,14 +56,14 @@ data() {
            id:"password",
            text:"密码管理"
        }],
-       updateImgUrl:this.$store.state.userInfo,
        nickname:this.$store.state.userInfo.nickname,
+       updateImgUrl:this.$store.state.userInfo.avator,
        currentPassword:"",
        updatePassword:"",
    };
 },
 computed:{
-    
+
 },
 methods:{
     changeTab:function(id){
@@ -78,8 +78,9 @@ methods:{
             })
         })
     },
-    updateInfo:function(){
+    updateInfo:function(e){
         let nickname = this.nickname
+        let updateImgUrl = this.updateImgUrl
         if(!nickname){
             this.$message({
                 msg:"请输入昵称"
@@ -88,18 +89,16 @@ methods:{
         }
         this.$axios.post("/updateUserInfo",{
             nickname,
-            avator:this.updateImgUrl
+            avator:updateImgUrl
         }).then(res=>{
-            console.log(res);
             this.$message({
                 msg:res.msg
             });
             if(res.status == 0){
                 let userInfo = this.$store.state.userInfo
-                console.log(userInfo);
                 userInfo.nickname = nickname
-                userInfo.avator = this.updateImgUrl
-                this.$store.commit('userInfo',userInfo)
+                userInfo.avator = updateImgUrl
+                this.$store.commit('updateUserInfo',userInfo)
             }
         })
     },
