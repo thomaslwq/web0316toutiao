@@ -103,10 +103,10 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
            overflow: auto;
             a{
             display: inline-block;
-            width: 6rem;
+            padding: 0 2rem;
             text-align: center;
             color: #505050;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 400;
             }
             a:last-child{

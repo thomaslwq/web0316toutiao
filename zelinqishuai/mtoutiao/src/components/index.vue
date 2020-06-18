@@ -13,6 +13,8 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
+//导入响应式rem文件
+
 //搜索栏
 import Search from '../components/search/Search'
 //导航栏
@@ -45,9 +47,9 @@ methods: {
         let scrollTop = document.documentElement.scrollTop;
         let scrollHeight = document.documentElement.scrollHeight;
         let cHeight = document.documentElement.clientHeight
-        console.log(scrollTop);
-        console.log(scrollHeight);
-        console.log(cHeight);
+        // console.log(scrollTop);
+        // console.log(scrollHeight);
+        // console.log(cHeight);
         if(scrollTop === scrollHeight - cHeight){
              console.log('触发了');
              console.log(this.page);

@@ -6,7 +6,7 @@
         <div>今日头条</div>
     </div>
     <div class="download-right">
-        <a href="//d.toutiao.com/N13p/">打开</a>
+        <a href="https://www.toutiao.com/m/detail/" >打开</a>
     </div>
 </div>
 </template>
@@ -50,18 +50,19 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 </script>
 <style lang='less' scoped>
     .download {
-        height: 5rem;
+        height: 4rem;
         padding: 0 2rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         background: white;
+         box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
   .download-left {
       display: flex;
       align-items: center;
     .left-bg {
-        width: 5rem;
-        height: 4rem;
+        width: 2.5rem;
+        height: 2.5rem;
         background: url(//s3.bytecdn.cn/growth/fe_sdk/image/banner_toutiao_icon_bce0b302.png) no-repeat;
         overflow: hidden;
         background-size: 100% 100%;
@@ -74,11 +75,11 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   }
 
   .download-right {
-      width: 72px;
-        height: 28px;
-        font-size: 14px;
-        line-height: 28px;
-        border-radius: 14px;
+        width: 5rem;
+        height: 2rem;
+        font-size: 1rem;
+        line-height: 2rem;
+        border-radius: 1.5rem;
         font-weight: 500;
         background-image: linear-gradient(90deg,red,#ff5050);
         text-align: center;

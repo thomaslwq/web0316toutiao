@@ -20,9 +20,6 @@ export default {
     text-decoration: none;
     --themeColor:#ea4245;
   }
-  html{
-    font-size: 62.5%;
-  }
   .tt-message {
   line-height: 5rem;
   font-size: 1.6rem;

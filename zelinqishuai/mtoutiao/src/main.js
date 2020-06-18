@@ -8,7 +8,8 @@ Vue.prototype.$Message = Message
 // import Vuex from 'vuex'
 import store from './vuex/store'
 Vue.config.productionTip = false
-
+import {reSizeRem} from './common/setRem'
+reSizeRem()
 new Vue({
   router,
   store,

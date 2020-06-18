@@ -1,8 +1,10 @@
 <!--  -->
 <template>
 <div class='newsList'>
-    <div class="newsList-item" v-for="n in news" :key="n.nid">
-        <div class="item-text">
+    <div class="newsList-item" v-for="n in news" :key="n.nid" 
+    @click="jumpNewDetail(n.nid)"
+    >
+        <div class="item-text" >
             <p class="title">{{n.title}}</p>
             <p>{{n.content}}</p>
             <div class="img" v-if="n.imgs">
@@ -44,7 +46,10 @@ computed: {
 watch: {},
 //方法集合
 methods: {
-
+     jumpNewDetail:function(id){
+        localStorage.setItem('nid',id);
+        this.$router.push('/NewDetail') 
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -106,8 +111,8 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
          span{
                 padding: 1rem;
               img{
-                width: 8rem;
-                height: 5rem;             
+                width: 20rem;
+                height: auto;             
             }
          }
       }
