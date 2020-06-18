@@ -7,8 +7,8 @@ import Index from "../components/Index"
 import Login from "../components/Login"
 import Register from "../components/Register"
 import UserCenter from "../components/UserCenter"
-import UserData from "../components/UserData.vue"
-import Detail from "../components/Detail.vue"
+import UserData from "../components/UserData"
+import Detail from "../components/Detail"
 
 let routes = [
     {

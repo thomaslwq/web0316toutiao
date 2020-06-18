@@ -111,6 +111,7 @@ methods: {
                 }
             }).then(res => {
                 if(res.data.msg == "发布成功") {
+                    this.elm_textarea = ""
                     this.$message({
                         type: "success",
                         message: res.data.msg
@@ -142,6 +143,8 @@ methods: {
                 }
             }).then(res => {
                 if(res.data.msg == "发布成功") {
+                    this.elm_text = "";
+                    this.editor_text = "";
                     this.$message({
                         type: "success",
                         message: res.data.msg

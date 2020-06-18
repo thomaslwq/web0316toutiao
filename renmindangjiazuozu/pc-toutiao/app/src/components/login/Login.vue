@@ -23,7 +23,7 @@
                     <span @click="exitLogin">退出登录</span>
                 </div>
                 <div class="user-info">
-                    <div class="user-avator" @click="$router.push('userCenter')">
+                    <div class="user-avator" @click="$router.push('/userCenter')">
                         <img :src="$store.state.userInfo.avator" alt="">
                     </div>
                     <div class="user-name">{{$store.state.userInfo.nickname}}</div>

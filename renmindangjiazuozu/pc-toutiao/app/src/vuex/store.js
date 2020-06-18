@@ -27,6 +27,7 @@ const mutations = {
         else {
             this.state.userInfo.tt_count -= 1;
         }
+        this.commit("updateLocalStorage")
     },
     modifyArticleCount: function(state ,{kind}) {
         if(kind == "add"){
@@ -35,6 +36,7 @@ const mutations = {
         else {
             this.state.userInfo.article_count -= 1;
         }
+        this.commit("updateLocalStorage")
     },
     updateUserInfo: function(state ,{params}) {
         this.state.userInfo.nickname = params.nickname;
