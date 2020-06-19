@@ -5,7 +5,7 @@
     </div>
     <div class="newsList-list">
 
-      <div class="list-item" v-for="article in articles" :key="article.nid" @click="toNewsDetail(article.nid)">
+      <div class="list-item" v-for="article in articles"  @click="toNewsDetail(article.nid)">
         <div class="item-left" v-if="article.img">
           <img :src="article.img" />
         </div>
@@ -31,17 +31,28 @@ data() {
    return {
      lastid:0,
      articles:[],
+     page:0,
+     number:20,
+     isloding:false,
    };
 },
 methods:{
   refresh:function(){
+    if(this.isloding){
+      return false
+    }
+    this.isloding  = true
     this.$axios.post("/getArticles",{
-      lastid:this.lastid
+      lastid:this.lastid,
+      page:this.page++,
+      number:this.number
     }).then(res =>{
-      this.articles = (res.articles||[]).concat(this.articles)
-      if(this.articles.length>0){
-        this.lastid = this.articles[0].nid
-      }
+      this.isloding = false
+      this.articles = (this.articles).concat(res.articles||[])
+      //判断是否最后一页
+      res.counts/this.number <= res.current_page?this.$message({
+        msg:"已经到最后一页了"
+      }):""
     })
   },
   toNewsDetail:function(nid){
@@ -55,15 +66,27 @@ methods:{
   }
 },
 mounted(){
-  this.$axios.post("/getArticles",{
-    lastid:this.lastid
-  }).then(res=>{
-    this.articles = res.articles || []
-    if (this.articles.length > 0) {
-      // 获取最后一条文章或头条的 id
-      this.lastid = this.articles[0].nid;
-    }
+  let that = this
+  window.addEventListener("scroll",()=>{
+    console.log('在滚动');
+    let htmlElement = document.documentElement
+    let scrollHeight = htmlElement.scrollHeight;
+    let scrollTop = htmlElement.scrollTop
+    let clienHeight = htmlElement.clientHeight
+
+    scrollHeight-scrollTop<=clienHeight?that.refresh():""
   })
+  this.refresh()
+
+  // this.$axios.post("/getArticles",{
+  //   lastid:this.lastid
+  // }).then(res=>{
+  //   this.articles = res.articles || []
+  //   if (this.articles.length > 0) {
+  //     // 获取最后一条文章或头条的 id
+  //     this.lastid = this.articles[0].nid;
+  //   }
+  // })
 }
 }
 </script>
