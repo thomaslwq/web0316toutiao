@@ -22,15 +22,15 @@
                             <el-tab-pane label="文章" name="wz">
                                 <div class="articles-container">
                                     <ul>
-                                        <li class="articles-item" v-for="e in userArticleData" @click="viewArticle(e.nid)">
-                                            <div class="item-top">
+                                        <li class="articles-item" v-for="e ,i in userArticleData">
+                                            <div class="item-top" @click="viewArticle(e.nid)">
                                                 <span class="item-title">{{e.title}}</span>
                                             </div>
                                             <div class="item-center">
                                                 <span>{{e.created_at}}</span>
                                             </div>
                                             <div class="item-bottom" v-html="e.content"></div>
-                                            <div class="item-operate">
+                                            <div class="item-operate" @click="dropArticle(i ,e.nid ,'wz')">
                                                 <div class="icon-drop"></div>
                                                 <span>删除</span>
                                             </div>
@@ -41,15 +41,15 @@
                             <el-tab-pane label="微头条" name="tt">
                                 <div class="articles-container">
                                     <ul>
-                                        <li class="articles-item" v-for="e in userToutiaoData" @click="viewArticle(e.nid)">
-                                            <div class="item-top">
+                                        <li class="articles-item" v-for="e ,i in userToutiaoData">
+                                            <div class="item-top" @click="viewArticle(e.nid)">
                                                 <span class="item-title">{{e.title}}</span>
                                             </div>
                                             <div class="item-center">
                                                 <span>{{e.created_at}}</span>
                                             </div>
                                             <div class="item-bottom">{{e.content}}</div>
-                                            <div class="item-operate">
+                                            <div class="item-operate" @click="dropArticle(i ,e.nid ,'tt')">
                                                 <div class="icon-drop"></div>
                                                 <span>删除</span>
                                             </div>
@@ -114,6 +114,48 @@ methods: {
             }
         })
     },
+    dropArticle: function(index ,id ,type) {
+        let dataArr;
+        let func;
+        switch(type) {
+            case "wz":
+                dataArr = this.userArticleData;
+                func = "modifyArticleCount";
+                break;
+            case "tt":
+                dataArr = this.userToutiaoData;
+                func = "modifyToutiaoCount";
+                break;
+            default:
+                throw new error("unkonw error");
+        }
+        this.axios({
+            method:'post',
+            url: "/deleteArticle",
+            data: {
+                nid: id,
+                oauth_token: this.$store.state.userInfo.oauth_token
+            }
+        }).then(res => {
+            if(res.data.msg == "删除成功") {
+                this.$message({
+                    type: "success",
+                    message: res.data.msg
+                })
+                dataArr.splice(index ,1);
+                this.$store.commit({
+                    type: func,
+                    kind: "reduce"
+                })
+            }
+            else {
+                this.$message({
+                    type: "warning",
+                    message: res.data.msg
+                })
+            }
+        })
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -208,7 +250,8 @@ activated() {
 
         .user-center-main-container {
             width: 100%;
-            height: 1000px;
+            height: auto;
+            min-height: 100vh;
             background-color: #f4f5f6;
 
             .user-center-main {

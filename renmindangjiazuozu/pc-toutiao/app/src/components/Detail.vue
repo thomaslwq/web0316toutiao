@@ -35,12 +35,10 @@
                         <span>{{articleDetail.title}}</span>
                     </div>
                     <div class="article-upload-info">
-                        <span class="nickname">{{articleDetail.n_user.nickname}}</span>
+                        <span class="user-nickname">{{articleDetail.n_user.nickname}}</span>
                         <span class="upload-date">{{articleDetail.created_at}}</span>
                     </div>
-                    <div class="article-content">
-                        {{articleDetail.content}}
-                    </div>
+                    <div class="article-content" v-html="articleDetail.content"></div>
                     <div class="article-operate">
                         <div class="collection">
                             <img src="../assets/images/collection.png" alt="">
