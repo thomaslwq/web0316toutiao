@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 62.5%;
+  --themeColor: #d23f42;
+  --bgColor: rgba(221, 221, 221);
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+.tt-m-index .tt-m-header {
+  position: fixed;
+  width: 100vw;
+  z-index: 999;
+}
+.tt-m-index .tt-m-header .header {
+  height: 4.5rem;
+  background-color: var(--themeColor);
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  color: white;
+}
+.tt-m-index .tt-m-header .header .header-title {
+  font-weight: 600;
+}
+.tt-m-index .tt-m-header .tt-m-tab {
+  display: flex;
+  background-color: var(--bgColor);
+}
+.tt-m-index .tt-m-header .tt-m-tab .tab-nav {
+  width: 90%;
+  font-size: 1.8rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+.tt-m-index .tt-m-header .tt-m-tab .tab-nav a {
+  padding: 0.8rem;
+  display: inline-block;
+  text-align: center;
+  color: #555;
+}
+.tt-m-index .tt-m-header .tt-m-tab .tab-nav::-webkit-scrollbar {
+  display: none;
+}
+.tt-m-index .tt-m-header .tt-m-tab .tab-more {
+  width: 10%;
+  text-align: center;
+  line-height: 3.4rem;
+  font-size: 2rem;
+}
+.tt-m-index .tt-m-content {
+  position: absolute;
+  top: 9rem;
+}
+.tt-m-index .tt-m-content .content-list .list-item {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+.tt-m-index .tt-m-content .content-list .list-item .item-title {
+  margin: 0.5rem;
+  font-size: 2rem;
+}
+.tt-m-index .tt-m-content .content-list .list-item .item-time {
+  margin: 0.5rem;
+  font-size: 1.5rem;
+  color: #777;
+}

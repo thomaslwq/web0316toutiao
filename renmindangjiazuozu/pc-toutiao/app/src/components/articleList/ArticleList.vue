@@ -7,7 +7,7 @@
             </div>
         </transition>
         <div class="article-list">
-            <div class="article-list-item" v-for="e in articleData">
+            <div class="article-list-item" v-for="e in articleData" @click="viewArticle(e.nid)">
                 <div class="article-item-left" v-show="e.img">
                     <img :src="e.img" alt="">
                 </div>
@@ -71,6 +71,14 @@ methods: {
         }).then(res => {
             this.articleData = res.data.articles;
             this.isLoadingplay = false;
+        })
+    },
+    viewArticle: function(id) {
+        this.$router.push({
+            name: "detail",
+            params: {
+                id
+            }
         })
     }
 },

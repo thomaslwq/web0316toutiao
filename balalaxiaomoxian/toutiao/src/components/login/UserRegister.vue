@@ -44,10 +44,7 @@ methods:{
         this.$axios.post("/createUser",{
             username,password
         }).then(res=>{
-            console.log(res.msg);
-            console.log('1');
             this.$message({
-                
                 msg:res.msg
             })
             if(res.status === 0){

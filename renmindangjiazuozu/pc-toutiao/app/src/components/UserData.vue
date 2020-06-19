@@ -12,6 +12,64 @@
                 </div>
             </div>
         </div>
+        <div class="user-center-main">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="账户信息" name="account">
+                    <div class="user-account">
+                        <div class="user-nickname">
+                            <div class="left">
+                                <span>名称</span>
+                            </div>
+                            <div class="right">
+                                <input type="text" v-model="currentNickName">
+                            </div>
+                        </div>
+                        <div class="upload-avator">
+                            <div class="left">
+                                <span>头像</span>
+                            </div>
+                            <div class="right">
+                                <div class="user-avator" :style="{'background-image': `url(${userUploadAvator})`}">
+                                    <input type="file" accept=".jpg ,.png" @change="uploadImg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="upload-info-button">
+                            <div class="left"></div>
+                            <div class="right">
+                                <button @click="updateUserInfo">更新资料</button>
+                            </div>
+                        </div>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="密码管理" name="password">
+                    <div class="password-management">
+                        <div class="current-password">
+                            <div class="left">
+                                <span>当前密码</span>
+                            </div>
+                            <div class="right">
+                                <input type="password" v-model="currentPassword">
+                            </div>
+                        </div>
+                        <div class="new-password">
+                            <div class="left">
+                                <span>新密码</span>
+                            </div>
+                            <div class="right">
+                                <input type="password" v-model="newPassword">
+                            </div>
+                        </div>
+                        <div class="upload-info-button">
+                            <div class="left"></div>
+                            <div class="right">
+                                <button @click="updatePassword">更新资料</button>
+                            </div>
+                        </div>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
     </div>
 </template>
 
@@ -27,7 +85,11 @@ components: {
 data() {
 //这里存放数据
 return {
-
+    activeName: "account",
+    userUploadAvator: "",
+    currentNickName: "",
+    currentPassword: "",
+    newPassword: "",
 };
 },
 //监听属性 类似于data概念
@@ -40,7 +102,85 @@ watch: {
 },
 //方法集合
 methods: {
-
+    handleClick(tab, event) {
+    },
+    uploadImg: function(e) {
+        Array.from(e.target.files).forEach(item => {
+            let params = new FormData();
+            params.append("file", item);
+    
+            this.axios({
+                method: "POST",
+                url: "/aliossUpload",
+                data: params
+            }).then(res => {
+                this.userUploadAvator = res.data.url;
+            })
+        })
+    },
+    updateUserInfo: function() {
+        this.axios({
+            method: 'POST',
+            url: "/updateUserInfo",
+            data: {
+                nickname: this.currentNickName,
+                avator: this.userUploadAvator,
+                oauth_token: this.$store.state.userInfo.oauth_token
+            }
+        }).then(res => {
+            if(res.data.msg === "修改成功") {
+                this.$message({
+                    type: "success",
+                    message: res.data.msg
+                })
+                this.$store.commit({
+                    type: "updateUserInfo" ,
+                    params: {
+                        nickname: this.currentNickName,
+                        url: this.userUploadAvator,
+                    }
+                })
+            }
+            else {
+                this.$message({
+                    type: "warning",
+                    message: "修改失败"
+                })
+            }
+        })
+    },
+    updatePassword: function() {
+        if(!this.currentPassword || !this.updatePassword){
+            this.$message({
+                    type: "warning",
+                    message: "不能为空"
+            })
+        }
+        else {
+            this.axios({
+                method: 'POST',
+                url: "/updatePassword",
+                data: {
+                    currentPassword: this.currentPassword,
+                    updatePassword: this.newPassword,
+                    oauth_token: this.$store.state.userInfo.oauth_token
+                }
+            }).then(res => {
+                if(res.data.msg === "修改成功") {
+                    this.$message({
+                        type: "success",
+                        message: res.data.msg
+                    })
+                }
+                else {
+                    this.$message({
+                        type: "warning",
+                        message: res.data.msg
+                    })
+                }
+            })
+        }
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -48,7 +188,8 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    this.currentNickName = this.$store.state.userInfo.nickname;
+    this.userUploadAvator = this.$store.state.userInfo.avator;
 },
 //生命周期 - 创建之前
 beforeCreate() {
@@ -81,6 +222,13 @@ activated() {
 }
 </script>
 <style lang='less' scoped>
+    /deep/ .el-tabs__nav-scroll {
+        padding: 0 10px;
+    }
+
+    /deep/ .el-tabs__active-bar {
+        background-color: #e43c46;
+    }
 
     .tt-user-data-container {
         width: 100%;
@@ -151,6 +299,8 @@ activated() {
                 }
 
                 .user-panel-dropdown {
+                    display: flex;
+                    flex-direction: column;
                     position: absolute;
                     top: 100%;
                     visibility: hidden;
@@ -160,11 +310,151 @@ activated() {
                     background-color: white;
                     box-shadow: 1px 1px 5px #d2d0d0;
                     transition: all ease-in-out .3s;
+
+                    span {
+                        flex: 1;
+                        padding: 10px 0;
+                    }
                 }
             }
 
         }
 
+        .user-center-main {
+            margin: 20px auto;
+            width: 80%;
+            height: 800px;
+
+            .user-account {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 280px;
+
+                .upload-avator {
+                    .right {
+                        .user-avator {
+                            width: 150px;
+                            height: 150px;
+                            border: 1px dashed black;
+                            border-radius: 5px;
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                        }
+
+                        input {
+                            width: 100%;
+                            height: 100%;
+                            opacity: 0;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                & > div {
+                    display: flex;
+                    flex: 1;
+
+                    .left {
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        flex: 0 1 100px;
+                        padding-right: 20px;
+                        color: #7a7c7f;
+                    }
+
+                    .right {
+                        display: flex;
+                        align-items: center;
+                        flex: 1 0 80%;
+                        width: 80%;
+                        height: 100%;
+
+                        input {
+                            padding: 0 10px;
+                            font-size: 20px;
+                            width: 100%;
+                            height: 75%;
+                            border: 2px solid #dddfe6;
+                            border-radius: 5px;
+                        }
+
+                        button {
+                            width: 105px;
+                            height: 75%;
+                            color: white;
+                            background-color: #5b99fe;
+                            border: none;
+                            border-radius: 5px;
+                            overflow: hidden;
+                            outline: none;
+                            cursor: pointer;
+                            transition: all ease-in-out .3s;
+
+                            &:hover {
+                                background-color: #76aefe;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .password-management {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 200px;
+
+                & > div {
+                    display: flex;
+                    flex: 1;
+
+                    .left {
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        flex: 0 1 100px;
+                        padding-right: 20px;
+                        color: #7a7c7f;
+                    }
+
+                    .right {
+                        display: flex;
+                        align-items: center;
+                        flex: 1 0 80%;
+                        width: 80%;
+                        height: 100%;
+
+                        input {
+                            padding: 0 10px;
+                            font-size: 20px;
+                            width: 100%;
+                            height: 75%;
+                            border: 2px solid #dddfe6;
+                            border-radius: 5px;
+                        }
+
+                        button {
+                            width: 105px;
+                            height: 75%;
+                            color: white;
+                            background-color: #5b99fe;
+                            border: none;
+                            border-radius: 5px;
+                            overflow: hidden;
+                            outline: none;
+                            cursor: pointer;
+                            transition: all ease-in-out .3s;
+
+                            &:hover {
+                                background-color: #76aefe;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 </style>

@@ -19,8 +19,44 @@
                 <div class="user-upload-container">
                     <div class="user-upload-left">
                         <el-tabs v-model="activeName" @tab-click="handleClick">
-                            <el-tab-pane label="文章" name="wz">文章</el-tab-pane>
-                            <el-tab-pane label="微头条" name="tt">微头条</el-tab-pane>
+                            <el-tab-pane label="文章" name="wz">
+                                <div class="articles-container">
+                                    <ul>
+                                        <li class="articles-item" v-for="e in userArticleData" @click="viewArticle(e.nid)">
+                                            <div class="item-top">
+                                                <span class="item-title">{{e.title}}</span>
+                                            </div>
+                                            <div class="item-center">
+                                                <span>{{e.created_at}}</span>
+                                            </div>
+                                            <div class="item-bottom" v-html="e.content"></div>
+                                            <div class="item-operate">
+                                                <div class="icon-drop"></div>
+                                                <span>删除</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="微头条" name="tt">
+                                <div class="articles-container">
+                                    <ul>
+                                        <li class="articles-item" v-for="e in userToutiaoData" @click="viewArticle(e.nid)">
+                                            <div class="item-top">
+                                                <span class="item-title">{{e.title}}</span>
+                                            </div>
+                                            <div class="item-center">
+                                                <span>{{e.created_at}}</span>
+                                            </div>
+                                            <div class="item-bottom">{{e.content}}</div>
+                                            <div class="item-operate">
+                                                <div class="icon-drop"></div>
+                                                <span>删除</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </el-tab-pane>
                         </el-tabs>
                     </div>
                     <div class="user-upload-right">
@@ -53,7 +89,9 @@ components: {
 data() {
 //这里存放数据
 return {
-    activeName: "tt"
+    activeName: "wz",
+    userArticleData: [],
+    userToutiaoData: [],
 };
 },
 //监听属性 类似于data概念
@@ -67,7 +105,15 @@ watch: {
 //方法集合
 methods: {
     handleClick(tab, event) {
-    }
+    },
+    viewArticle: function(id) {
+        this.$router.push({
+            name: "detail",
+            params: {
+                id
+            }
+        })
+    },
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -75,7 +121,27 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
+    this.axios({
+        method: 'POST',
+        url: "/getArticlesByType",
+        data: {
+            type: "TT",
+            oauth_token: this.$store.state.userInfo.oauth_token
+        }
+    }).then(res => {
+        this.userToutiaoData = res.data.articles;
+    });
 
+    this.axios({
+        method: 'POST',
+        url: "/getArticlesByType",
+        data: {
+            type: "article",
+            oauth_token: this.$store.state.userInfo.oauth_token
+        }
+    }).then(res => {
+        this.userArticleData = res.data.articles;
+    })
 },
 //生命周期 - 创建之前
 beforeCreate() {
@@ -230,6 +296,71 @@ activated() {
                     .user-upload-left {
                         width: 69%;
                         height: 100%;
+
+                        .articles-container {
+                            width: 100%;
+                            // height: 400px;
+
+                            ul {
+                                width: 100%;
+                                height: 100%;
+
+                                .articles-item {
+                                    display: flex;
+                                    flex-direction: column;
+                                    position: relative;
+                                    padding: 5px;
+                                    width: 100%;
+                                    height: 130px;
+                                    text-align: left;
+                                    background-color: white;
+                                    border-bottom: 1px solid #dddddd;
+                                    border-radius: 3px;
+                                    user-select: none;
+
+                                    & > div {
+                                        flex: 1;
+                                        padding: 0 10px;
+                                    }
+
+                                    .item-top {
+                                        font-size: 30px;
+                                        font-weight: bold;
+                                    }
+
+                                    .item-center {
+                                        font-size: 15px;
+                                    }
+
+                                    &:hover .item-operate {
+                                        visibility: visible;
+                                        opacity: 1;
+                                    }
+
+                                    .item-operate {
+                                        display: flex;
+                                        align-items: center;
+                                        position: absolute;
+                                        visibility: hidden;
+                                        opacity: 0;
+                                        bottom: 10px;
+                                        right: 5px;
+                                        width: 80px;
+                                        height: 30px;
+                                        transition: all ease-in-out .1s;
+                                        cursor: pointer;
+
+                                        .icon-drop {
+                                            width: 16px;
+                                            height: 16px;
+                                            background-image: url("../assets/images/drop.png");
+                                            background-repeat: no-repeat;
+                                            background-size: contain;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     .user-upload-right {

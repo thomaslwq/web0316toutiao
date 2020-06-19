@@ -35,6 +35,14 @@ const mutations = {
         else {
             this.state.userInfo.article_count -= 1;
         }
+    },
+    updateUserInfo: function(state ,{params}) {
+        this.state.userInfo.nickname = params.nickname;
+        this.state.userInfo.avator = params.url;
+        this.commit("updateLocalStorage")
+    },
+    updateLocalStorage: function(state) {
+        localStorage["userInfo"] = JSON.stringify(this.state.userInfo);
     }
 };
 
