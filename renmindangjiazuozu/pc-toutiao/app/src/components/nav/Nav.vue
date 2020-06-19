@@ -1,9 +1,10 @@
 <template>
     <div class='nav-container'>
         <h3>今日头条</h3>
-        <ul>
+        <ul :style="{height: `${navHeight}px`}">
             <li v-for="e ,i in data" @click="toggleNav(i)" :class="{active: clickNav == i}">{{e.text}}</li>
         </ul>
+        <div :class="['arrow' ,{'rotate': arrowRotate}]" @click="arrowRotate = !arrowRotate"></div>
     </div>
 </template>
 
@@ -19,7 +20,9 @@ components: {
 data() {
 //这里存放数据
 return {
+    arrowRotate: false,
     clickNav: "",
+    navHeight: "",
     data: [
         { 
             id: 1, 
@@ -78,7 +81,14 @@ computed: {
 },
 //监控data中的数据变化
 watch: {
-
+    arrowRotate: function() {
+        if(this.arrowRotate) {
+            this.navHeight = 0;
+        }
+        else {
+            this.navHeight = this.data.length * 40 + 60;
+        }
+    }
 },
 //方法集合
 methods: {
@@ -92,7 +102,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    this.navHeight = this.data.length * 40 + 60;
 },
 //生命周期 - 创建之前
 beforeCreate() {
@@ -130,7 +140,32 @@ activated() {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100%;
+        height: auto;
+
+        .arrow {
+            position: relative;
+            bottom: 0;
+            display: inline-block;
+            width: 100%;
+            height: 25px;
+            transition: all ease-in-out .5s;
+
+            &.rotate {
+                transform: rotate(180deg);
+            }
+
+            &::after {
+                content: "\21E7";
+                position: absolute;
+                font-size: 25px;
+                left: 50%;
+                bottom: -20%;
+                transform: translateX(-50%);
+                cursor: pointer;
+                animation: shake ease-in-out 1s infinite;
+            }
+        }
+
         h3 {
             font-size: 30px;
             user-select: none;
@@ -138,7 +173,9 @@ activated() {
         }
         ul {
             width: 100%;
-            height: 100%;
+            overflow: hidden;
+            transition: all ease-in-out .2s;
+
             li {
                 margin: 5px 0;
                 height: 40px;
@@ -157,6 +194,23 @@ activated() {
                 background-color: @red;
                 color: white
             }
+        }
+    }
+
+    @keyframes shake {
+        0% {
+            bottom: -20%;
+            color: black;
+        }
+
+        50% {
+            bottom: 5%;
+            color: grey;
+        }
+
+        100% {
+            bottom: -20%;
+            color: black;
         }
     }
 </style>

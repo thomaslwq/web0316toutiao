@@ -1,13 +1,13 @@
 <template>
     <div class='tt-article-list'>
         <transition name="el-fade-in-linear">
-            <div class="refresh-button" v-show="true" @click="refreshList() ;getNewsList()">
+            <div class="refresh-button" v-show="true" @click="refreshList()">
                 <span>点击刷新</span>
                 <div :class="{stop :!isLoadingplay}"></div>
             </div>
         </transition>
         <div class="article-list">
-            <div class="article-list-item" v-for="e in articleData" @click="viewArticle(e.nid)">
+            <div class="article-list-item" v-for="e in $store.state.articleData" @click="viewArticle(e.nid)">
                 <div class="article-item-left" v-show="e.img">
                     <img :src="e.img" alt="">
                 </div>
@@ -43,7 +43,6 @@ data() {
 //这里存放数据
 return {
     isLoadingplay: false,
-    articleData: [],
 };
 },
 //监听属性 类似于data概念
@@ -58,6 +57,21 @@ watch: {
 methods: {
     refreshList: function() {
         this.isLoadingplay = !this.isLoadingplay;
+        this.axios({
+            method: 'POST',
+            url: "/getArticles",
+            data: {
+                type: "TT",
+                page: 0,
+                number: 20
+            }
+        }).then(res => {
+            this.$store.commit({
+                type: "refreshArticle",
+                arr: res.data.articles
+            })
+            this.isLoadingplay = false;
+        })
     },
     getNewsList: function() {
         this.axios({
@@ -69,8 +83,10 @@ methods: {
                 number: 20
             }
         }).then(res => {
-            this.articleData = res.data.articles;
-            this.isLoadingplay = false;
+            this.$store.commit({
+                type: "appendArticle",
+                arr: res.data.articles
+            })
         })
     },
     viewArticle: function(id) {
@@ -88,7 +104,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    this.getNewsList();
 },
 //生命周期 - 创建之前
 beforeCreate() {
@@ -168,8 +184,32 @@ activated() {
             flex-direction: column;
             .article-list-item {
                 display: flex;
+                position: relative;
                 padding: 10px;
+                border-left: 1px solid transparent;
                 border-bottom: 1px solid #e8e8e8;
+                overflow: hidden;
+                transition: all ease-in-out .3s;
+                max-height: 150px;
+                cursor: pointer;
+
+                &:hover {
+                    border-left: 3px solid grey;
+                }
+
+                &:hover::after{
+                    right: 5%;
+                }
+
+                &::after {
+                    content: "\279C";
+                    position: absolute;
+                    top: 50%;
+                    right: -5%;
+                    transition: all ease-in-out .2s;
+                    transform: translateY(-50%) rotate(180deg);
+                }
+
                 .article-item-left {
                     flex: 0 1 30%;
 

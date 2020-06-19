@@ -1,6 +1,8 @@
 <template>
     <div class="container">
-        <div class="header">今日头条</div>
+        <div class="header">
+            <span @click="$router.push('index')">今日头条</span>
+            </div>
         <div class="vertical-text"></div>
         <div class="login-model">
             <el-alert class="tips" v-show="tipsStatus" :title="tipsMsg" :type="tipsType" show-icon></el-alert>
@@ -176,6 +178,11 @@ activated() {
             font-size: 30px;
             font-weight: bold;
             color: #e43c46;
+
+            span {
+                user-select: none;
+                cursor: pointer;
+            }
         }
         .vertical-text {
             position: absolute;

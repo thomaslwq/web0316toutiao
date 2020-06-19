@@ -8,7 +8,7 @@
                 </div>
                 <span class="user-name">{{$store.state.userInfo.nickname}}</span>
                 <div class="user-panel-dropdown">
-                    <span>退出登录</span>
+                    <span @click="exitLogin">退出登录</span>
                 </div>
             </div>
         </div>
@@ -119,35 +119,44 @@ methods: {
         })
     },
     updateUserInfo: function() {
-        this.axios({
-            method: 'POST',
-            url: "/updateUserInfo",
-            data: {
-                nickname: this.currentNickName,
-                avator: this.userUploadAvator,
-                oauth_token: this.$store.state.userInfo.oauth_token
-            }
-        }).then(res => {
-            if(res.data.msg === "修改成功") {
-                this.$message({
-                    type: "success",
-                    message: res.data.msg
-                })
-                this.$store.commit({
-                    type: "updateUserInfo" ,
-                    params: {
-                        nickname: this.currentNickName,
-                        url: this.userUploadAvator,
-                    }
-                })
-            }
-            else {
-                this.$message({
-                    type: "warning",
-                    message: "修改失败"
-                })
-            }
-        })
+        if(!this.currentNickName){
+            this.$message({
+                type: "warning",
+                message: "不能为空"
+            })
+        }
+        else {
+            this.axios({
+                method: 'POST',
+                url: "/updateUserInfo",
+                data: {
+                    nickname: this.currentNickName,
+                    avator: this.userUploadAvator,
+                    oauth_token: this.$store.state.userInfo.oauth_token
+                }
+            }).then(res => {
+                if(res.data.msg === "修改成功") {
+                    this.$message({
+                        type: "success",
+                        message: res.data.msg
+                    })
+                    this.$store.commit({
+                        type: "updateUserInfo" ,
+                        params: {
+                            nickname: this.currentNickName.trim(),
+                            url: this.userUploadAvator,
+                        }
+                    })
+                    this.$router.push("/");
+                }
+                else {
+                    this.$message({
+                        type: "warning",
+                        message: "修改失败"
+                    })
+                }
+            })
+        }
     },
     updatePassword: function() {
         if(!this.currentPassword || !this.updatePassword){
@@ -161,8 +170,8 @@ methods: {
                 method: 'POST',
                 url: "/updatePassword",
                 data: {
-                    currentPassword: this.currentPassword,
-                    updatePassword: this.newPassword,
+                    currentPassword: this.currentPassword.trim(),
+                    updatePassword: this.newPassword.trim(),
                     oauth_token: this.$store.state.userInfo.oauth_token
                 }
             }).then(res => {
@@ -180,7 +189,22 @@ methods: {
                 }
             })
         }
-    }
+    },
+    exitLogin: function() {
+        this.axios({
+            method: 'POST',
+            url: "/logout",
+        }).then(res => {
+            this.$message({
+                type: "success",
+                message: "退出成功",
+            })
+            this.$store.commit({
+                type: "exitLogin"
+            })
+            this.$router.push("/")
+        });
+    },
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -267,7 +291,7 @@ activated() {
                     height: 8px;
                     top: 50%;
                     position: absolute;
-                    right: 10px;
+                    right: 0;
                     border-right: 2px solid black;
                     border-bottom: 2px solid black;
                     transform: translateY(-50%) rotate(45deg);
@@ -306,14 +330,16 @@ activated() {
                     visibility: hidden;
                     opacity: 0;
                     width: 100%;
-                    height: 50px;
+                    height: 100%;
                     background-color: white;
                     box-shadow: 1px 1px 5px #d2d0d0;
-                    transition: all ease-in-out .3s;
+                    transition: all ease-in-out .2s;
 
                     span {
                         flex: 1;
+                        height: 100%;
                         padding: 10px 0;
+                        cursor: pointer;
                     }
                 }
             }
