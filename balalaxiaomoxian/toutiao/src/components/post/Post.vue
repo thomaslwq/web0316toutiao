@@ -149,6 +149,11 @@ methods: {
             this.$message({
                 msg:res.msg
             })
+            if(res.status === 0){
+                let userInfo = this.$store.state.userInfo
+                userInfo.tt_count++;
+                this.$store.commit("updateUserInfo",userInfo)
+            }
         })
     },
     textAreaWord(){
