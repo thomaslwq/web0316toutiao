@@ -61,6 +61,7 @@ data: function() {
 //这里存放数据
     return {
         loginSuccessTips: false,
+        flag: true
     };
 },
 //监听属性 类似于data概念
@@ -78,6 +79,23 @@ methods: {
         setTimeout(() => {
             this.loginSuccessTips = false;
         } ,3000)
+    },
+    scrollToBottom: function() {
+        let webTotalHeight = document.body.scrollHeight;
+        let clientHeight = document.documentElement.clientHeight;
+        window.addEventListener("scroll" ,() => {
+            console.log(webTotalHeight)
+            if(document.documentElement.scrollTop == webTotalHeight - clientHeight) {
+                // this.flag = false;
+                this.$message({
+                    type: "warning",
+                    message: "底部"
+                })
+                // setTimeout(() => {
+                //     this.flag = true;
+                // } ,3000)
+            }
+        })
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
@@ -89,6 +107,8 @@ mounted() {
     if(this.$store.state.loginStatus){
         this.loginSuccess();
     }
+
+    this.scrollToBottom();
 },
 //生命周期 - 创建之前
 beforeCreate() {
@@ -138,7 +158,7 @@ activated() {
 .main {
     display: flex;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
     .main-left {
         padding: 0 10px;
