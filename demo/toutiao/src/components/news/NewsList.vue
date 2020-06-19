@@ -1,10 +1,10 @@
 <!--  -->
 <template>
   <div class="tt-news-list">
-    <div class="tt-news-refresh" @click.stop="refresh">点击刷新</div>
+    <div class="tt-news-refresh" @click.stop="refreshPage">点击刷新</div>
     <div class="list-item" v-for="article in articles" 
     @click.stop="goToNewsDetail(article.nid)"
-    :key="article.nid">
+    >
       <div class="left" v-if="article.img">
         <img :src="article.img" alt />
       </div>
@@ -30,8 +30,11 @@ export default {
   data() {
     //这里存放数据
     return {
-      lastid: 0, // 最新一条资讯的id
-      articles: [] // 文章列表
+      lastid: 0, // 默认都是0 不用修改
+      articles: [], // 文章列表
+      page:0, //当前请求的页码
+      number:20,//请求的条数
+      is_loading:false //是否正在请求
     };
   },
   //监听属性 类似于data概念
@@ -43,24 +46,40 @@ export default {
     goToNewsDetail:function(nid){
       console.log(nid);
       this.$router.push({
-        path:"/newsDetail",query:{
+        path:"/newsDetail",
+        query:{
           nid:nid
         }
       })
     },
+    refreshPage:function(){
+      window.location.reload();
+    },
     refresh: function() {
+    
+      if(this.is_loading){
+        return false;
+      }
+      this.is_loading = true;//正在发请求
       this.$axios
         .post("/getArticles", {
-          lastid: this.lastid
+          lastid: this.lastid,
+          page:this.page++,// 0 1 2 3 4 ..... 17 
+          number:this.number
         })
         .then(res => {
           console.log(res);
           // 将最新的数据 拼接到 现有的数据上 
-          this.articles = (res.articles || []).concat(this.articles);
-          if (this.articles.length > 0) {
-            // 获取最后一条文章或头条的 id
-            this.lastid = this.articles[0].nid;
+          this.articles = (this.articles).concat(res.articles || []);
+          this.page = res.current_page || this.page;// 设置当前的页码
+          // 判断是否是最后一页 总页数17  当前页码 17,16
+          if(res.counts/this.number <= res.current_page){
+            this.$message({
+              msg:"已经到最后一页了"
+            })
           }
+        }).catch(err=>{console.log(err)}).finally(()=>{
+          this.is_loading = false;
         });
     }
   },
@@ -68,19 +87,23 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.$axios
-      .post("/getArticles", {
-        lastid: this.lastid
-      })
-      .then(res => {
-        console.log(res);
-
-        this.articles = res.articles || [];
-        if (this.articles.length > 0) {
-          // 获取最后一条文章或头条的 id
-          this.lastid = this.articles[0].nid;
-        }
-      });
+    let _this = this;
+    // 添加页面的滚动事件
+    window.addEventListener("scroll",()=>{
+      //console.log("正在滚动中");
+      //1. 获取整个屏幕可以滚动的高度
+      let htmlElement = document.documentElement;
+      let scrollHeight = htmlElement.scrollHeight;
+      //2. 获取当前已经滚动的距离
+      let scrollTop = htmlElement.scrollTop;
+      //3. 获取当前浏览器可视区域的高度
+      let clientHeight = htmlElement.clientHeight;
+      // scrollHeight-scrollTop<=clientHeight 说明已经触底
+      console.log(scrollHeight-scrollTop<=clientHeight?"触底":"继续努力，还没触底");
+      // 如果触底
+      scrollHeight-scrollTop<=clientHeight?_this.refresh():"";
+    })
+    this.refresh();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

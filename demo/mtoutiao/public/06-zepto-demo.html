@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>zepto Demo</title>
+</head>
+<body>
+        <div id="app">😊👍💯</div>
+        <p>😊👍💯</p>
+        <p class="demo">😊👍💯</p>
+</body>
+<!-- 
+    官方的链接 https://zeptojs.com/
+    中文的链接：https://www.html.cn/doc/zeptojs_api/
+ -->
+ <script src="https://zeptojs.com/zepto.js"></script>
+ <script>
+     // jQuery jQuery 全局对象
+     // jQuery(function(){
+        // 页面的文档准备好的时候
+     //})
+     /* 
+         $("#id")
+     
+     */
+     // zepto Zepto
+     console.log(Zepto);
+     Zepto(function(){
+         console.log("页面文档已经准备好");
+     })
+    console.log($("#app"));
+    console.log($("p"));
+    console.log($(".demo"));
+    $(".demo").append("<div>☀️</div>");
+    $.fn.say = function(){
+        alert("天气真好！");
+    }
+   // $(".demo").say();
+   $(".demo").on("click",function(e){
+       alert("demo 被点击了");
+   })
+
+
+ 
+ </script>
+</html>

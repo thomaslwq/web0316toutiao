@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+        // 获取 文章的 id
+        let nid = window.location.search.split("=")[1];
+        // 将nid 存到 localStorage 里面去
+         localStorage.setItem("nid",nid);
+         window.location.href = "./article.html"
+</script>
+</html>

@@ -8,11 +8,12 @@
         maximum-scale=1.0,minimum-scale=1.0
         ">
     <style>
-        *{
-            padding:0px;
-            margin:0px;
+        * {
+            padding: 0px;
+            margin: 0px;
             box-sizing: border-box;
         }
+
         html {
             font-size: 62.5%;
             --themeColor: #d23f42;
@@ -56,34 +57,49 @@
         <!-- 分类结束 -->
         <!-- 列表开始 -->
         <section class="tt-m-list">
-            <section class="list-item">
-               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
-               <section class="date">2020-06-20 05:02:02</section> 
-            </section>
-            <section class="list-item">
-               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
-               <section class="date">2020-06-20 05:02:02</section> 
-            </section>
-            <section class="list-item">
-               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
-               <section class="date">2020-06-20 05:02:02</section> 
-            </section>
-            <section class="list-item">
-               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
-               <section class="date">2020-06-20 05:02:02</section> 
-            </section>
-            <section class="list-item">
-               <section class="title">第一报道 | 同两国领导人通电话，习主席谈到这些大事</section> 
-               <section class="date">2020-06-20 05:02:02</section> 
-            </section>
         </section>
         <!-- 列表结束 -->
     </section>
     <!--移动端主体结构结束 -->
 </body>
+<!-- 
+    根据屏幕的大小 动态改变 根字体的大小
+
+ -->
+<script src="./js/setRem.js"></script>
+<script src="./js/zepto.js"></script>
 <script>
-    console.log(document.documentElement);
-    console.log(document.documentElement);
+    $.ajax({
+        type: "post",
+        url: "http://tt.linweiqin.com/api/tt/getArticles",
+        data: {
+            lastid: 0,
+            page: 0,
+            number: 20
+        },
+        dataType:"json",// 设置返回的 dataType 为 json
+        success(data, status, xhr) {
+            console.log(xhr);
+            console.log(data);
+            let articles = data.articles;
+            console.log(articles);
+            let items_html = articles.map(v=>{
+                return  `
+                <a href="./transfer.html?nid=${v.nid}" class="list-item">
+                    <section class="title">${v.title}</section>
+                    <section class="date">${v.created_at}</section>
+                </a>
+                `
+            })
+            $('.tt-m-list').append(items_html);
+        },
+        error(xhr, errorType, error) {
+            console.log(error);
+        },
+        complete(xhr, status) {
+            console.log(status);
+        }
+    })
 </script>
 
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="content"
+        style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;">
+    </div>
+
+</body>
+<script>
+    let num = 1;
+    document.getElementById("content").innerHTML = num;
+    document.getElementById("content").onmousemove = throttle(function () {
+        document.getElementById("content").innerHTML = ++num;
+    }, 1000)
+
+    // 一段时间内 规律地发生
+    function throttle(func, timeout) {
+        let timeId; //标志位
+        return function () {
+            let context = this;// 函数执行时的上下文
+            let args = arguments;//  函数执行时的参数
+            if (!timeId) {
+                timeId = setTimeout(function () {
+                    func.call(context, arguments);
+                    timeId = null;
+                }, timeout)
+            }
+
+        }
+    }
+</script>
+
+</html>

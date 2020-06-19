@@ -49,6 +49,8 @@
 }
 .tt-m-index .tt-m-list .list-item {
   padding: 1rem;
+  text-decoration: none;
+  color: black;
   border-bottom: 0.1rem solid #ddd;
 }
 .tt-m-index .tt-m-list .list-item .title {
