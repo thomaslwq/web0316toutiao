@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /* 
+    实现一段代码，对一个整数数组进行去重，保留最后
+    出现的整数：例如 传入数组[1,3,5,1,4,5,2,4,3],
+    输出[1,5,2,4,3]
+     */
+     /* 方法一 */
+     let arr = [1,3,5,1,4,5,2,4,3];
+     console.log(...new Set(arr));
+     /* 方法二 */
+     let arrkeys = {}
+     /* 
+        {1:1,3:3,5:5,4:4,2:2}
+      */
+     for(let value of arr){
+         arrkeys[value] = value;
+     }
+     console.log(Object.keys(arrkeys));
+     console.log(Object.values(arrkeys));
+</script>
+</html>

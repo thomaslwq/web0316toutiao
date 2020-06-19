@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    /* 
+        实现一段代码，请求后台接口/getData1,/getData2,/getData3,并将后台结果返回的
+        数据按接口 /getData1、/getData2、/getData3的顺序依次输出出来
+     */
+     /* 第一中方式 回调方式 */
+    $.ajax({
+        method: "get",
+        url: "/getData1",
+        success: function (res) {
+            $.ajax({
+                method: "get",
+                url: "/getData2",
+                success: function (res) {
+                    $.ajax({
+                        method: "get",
+                        url: "/getData3",
+                        success: function (res) {
+
+                        }
+                    })
+                }
+            })
+        }
+    })
+    /* 2. promise 加async await 方式 */
+    async function promise1(){
+       let result1 =  await new Promise(function(resolve,reject){
+            axios.get("/getData1").then((res)=>{
+                resolve(res);
+            })
+        })
+       let result2 =  await new Promise(function(resolve,reject){
+            axios.get("/getData2").then((res)=>{
+                resolve(res);
+            })
+        })
+       let result3 =  await new Promise(function(resolve,reject){
+            axios.get("/getData3").then((res)=>{
+                resolve(res);
+            })
+        })
+    }
+
+</script>
+
+</html>

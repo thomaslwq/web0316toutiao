@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /* 
+    实现一段代码，返回字符串中的第一个出现的
+    十进制数：例如“price-2.5” 返回2.5
+    ‘3x4’返回3，‘012’返回12
+     */
+     // let strs = 'price-2.5'
+    //  let strs = '3X4'
+      let strs = '012'
+    for(let i=0;i<strs.length;i++){
+      let c = strs[i]
+      if(c>='0'&&c<='9')
+        console.log(c);
+    }
+</script>
+</html>

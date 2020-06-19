@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /* 
+        1. 以下代码输出结果为
+     */
+     var type = "image";
+     var size = {width:800,height:600};
+     var format = ["jpg","png"];
+     // 传进来的参数 type,size是传值，format是对象引用
+     function change(type,size,format){
+         type = "vedio";
+         size = {width:1024,height:768};
+         format.push("mp4");
+         console.log(type,size,format);
+     }
+    //  function change(){
+    //      type = "vedio";
+    //      size = {width:1024,height:768};
+    //      format.push("mp4");
+    //      console.log(type,size,format);
+    //  }
+     change(type,size,format);
+     console.log(type,size,format);
+</script>
+</html>
