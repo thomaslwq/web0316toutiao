@@ -5,11 +5,18 @@ Vue.use(Vuex)
 // 这里定义初始值
 let state = {
     loginStatus: false,
-    userInfo: {}
+    userInfo: {},
+    articleData: [],
 };
 
 /* 变动 */
 const mutations = {
+    refreshArticle: function(state ,{arr}) {  
+        this.state.articleData = arr;
+    },
+    appendArticle: function(state ,{arr}) {
+        this.state.articleData.push(...arr);
+    },
     modifyLoginInfo: function(state ,{params}) {
         localStorage["userInfo"] = JSON.stringify(params);
         this.state.userInfo = params;
