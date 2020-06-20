@@ -13,6 +13,10 @@ import Detail from "../components/Detail"
 let routes = [
     {
         path: "/",
+        redirect: '/index'
+    },
+    {
+        path: "/index",
         name: "index",
         component: Index
     },

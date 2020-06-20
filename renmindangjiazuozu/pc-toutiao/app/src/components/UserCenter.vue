@@ -242,7 +242,7 @@ activated() {
                 width: 60%;
                 height: 100%;
                 font-size: 30px;
-                font-weight: bold;
+                font-weight: bold;  
                 cursor: pointer;
                 user-select: none;
             }

@@ -79,6 +79,8 @@ activated() {
         
         input {
             flex: 0 1 70%;
+            padding: 0 10px;
+            font-size: 16px;
             border: none;
             outline: none;
             background-color: #f5f6f7;
@@ -91,6 +93,12 @@ activated() {
             color: white;
             border: none;
             outline: none;
+            transition: all ease-in-out .2s;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #6cb2f0;
+            }
         }
     }
 </style>
