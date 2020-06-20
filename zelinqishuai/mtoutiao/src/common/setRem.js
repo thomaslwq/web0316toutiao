@@ -6,7 +6,7 @@ function reSizeRem (){
         let htmlFontSize;
         htmlFontSize = uiFontSize/uiWidth*clienWidth
         document.documentElement.style.fontSize = htmlFontSize + 'px'
-        console.log(htmlFontSize);
+        // console.log(htmlFontSize);
     }
     resize();
     window.addEventListener('resize',resize);

@@ -29,12 +29,13 @@ components: {
     Search,
     Navs,
     NewsList,
-    Download
+    Download,
 },
 data() {
 //这里存放数据
 return {
-    page:1
+    page:0,
+    falg:false
 };
 },
 //监听属性 类似于data概念
@@ -44,19 +45,21 @@ watch: {},
 //方法集合
 methods: {
     getNews(){
+        
         let scrollTop = document.documentElement.scrollTop;
         let scrollHeight = document.documentElement.scrollHeight;
         let cHeight = document.documentElement.clientHeight
-        // console.log(scrollTop);
-        // console.log(scrollHeight);
-        // console.log(cHeight);
         if(scrollTop === scrollHeight - cHeight){
              console.log('触发了');
              console.log(this.page);
+            if(this.flag){
+                return false
+            }
+            this.flag = true
             this.$axios.post('/getArticles',{
              type:'TT',
             page:this.page,
-            number:15
+            number:20
             }).then(res => {
                 console.log('进来了');
                 if(res.ret === 0){
@@ -68,7 +71,7 @@ methods: {
                         item.imgs  = item.imgs.split(',')
                         }
                     });
-                    console.log(this.page);
+                    // console.log(this.page);
                     this.$store.state.news.push(...arr) 
                     // console.log(arr);
                     this.$Message({msg:res.msg})
@@ -78,6 +81,8 @@ methods: {
             }).catch(err=>{
                 console.log('加载失败');
                 return Promise.reject(err)
+            }).finally(()=>{
+                this.flag = false
             })
         }
     }

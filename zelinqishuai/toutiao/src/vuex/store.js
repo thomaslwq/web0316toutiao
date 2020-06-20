@@ -8,7 +8,7 @@ Vue.use(Vuex)
 let state = JSON.parse(localStorage.getItem('state')) || {
     userInfo:{},
     isLogin:false,
-    articleLists:{}
+    articleLists:[]
 }
 
 //所有模块组件的getter setter集合方法

@@ -71,7 +71,8 @@ export default {
       articlesImgs:[],
       title:'',
       richContent: "",//v-model文章输入框
-      messages: ""//v-modeltexteara输入框
+      messages: "",
+      time:null//v-modeltexteara输入框
     };
   },
   //监听属性 类似于data概念
@@ -103,7 +104,7 @@ export default {
           this.uploadImgs.push(res.url);
         });
       });
-      console.log(this.uploadImgs);
+      // console.log(this.uploadImgs);
     },
    
     //删除图片
@@ -116,10 +117,17 @@ export default {
         this.$Message({msg:'请先登录'})
         return;
       }
+      if(this.time){
+        this.$Message({msg:'操作过于频繁'})
+        return
+      }
       this.$axios.post("/createTT", {
           "content":this.messages,
           "imgs":this.uploadImgs.join(',')
       }).then(res => {
+        this.time = setTimeout(()=>{
+          this.time = null
+        },3000)
           //成功后个人信息文章数量加1
         if (res.ret === 0) {
           res.status = 'success';
@@ -139,6 +147,8 @@ export default {
       }).catch(({err}) => {
           this.$Message({msg:'服务器繁忙'});
         });
+      
+        console.log(this.time);
     },
     //刷新最新文章目录
     refreshMessages: function() {
