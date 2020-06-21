@@ -4,8 +4,8 @@
       <Download></Download>
     <div class="title">{{news.title}}</div>
     <div class="userInfo">
-      <img :src="news.n_user.avator" alt />
-      <span>{{news.n_user.nickname}}</span>
+      <img :src="avator" alt />
+      <span>{{nickname}}</span>
     </div>
     <div class="img" v-if="news.imgs">
       <span v-for="img in news.imgs" :key="img">
@@ -28,7 +28,9 @@ export default {
   data() {
     //这里存放数据
     return {
-      news: {}
+      news: {},
+      nickname:'',
+      avator:''
     };
   },
   //监听属性 类似于data概念
@@ -43,11 +45,15 @@ export default {
   mounted() {
     this.$axios
       .post("/getArticleById", {
-        nid: localStorage.getItem("nid")
+        nid: this.$route.query.id
       })
       .then(res => {
         console.log(res);
-        this.news = res.article;
+        if(res.ret === 0){
+          this.news = res.article;
+          this.nickname = res.article.n_user.nickname;
+          this.avator = res.article.n_user.avator
+        }
       });
   },
   beforeCreate() {}, //生命周期 - 创建之前

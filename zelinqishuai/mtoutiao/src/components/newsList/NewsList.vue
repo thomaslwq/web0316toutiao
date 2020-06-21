@@ -8,7 +8,7 @@
             <p class="title">{{n.title}}</p>
             <p>{{n.content}}</p>
             <div class="img" v-if="n.imgs">
-                <span v-for=" (img,i) in n.imgs" :key="i">
+                <span v-for=" (img,index) in n.imgs" :key="index">
                     <img :src="img" alt="">
                 </span>
             </div>
@@ -47,8 +47,7 @@ watch: {},
 //方法集合
 methods: {
      jumpNewDetail:function(id){
-        localStorage.setItem('nid',id);
-        this.$router.push('/NewDetail') 
+        this.$router.push({path:'/NewDetail',query:{id:id}}) 
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
@@ -60,7 +59,7 @@ mounted() {
      this.$axios.post('/getArticles',{
         'type':'TT',
         page:0,
-        number:15
+        number:20
         }).then(res => {
             console.log(res);
             if(res.ret === 0){
@@ -72,13 +71,14 @@ mounted() {
                 });
                 this.$store.state.news.push(...arr)
                 // console.log(arr);
-                this.$Message({msg:res.msg})
+                // this.$Message({msg:res.msg})
             }else{
-                this.$Message({msg:res.msg})
+                // this.$Message({msg:res.msg})
             }
         }).catch(err=>{
             console.log('加载失败');
-            return Promise.reject(err)
+            // return Promise.reject(err)
+            return err
     })
 },
 beforeCreate() {}, //生命周期 - 创建之前

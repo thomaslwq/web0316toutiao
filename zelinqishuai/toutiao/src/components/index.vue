@@ -48,7 +48,8 @@ components: {
 data() {
 //这里存放数据
 return {
-    page:1
+    page:1,
+    flag:false
 };
 },
 //监听属性 类似于data概念
@@ -65,17 +66,24 @@ methods: {
         // console.log(top);
         // console.log(height-clienHeight);
         if(top == height-clienHeight){
+            if(this.flag){
+                return
+            }
+            this.flag = true
             console.log('触发了');
             this.$axios.post('/getArticles',{
                 type:'TT',
                 page:this.page,
                 number:20
                 }).then(res => {
+                    this.flag = false
                 // console.log(res);
                 // console.log(...res.articles);
                 if(res.ret === 0){
                     this.$store.state.articleLists.push(...res.articles)
-                    this.page++
+                    // console.log(res);
+                    this.page = res.current_page + 1
+                    // console.log(this.page);
                 }
             }).catch(err => err)
         }
